@@ -8,8 +8,10 @@ namespace ClinicBooking.Models
         public int AppointmentID { get; set; }
         [Required]
         public int UserId { get; set; }
+        public required User User { get; set; }
         [Required]
         public int BookByUserID { get; set; }
+        public required User BookByUser { get; set; }
         public DateTime StartTime { get; set; }
         public int MyProperty { get; set; }
         [Required]
