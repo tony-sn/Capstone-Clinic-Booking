@@ -15,6 +15,18 @@ namespace ClinicBooking.Data
         }
 
         public DbSet<Appointment> Appointments { get; set; }
+        public DbSet<Doctor> Doctors { get; set; }
+        public DbSet<Department> Departments { get; set; }
+        public DbSet<MedicalHistory> MedicalHistories { get; set; }
+        public DbSet<Image> Images { get; set; }
+        public DbSet<LaboratoryTestReport> LaboratoryTestReports { get; set; }
+        public DbSet<LaboratoryTest> LaboratoryTests { get; set; }
+        public DbSet<Prescription> Prescriptions { get; set; }
+        public DbSet<PrescriptionDetail> PrescriptionDetails { get; set; }
+        public DbSet<Medicine> Medicines { get; set; }
+        public DbSet<MedicineInventoryEntry> MedicineInventoryEntries { get; set; }
+        public DbSet<Transaction> Transactions { get; set; }
+        public DbSet<RevenueReport> RevenueReports { get; set; }
 
         public override Task<int> SaveChangesAsync(bool acceptAllChangesOnSuccess, CancellationToken cancellationToken = default)
         {
