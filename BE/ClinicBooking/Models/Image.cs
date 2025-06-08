@@ -18,8 +18,6 @@ namespace ClinicBooking.Models
         public int LaboratoryTestReportMedicalHistoryId { get; set; }
         public int LaboratoryTestReportLaboratoryTestId { get; set; }
 
-        // Navigation property
-        public LaboratoryTestReport LaboratoryTestReport { get; set; }
 
     }
 }

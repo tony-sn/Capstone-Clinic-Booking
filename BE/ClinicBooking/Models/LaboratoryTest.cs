@@ -1,10 +1,12 @@
 ﻿using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace ClinicBooking.Models
 {
-    public class LaboratoryTest: EntityBase
+    public class LaboratoryTest : EntityBase
     {
         [Key]
+        [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public int LaboratoryTestId { get; set; }
 
         [Required, StringLength(200)]
