@@ -15,5 +15,11 @@ namespace ClinicBooking.Models
 
         [Required]
         public string Path { get; set; }
+        public int LaboratoryTestReportMedicalHistoryId { get; set; }
+        public int LaboratoryTestReportLaboratoryTestId { get; set; }
+
+        // Navigation property
+        public LaboratoryTestReport LaboratoryTestReport { get; set; }
+
     }
 }
