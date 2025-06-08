@@ -1,5 +1,9 @@
 using ClinicBooking.Data;
+using ClinicBooking.MiddleWares;
 using ClinicBooking.Models;
+using ClinicBooking.Repositories;
+using ClinicBooking.Repositories.IRepositories;
+using ClinicBooking.Services;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.FileProviders;
 using Microsoft.OpenApi.Models;
@@ -21,7 +25,10 @@ builder.Services.AddDbContextFactory<ApplicationDbContext>(options =>
 builder.Services.AddIdentityApiEndpoints<User>(opt => opt.User.RequireUniqueEmail = true)
     .AddRoles<Role>()
     .AddEntityFrameworkStores<ApplicationDbContext>();
-
+#region  add dependence injection
+builder.Services.AddScoped<ILaboratoryTestRepository, LaboratoryTestRepository>();
+builder.Services.AddScoped<ILaboratoryTestService, LaboratoryTestService>();
+#endregion
 // Swagger
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen(c =>
@@ -65,11 +72,11 @@ builder.Services.AddSwaggerGen(c =>
 });
 
 // add Swagger
-builder.Services.AddSwaggerGen(c =>
-{
-    c.SwaggerDoc("v1", new OpenApiInfo { Title = "Cyber Clinic", Version = "v1" });
+// builder.Services.AddSwaggerGen(c =>
+// {
+//     c.SwaggerDoc("v1", new OpenApiInfo { Title = "Cyber Clinic", Version = "v1" });
 
-});
+// });
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
@@ -78,7 +85,7 @@ if (app.Environment.IsDevelopment())
     app.UseSwagger();
     app.UseSwaggerUI();
 }
-
+app.UseExceptionMiddleware();
 // Static files
 app.UseDefaultFiles();
 app.UseStaticFiles();
