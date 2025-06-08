@@ -1,3 +1,4 @@
+using ClinicBooking.Entities;
 using ClinicBooking.Models;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
