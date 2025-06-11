@@ -19,7 +19,7 @@ namespace ClinicBooking.Models
 
         [ForeignKey("Technician")]
         public int TechnicianId { get; set; }
-        public required User Technician { get; set; }
+        public User Technician { get; set; }
 
     }
 }
