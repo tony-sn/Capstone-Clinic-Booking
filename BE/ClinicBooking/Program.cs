@@ -1,9 +1,13 @@
 using ClinicBooking.Data;
+using ClinicBooking.Extensions;
 using ClinicBooking.MiddleWares;
 using ClinicBooking.Models;
+using ClinicBooking.Models.Settings;
 using ClinicBooking.Repositories;
 using ClinicBooking.Repositories.IRepositories;
 using ClinicBooking.Services;
+using Microsoft.AspNetCore.DataProtection;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.FileProviders;
 using Microsoft.OpenApi.Models;
@@ -21,7 +25,20 @@ builder.Services.AddDbContextFactory<ApplicationDbContext>(options =>
     options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection"),
     o => o.UseQuerySplittingBehavior(QuerySplittingBehavior.SplitQuery)));
 
+builder.Services.AddDataProtection()
+    .SetApplicationName("ClinicBooking")
+    .PersistKeysToFileSystem(new DirectoryInfo(Path.Combine(builder.Environment.ContentRootPath, "KeyRing")))
+    .SetDefaultKeyLifetime(TimeSpan.FromDays(360));
+
+// HTTP, Email, Logging
+builder.Services.AddHttpClient();
+builder.Services.Configure<EmailSenderSettings>(builder.Configuration.GetSection("EmailSenderSettings"));
+builder.Services.AddTransient(typeof(IEmailSender<>), typeof(EmailSender<>));
+
 // Identity & Role
+builder.Services.AddAuthorizationBuilder()
+    .AddPolicy("Admin", policy => policy.RequireRole("Admin"))
+    .AddPolicy("Doctor", policy => policy.RequireRole("Admin", "Doctor"));
 builder.Services.AddIdentityApiEndpoints<User>(opt => opt.User.RequireUniqueEmail = true)
     .AddRoles<Role>()
     .AddEntityFrameworkStores<ApplicationDbContext>();
@@ -106,15 +123,18 @@ app.UseHttpsRedirection();
 app.UseAuthorization();
 
 app.MapControllers();
-app.MapGroup("api").MapIdentityApi<User>();
+app.MapGroup("api").MapCustomIdentityApi<User>();
 
 // Auto migrate & seed
 using var scope = app.Services.CreateScope();
 try
 {
     var dbContext = scope.ServiceProvider.GetRequiredService<ApplicationDbContext>();
+    var userMgr = scope.ServiceProvider.GetRequiredService<UserManager<User>>();
+    var roleMgr = scope.ServiceProvider.GetRequiredService<RoleManager<Role>>();
 
     await dbContext.Database.MigrateAsync();
+    await DbInitializer.SeedData(dbContext, userMgr, roleMgr);
 }
 catch (Exception ex)
 {
