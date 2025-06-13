@@ -34,7 +34,13 @@ builder.Services.AddScoped<IImageRepository, ImageRepository>();
 builder.Services.AddScoped<IImageService, ImageService>();
 builder.Services.AddScoped<ILaboratoryTestReportService, LaboratoryTestReportService>();
 builder.Services.AddScoped<ILaboratoryTestService, LaboratoryTestService>();
-
+builder.Services.AddScoped<IMedicineRepository, MedicineRepository>();
+builder.Services.AddScoped<IMedicineService, MedicineService>();
+builder.Services.AddScoped<IMedicineInventoryEntryRepository, MedicineInventoryEntryRepository>();
+builder.Services.AddScoped<IMedicineInventoryEntryService, MedicineInventoryEntryService>();
+builder.Services.AddScoped<IPrescriptionRepository, PrescriptionRepository>();
+builder.Services.AddScoped<IPrescriptionService, PrescriptionService>();
+builder.Services.AddScoped<IPrescriptionDetailService, PrescriptionDetailService>();
 #endregion
 // Swagger
 builder.Services.AddEndpointsApiExplorer();
