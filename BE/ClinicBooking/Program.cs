@@ -1,6 +1,7 @@
 using ClinicBooking.Data;
 using ClinicBooking.MiddleWares;
 using ClinicBooking.Models;
+using ClinicBooking.Models.DTOs;
 using ClinicBooking.Repositories;
 using ClinicBooking.Repositories.IRepositories;
 using ClinicBooking.Services;
@@ -28,6 +29,10 @@ builder.Services.AddIdentityApiEndpoints<User>(opt => opt.User.RequireUniqueEmai
     .AddEntityFrameworkStores<ApplicationDbContext>();
 #region  add dependence injection
 builder.Services.AddScoped<ILaboratoryTestRepository, LaboratoryTestRepository>();
+builder.Services.AddScoped<ILaboratoryTestReportRepository, LaboratoryTestReportRepository>();
+builder.Services.AddScoped<IImageRepository, ImageRepository>();
+builder.Services.AddScoped<IImageService, ImageService>();
+builder.Services.AddScoped<ILaboratoryTestReportService, LaboratoryTestReportService>();
 builder.Services.AddScoped<ILaboratoryTestService, LaboratoryTestService>();
 builder.Services.AddScoped<IMedicineRepository, MedicineRepository>();
 builder.Services.AddScoped<IMedicineService, MedicineService>();
