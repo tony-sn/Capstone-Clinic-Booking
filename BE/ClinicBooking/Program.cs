@@ -29,6 +29,8 @@ builder.Services.AddIdentityApiEndpoints<User>(opt => opt.User.RequireUniqueEmai
 #region  add dependence injection
 builder.Services.AddScoped<ILaboratoryTestRepository, LaboratoryTestRepository>();
 builder.Services.AddScoped<ILaboratoryTestService, LaboratoryTestService>();
+builder.Services.AddScoped<IAppointmentService, AppointmentService>();
+builder.Services.AddScoped<IAppointmentRepository, AppointmentRepository>();
 builder.Services.AddScoped<IMedicineRepository, MedicineRepository>();
 builder.Services.AddScoped<IMedicineService, MedicineService>();
 builder.Services.AddScoped<IMedicineInventoryEntryRepository, MedicineInventoryEntryRepository>();
@@ -79,12 +81,6 @@ builder.Services.AddSwaggerGen(c =>
     c.EnableAnnotations();
 });
 
-// add Swagger
-// builder.Services.AddSwaggerGen(c =>
-// {
-//     c.SwaggerDoc("v1", new OpenApiInfo { Title = "Cyber Clinic", Version = "v1" });
-
-// });
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
