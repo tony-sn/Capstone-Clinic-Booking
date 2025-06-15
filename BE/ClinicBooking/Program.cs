@@ -40,6 +40,8 @@ builder.Services.AddScoped<IMedicineInventoryEntryService, MedicineInventoryEntr
 builder.Services.AddScoped<IPrescriptionRepository, PrescriptionRepository>();
 builder.Services.AddScoped<IPrescriptionService, PrescriptionService>();
 builder.Services.AddScoped<IPrescriptionDetailService, PrescriptionDetailService>();
+builder.Services.AddScoped<IRevenueReportRepository, RevenueReportRepository>();
+builder.Services.AddScoped<IRevenueReportService, RevenueReportService>();
 #endregion
 // Swagger
 builder.Services.AddEndpointsApiExplorer();
