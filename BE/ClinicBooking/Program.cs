@@ -34,13 +34,21 @@ builder.Services.AddScoped<IImageRepository, ImageRepository>();
 builder.Services.AddScoped<IImageService, ImageService>();
 builder.Services.AddScoped<ILaboratoryTestReportService, LaboratoryTestReportService>();
 builder.Services.AddScoped<ILaboratoryTestService, LaboratoryTestService>();
+builder.Services.AddScoped<IAppointmentService, AppointmentService>();
+builder.Services.AddScoped<IAppointmentRepository, AppointmentRepository>();
 builder.Services.AddScoped<IMedicineRepository, MedicineRepository>();
 builder.Services.AddScoped<IMedicineService, MedicineService>();
+builder.Services.AddScoped<IMedicalHistoryRepository, MedicalHistoryRepository>();
+builder.Services.AddScoped<IMedicalHistoryService, MedicalHistoryService>();
 builder.Services.AddScoped<IMedicineInventoryEntryRepository, MedicineInventoryEntryRepository>();
 builder.Services.AddScoped<IMedicineInventoryEntryService, MedicineInventoryEntryService>();
 builder.Services.AddScoped<IPrescriptionRepository, PrescriptionRepository>();
 builder.Services.AddScoped<IPrescriptionService, PrescriptionService>();
 builder.Services.AddScoped<IPrescriptionDetailService, PrescriptionDetailService>();
+builder.Services.AddScoped<IRevenueReportRepository, RevenueReportRepository>();
+builder.Services.AddScoped<IRevenueReportService, RevenueReportService>();
+builder.Services.AddScoped<ITransactionRepository, TransactionRepository>();
+builder.Services.AddScoped<ITransactionService, TransactionService>();
 #endregion
 // Swagger
 builder.Services.AddEndpointsApiExplorer();
@@ -84,12 +92,6 @@ builder.Services.AddSwaggerGen(c =>
     c.EnableAnnotations();
 });
 
-// add Swagger
-// builder.Services.AddSwaggerGen(c =>
-// {
-//     c.SwaggerDoc("v1", new OpenApiInfo { Title = "Cyber Clinic", Version = "v1" });
-
-// });
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
