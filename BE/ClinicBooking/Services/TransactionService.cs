@@ -1,6 +1,7 @@
 using ClinicBooking.Models;
 using ClinicBooking.Models.DTOs;
 using ClinicBooking.Repositories.IRepositories;
+using ClinicBooking_Utility;
 
 namespace ClinicBooking.Services
 {
@@ -12,10 +13,22 @@ namespace ClinicBooking.Services
             _repository = repository;
         }
 
-        public async Task<IEnumerable<TransactionDTO>> GetAll()
+        public async Task<PageResultUlt<IEnumerable<TransactionDTO>>> GetAll(int pageSize = 0, int pageNumber = 1)
         {
+            if (pageSize < 0) throw new ArgumentException($"invalid page size: {pageSize}");
+            if (pageNumber <= 0) throw new ArgumentException($"inlvalid page number:{pageNumber}");
             var list = await _repository.GetAllAsync();
-            return list.Select(TransactionDTO.ConvertToDTO);
+            if (list == null) return null;
+            var totalItems = list.Count();
+            if (pageSize > 0)
+            {
+                list = list.Skip((1 - pageNumber) * pageSize).Take(pageSize).ToList();
+            }
+            return new PageResultUlt<IEnumerable<TransactionDTO>> 
+            {
+                Items = list.Select(x => TransactionDTO.ConvertToDTO(x)),
+                TotalItems = totalItems
+            };
         }
 
         public async Task<TransactionDTO> GetById(int id)

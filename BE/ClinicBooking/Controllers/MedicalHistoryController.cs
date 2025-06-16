@@ -49,7 +49,7 @@ namespace ClinicBooking.Controllers
         }
 
         [HttpPost]
-        public async Task<ActionResult<ApiResponse<MedicalHistoryDTO>>> Create([FromBody] MedicalHistoryRequest request)
+        public async Task<ActionResult<ApiResponse<MedicalHistoryDTO>>> Create([FromForm] MedicalHistoryRequest request)
         {
             var created = await _service.Create(request);
             return Ok(new ApiResponse<MedicalHistoryDTO>
