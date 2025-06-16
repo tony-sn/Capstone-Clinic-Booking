@@ -28,7 +28,7 @@ builder.Services.AddOpenApi();
 // add DbContext
 builder.Services.AddDbContextFactory<ApplicationDbContext>(options =>
     options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection"),
-    o => o.UseQuerySplittingBehavior(QuerySplittingBehavior.SplitQuery)));
+        o => o.UseQuerySplittingBehavior(QuerySplittingBehavior.SplitQuery)));
 
 builder.Services.AddDataProtection()
     .SetApplicationName("ClinicBooking")
@@ -47,21 +47,34 @@ builder.Services.AddAuthorizationBuilder()
 builder.Services.AddIdentityApiEndpoints<User>(opt => opt.User.RequireUniqueEmail = true)
     .AddRoles<Role>()
     .AddEntityFrameworkStores<ApplicationDbContext>();
-#region  add dependence injection
+
+#region add dependence injection
+
 builder.Services.AddScoped<ILaboratoryTestRepository, LaboratoryTestRepository>();
 builder.Services.AddScoped<ILaboratoryTestReportRepository, LaboratoryTestReportRepository>();
 builder.Services.AddScoped<IImageRepository, ImageRepository>();
 builder.Services.AddScoped<IImageService, ImageService>();
 builder.Services.AddScoped<ILaboratoryTestReportService, LaboratoryTestReportService>();
 builder.Services.AddScoped<ILaboratoryTestService, LaboratoryTestService>();
+builder.Services.AddScoped<IAppointmentService, AppointmentService>();
+builder.Services.AddScoped<IAppointmentRepository, AppointmentRepository>();
 builder.Services.AddScoped<IMedicineRepository, MedicineRepository>();
 builder.Services.AddScoped<IMedicineService, MedicineService>();
+builder.Services.AddScoped<IMedicalHistoryRepository, MedicalHistoryRepository>();
+builder.Services.AddScoped<IMedicalHistoryService, MedicalHistoryService>();
 builder.Services.AddScoped<IMedicineInventoryEntryRepository, MedicineInventoryEntryRepository>();
 builder.Services.AddScoped<IMedicineInventoryEntryService, MedicineInventoryEntryService>();
 builder.Services.AddScoped<IPrescriptionRepository, PrescriptionRepository>();
 builder.Services.AddScoped<IPrescriptionService, PrescriptionService>();
+builder.Services.AddScoped<IPrescriptionDetailRepositiory, PrescriptionDetailRepositiory>();
 builder.Services.AddScoped<IPrescriptionDetailService, PrescriptionDetailService>();
+builder.Services.AddScoped<IRevenueReportRepository, RevenueReportRepository>();
+builder.Services.AddScoped<IRevenueReportService, RevenueReportService>();
+builder.Services.AddScoped<ITransactionRepository, TransactionRepository>();
+builder.Services.AddScoped<ITransactionService, TransactionService>();
+
 #endregion
+
 // Swagger
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen(c =>
@@ -82,7 +95,8 @@ builder.Services.AddSwaggerGen(c =>
         Scheme = "bearer"
     });
 
-    c.AddSecurityRequirement(new OpenApiSecurityRequirement {
+    c.AddSecurityRequirement(new OpenApiSecurityRequirement
+    {
         {
             new OpenApiSecurityScheme
             {
@@ -104,12 +118,12 @@ builder.Services.AddSwaggerGen(c =>
     c.EnableAnnotations();
 });
 
-// add Swagger
-// builder.Services.AddSwaggerGen(c =>
-// {
-//     c.SwaggerDoc("v1", new OpenApiInfo { Title = "Cyber Clinic", Version = "v1" });
+// CORS
+builder.Services.AddCors(options =>
+{
+    options.AddDefaultPolicy(corsPolicyBuilder => { corsPolicyBuilder.AllowAnyOrigin().AllowAnyMethod().AllowAnyHeader(); });
+});
 
-// });
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
@@ -118,6 +132,7 @@ if (app.Environment.IsDevelopment())
     app.UseSwagger();
     app.UseSwaggerUI();
 }
+
 app.UseExceptionMiddleware();
 // Static files
 app.UseDefaultFiles();
@@ -136,6 +151,7 @@ app.UseStaticFiles(new StaticFileOptions
 
 app.UseHttpsRedirection();
 
+app.UseCors();
 app.UseAuthorization();
 
 app.MapControllers();
