@@ -44,6 +44,7 @@ builder.Services.AddScoped<IMedicineInventoryEntryRepository, MedicineInventoryE
 builder.Services.AddScoped<IMedicineInventoryEntryService, MedicineInventoryEntryService>();
 builder.Services.AddScoped<IPrescriptionRepository, PrescriptionRepository>();
 builder.Services.AddScoped<IPrescriptionService, PrescriptionService>();
+builder.Services.AddScoped<IPrescriptionDetailRepositiory, PrescriptionDetailRepositiory>();
 builder.Services.AddScoped<IPrescriptionDetailService, PrescriptionDetailService>();
 builder.Services.AddScoped<IRevenueReportRepository, RevenueReportRepository>();
 builder.Services.AddScoped<IRevenueReportService, RevenueReportService>();
