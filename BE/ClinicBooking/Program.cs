@@ -21,13 +21,15 @@ builder.Services.AddOpenApi();
 // add DbContext
 builder.Services.AddDbContextFactory<ApplicationDbContext>(options =>
     options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection"),
-    o => o.UseQuerySplittingBehavior(QuerySplittingBehavior.SplitQuery)));
+        o => o.UseQuerySplittingBehavior(QuerySplittingBehavior.SplitQuery)));
 
 // Identity & Role
 builder.Services.AddIdentityApiEndpoints<User>(opt => opt.User.RequireUniqueEmail = true)
     .AddRoles<Role>()
     .AddEntityFrameworkStores<ApplicationDbContext>();
-#region  add dependence injection
+
+#region add dependence injection
+
 builder.Services.AddScoped<ILaboratoryTestRepository, LaboratoryTestRepository>();
 builder.Services.AddScoped<ILaboratoryTestReportRepository, LaboratoryTestReportRepository>();
 builder.Services.AddScoped<IImageRepository, ImageRepository>();
@@ -50,7 +52,9 @@ builder.Services.AddScoped<IRevenueReportRepository, RevenueReportRepository>();
 builder.Services.AddScoped<IRevenueReportService, RevenueReportService>();
 builder.Services.AddScoped<ITransactionRepository, TransactionRepository>();
 builder.Services.AddScoped<ITransactionService, TransactionService>();
+
 #endregion
+
 // Swagger
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen(c =>
@@ -71,7 +75,8 @@ builder.Services.AddSwaggerGen(c =>
         Scheme = "bearer"
     });
 
-    c.AddSecurityRequirement(new OpenApiSecurityRequirement {
+    c.AddSecurityRequirement(new OpenApiSecurityRequirement
+    {
         {
             new OpenApiSecurityScheme
             {
@@ -93,6 +98,12 @@ builder.Services.AddSwaggerGen(c =>
     c.EnableAnnotations();
 });
 
+// CORS
+builder.Services.AddCors(options =>
+{
+    options.AddDefaultPolicy(corsPolicyBuilder => { corsPolicyBuilder.AllowAnyOrigin().AllowAnyMethod().AllowAnyHeader(); });
+});
+
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
@@ -101,6 +112,7 @@ if (app.Environment.IsDevelopment())
     app.UseSwagger();
     app.UseSwaggerUI();
 }
+
 app.UseExceptionMiddleware();
 // Static files
 app.UseDefaultFiles();
@@ -119,6 +131,7 @@ app.UseStaticFiles(new StaticFileOptions
 
 app.UseHttpsRedirection();
 
+app.UseCors();
 app.UseAuthorization();
 
 app.MapControllers();
