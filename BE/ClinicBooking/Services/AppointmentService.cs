@@ -1,3 +1,4 @@
+using ClinicBooking_Utility;
 using ClinicBooking.Models;
 using ClinicBooking.Models.DTOs;
 using ClinicBooking.Repositories.IRepositories;
@@ -14,16 +15,29 @@ namespace ClinicBooking.Services
             _repository = repository;
         }
 
-        public async Task<IEnumerable<AppointmentDTO>> GetAll()
+        public async Task<PageResultUlt<IEnumerable<AppointmentDTO>>> GetAll(int pageSize = 0, int pageNumber = 1)
         {
+            if (pageSize < 0) throw new ArgumentException($"invalid page size: {pageSize}");
+            if (pageNumber <= 0) throw new ArgumentException($"inlvalid page number:{pageNumber}");
             var list = await _repository.GetAllAsync();
-            return list.Select(AppointmentDTO.ConvertToDTO);
+            if (list == null) return null;
+            var totalItems = list.Count();
+            if (pageSize > 0)
+            {
+                list = list.Skip((1 - pageNumber) * pageSize).Take(pageSize).ToList();
+            }
+
+            return new PageResultUlt<IEnumerable<AppointmentDTO>>
+            {
+                Items = list.Select(x => AppointmentDTO.ConvertToDTO(x)),
+                TotalItems = totalItems
+            };
         }
 
         public async Task<AppointmentDTO> GetById(int id)
         {
             var item = await _repository.GetById(id);
-            if (item == null) return null;
+            if (item == null) throw new ArgumentException($"invalid Id:{id}");
             return AppointmentDTO.ConvertToDTO(item);
         }
 
@@ -48,7 +62,7 @@ namespace ClinicBooking.Services
 
         public async Task<AppointmentDTO> Update(int id, AppointmentRequest appointmentRequest)
         {
-            var entity = new Appointment
+            var item = new Appointment
             {
                 AppointmentID = id,
                 DoctorId = appointmentRequest.DoctorId,
@@ -62,8 +76,8 @@ namespace ClinicBooking.Services
                 BookByUser = null,
                 MedicalHistory = null,
             };
-            var updated = await _repository.Update(id, entity);
-            return AppointmentDTO.ConvertToDTO(updated);
+            var result = await _repository.Update(id, item);
+            return AppointmentDTO.ConvertToDTO(result);
         }
 
         public async Task<AppointmentDTO> DeleteById(int id)
