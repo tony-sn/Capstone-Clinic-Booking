@@ -16,19 +16,26 @@ namespace ClinicBooking.Controllers
         }
 
         [HttpGet]
-        public async Task<ActionResult<ApiResponse<IEnumerable<RevenueReportDTO>>>> GetAll()
+        public async Task<ActionResult<ApiResponseWithPagination<IEnumerable<RevenueReportDTO>>>> GetAll(int pageSize = 5, int pageNumber = 1)
         {
-            var result = await _service.GetAll();
-            return Ok(new ApiResponse<IEnumerable<RevenueReportDTO>>
+            var result = await _service.GetAll(pageSize: pageSize, pageNumber: pageNumber);
+            if (result == null) return NotFound();
+            return Ok(new ApiResponseWithPagination<IEnumerable<RevenueReportDTO>>
             {
                 Status = Constants.SUCCESS_READ_CODE,
                 Message = Constants.SUCCESS_READ_MSG,
-                Data = result
+                Data = result.Items,
+                Pagination = new Pagination
+                {
+                    PageSize = pageSize,
+                    PageNumber = pageNumber,
+                    TotalItems = result.TotalItems
+                }
             });
         }
 
-        [HttpGet("{id}")]
-        public async Task<ActionResult<ApiResponse<RevenueReportDTO>>> Get(int id)
+        [HttpGet("{id:int}")]
+        public async Task<ActionResult<ApiResponse<RevenueReportDTO>>> GetById(int id)
         {
             var item = await _service.GetById(id);
             if (item == null) return NotFound();
@@ -41,7 +48,7 @@ namespace ClinicBooking.Controllers
         }
 
         [HttpPost]
-        public async Task<ActionResult<ApiResponse<RevenueReportDTO>>> Post([FromBody] RevenueReportRequest report)
+        public async Task<ActionResult<ApiResponse<RevenueReportDTO>>> Create([FromForm] RevenueReportRequest report)
         {
             var created = await _service.Create(report);
             return Ok(new ApiResponse<RevenueReportDTO>
@@ -52,8 +59,8 @@ namespace ClinicBooking.Controllers
             });
         }
 
-        [HttpPut("{id}")]
-        public async Task<ActionResult<ApiResponse<RevenueReportDTO>>> Put(int id, [FromBody] RevenueReportRequest report)
+        [HttpPut("{id:int}")]
+        public async Task<ActionResult<ApiResponse<RevenueReportDTO>>> Update(int id, [FromForm] RevenueReportRequest report)
         {
             var updated = await _service.Update(id, report);
             return Ok(new ApiResponse<RevenueReportDTO>
@@ -64,8 +71,8 @@ namespace ClinicBooking.Controllers
             });
         }
 
-        [HttpDelete("{id}")]
-        public async Task<ActionResult<ApiResponse<RevenueReportDTO>>> Delete(int id)
+        [HttpPut("DeleteById/{id:int}")]
+        public async Task<ActionResult<ApiResponse<RevenueReportDTO>>> DeleteById(int id)
         {
             var deleted = await _service.DeleteById(id);
             return Ok(new ApiResponse<RevenueReportDTO>

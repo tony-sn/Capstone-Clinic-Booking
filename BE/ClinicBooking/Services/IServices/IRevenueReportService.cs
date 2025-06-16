@@ -1,10 +1,11 @@
 using ClinicBooking.Models.DTOs;
+using ClinicBooking_Utility;
 
 namespace ClinicBooking.Services
 {
     public interface IRevenueReportService
     {
-        Task<IEnumerable<RevenueReportDTO>> GetAll();
+        Task<PageResultUlt<IEnumerable<RevenueReportDTO>>> GetAll(int pageSize = 0, int pageNumber = 1);
         Task<RevenueReportDTO> GetById(int id);
         Task<RevenueReportDTO> Create(RevenueReportRequest report);
         Task<RevenueReportDTO> Update(int id, RevenueReportRequest report);
