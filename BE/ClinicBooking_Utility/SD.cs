@@ -39,5 +39,7 @@ namespace ClinicBooking_Utility
 
         #endregion
 
+        public static decimal MedicalFee = 50;
+        
     }
 }

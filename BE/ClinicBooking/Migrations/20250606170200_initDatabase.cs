@@ -275,15 +275,15 @@ namespace ClinicBooking.Migrations
                 name: "MedicalHistories",
                 columns: table => new
                 {
-                    Id = table.Column<int>(type: "int", nullable: false)
+                    MedicalHistoryId = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    MedicalHistoryId = table.Column<int>(type: "int", nullable: false),
                     Price = table.Column<decimal>(type: "decimal(18,2)", nullable: false),
                     Symptoms = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     Diagnosis = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     TreatmentInstructions = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     DoctorId = table.Column<int>(type: "int", nullable: false),
                     PatientId = table.Column<int>(type: "int", nullable: false),
+                    Id = table.Column<int>(type: "int", nullable: false),
                     Created = table.Column<DateTime>(type: "datetime2", nullable: true),
                     CreatedBy = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     Updated = table.Column<DateTime>(type: "datetime2", nullable: true),
@@ -293,7 +293,7 @@ namespace ClinicBooking.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_MedicalHistories", x => x.Id);
+                    table.PrimaryKey("PK_MedicalHistories", x => x.MedicalHistoryId);
                     table.ForeignKey(
                         name: "FK_MedicalHistories_AspNetUsers_DoctorId",
                         column: x => x.DoctorId,
@@ -348,7 +348,7 @@ namespace ClinicBooking.Migrations
                         name: "FK_Appointments_MedicalHistories_MedicalHistoryId",
                         column: x => x.MedicalHistoryId,
                         principalTable: "MedicalHistories",
-                        principalColumn: "Id",
+                        principalColumn: "MedicalHistoryId",
                         onDelete: ReferentialAction.NoAction);
                 });
 
@@ -387,7 +387,7 @@ namespace ClinicBooking.Migrations
                         name: "FK_LaboratoryTestReports_MedicalHistories_MedicalHistoryId",
                         column: x => x.MedicalHistoryId,
                         principalTable: "MedicalHistories",
-                        principalColumn: "Id",
+                        principalColumn: "MedicalHistoryId",
                         onDelete: ReferentialAction.NoAction);
                 });
 
@@ -414,7 +414,7 @@ namespace ClinicBooking.Migrations
                         name: "FK_Prescriptions_MedicalHistories_MedicalHistoryID",
                         column: x => x.MedicalHistoryID,
                         principalTable: "MedicalHistories",
-                        principalColumn: "Id",
+                        principalColumn: "MedicalHistoryId",
                         onDelete: ReferentialAction.NoAction);
                 });
 
@@ -444,7 +444,7 @@ namespace ClinicBooking.Migrations
                         name: "FK_Transactions_MedicalHistories_MedicalHistoryId",
                         column: x => x.MedicalHistoryId,
                         principalTable: "MedicalHistories",
-                        principalColumn: "Id",
+                        principalColumn: "MedicalHistoryId",
                         onDelete: ReferentialAction.NoAction);
                     table.ForeignKey(
                         name: "FK_Transactions_RevenueReports_RevenueReportID",
