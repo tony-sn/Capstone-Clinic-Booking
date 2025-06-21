@@ -11,7 +11,7 @@ namespace ClinicBooking.Models.DTOs
         public DateTime EndTime { get; set; }
         public decimal? Price { get; set; }
         public AppointmentStatus AppointmentStatus { get; set; }
-        public int MedicalHistoryId { get; set; }
+        public int? MedicalHistoryId { get; set; }
         public bool Active { get; set; }
 
         public static AppointmentDTO ConvertToDTO(Appointment appointment)
