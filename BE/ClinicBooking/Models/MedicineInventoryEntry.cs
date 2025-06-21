@@ -17,7 +17,7 @@ namespace ClinicBooking.Models
         public DateTime Timestamp { get; set; }
         public string CompanyName { get; set; }
         public string Note { get; set; }
-        public int PrescriptionID { get; set; }
+        public int? PrescriptionID { get; set; }
         public Prescription Prescription { get; set; }
     }
 

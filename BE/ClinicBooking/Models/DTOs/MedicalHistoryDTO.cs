@@ -4,8 +4,8 @@ namespace ClinicBooking.Models.DTOs;
 
 public class MedicalHistoryDTO
 {
-    public int Id { get; set; }
-    public decimal Price { get; set; }
+    public int MedicalHistoryId { get; set; }
+    public decimal TotalAmount { get; set; }
     public string Symptoms { get; set; }
     public string Diagnosis { get; set; }
     public string TreatmentInstructions { get; set; }
@@ -17,8 +17,8 @@ public class MedicalHistoryDTO
     {
         return new MedicalHistoryDTO
         {
-            Id = medicalHistory.MedicalHistoryId,
-            Price = medicalHistory.Price,
+            MedicalHistoryId = medicalHistory.MedicalHistoryId,
+            TotalAmount = medicalHistory.TotalAmount,
             Symptoms = medicalHistory.Symptoms,
             Diagnosis = medicalHistory.Diagnosis,
             TreatmentInstructions = medicalHistory.TreatmentInstructions,
@@ -32,7 +32,7 @@ public class MedicalHistoryDTO
 public class MedicalHistoryRequest
 {
     [Range(0, double.MaxValue)]
-    public decimal Price { get; set; }
+    public decimal TotalAmount { get; set; }
     public string Symptoms { get; set; }
     public string Diagnosis { get; set; }
     public string TreatmentInstructions { get; set; }

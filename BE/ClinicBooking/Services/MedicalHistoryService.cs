@@ -44,7 +44,7 @@ namespace ClinicBooking.Services
         {
             var entity = new MedicalHistory
             {
-                Price = request.Price,
+                TotalAmount = request.TotalAmount,  
                 Symptoms = request.Symptoms,
                 Diagnosis = request.Diagnosis,
                 TreatmentInstructions = request.TreatmentInstructions,
@@ -62,7 +62,7 @@ namespace ClinicBooking.Services
             var entity = new MedicalHistory
             {
                 MedicalHistoryId = id,
-                Price = request.Price,
+                TotalAmount = request.TotalAmount,
                 Symptoms = request.Symptoms,
                 Diagnosis = request.Diagnosis,
                 TreatmentInstructions = request.TreatmentInstructions,

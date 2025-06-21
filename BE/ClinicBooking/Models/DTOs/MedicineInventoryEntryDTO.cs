@@ -10,7 +10,7 @@ namespace ClinicBooking.Models.DTOs
         public int Quantity { get; set; }
         public string CompanyName { get; set; }
         public string Note { get; set; }
-        public int PrescriptionID { get; set; }
+        public int? PrescriptionID { get; set; }
         public static MedicineInventoryEntryDTO ConvertToDTO(MedicineInventoryEntry medicineInventoryEntry)
         {
             return new MedicineInventoryEntryDTO
