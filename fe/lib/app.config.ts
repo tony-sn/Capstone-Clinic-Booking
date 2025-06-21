@@ -1,14 +1,11 @@
 export const {
   NEXT_PUBLIC_ENDPOINT: ENDPOINT,
-  PROJECT_ID,
-  API_KEY,
-  DATABASE_ID,
-  PATIENT_COLLECTION_ID,
-  DOCTOR_COLLECTION_ID,
-  APPOINTMENT_COLLECTION_ID,
   NEXT_PUBLIC_BUCKET_ID: BUCKET_ID,
+  NEXT_PUBLIC_UNSPLASH_ACCESS_KEY: UNSPLASH_ACCESS_KEY,
 } = process.env;
 
 export const Endpoints = {
-  APPOINTMENTS: `${ENDPOINT}/api/appointments`,
+  APPOINTMENT: `${ENDPOINT}/api/appointment`,
+  DOCTORS: `${ENDPOINT}/api/doctors`,
+  MEDICAL_HISTORY: `${ENDPOINT}/api/medicalhistory`,
 };
