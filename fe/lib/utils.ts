@@ -83,6 +83,6 @@ export function decryptKey(passkey: string) {
   return atob(passkey);
 }
 
-export function flattenPages<T>(pages: { data: T[] }[]): T[] {
+export function flattenPages<T>(pages: PaginatedPage<T>[]): T[] {
   return pages.flatMap((page) => page.data);
 }

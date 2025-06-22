@@ -20,14 +20,7 @@ export const useInfiniteAppointments = (pageSize = 5) =>
     queryKey: ["appointments", pageSize],
     queryFn: ({ pageParam }: { pageParam: number }) =>
       getAllAppointment({ pageNumber: pageParam, pageSize }), // TODO: may need to check whether this pageParam is pageNumber
-    getNextPageParam: (lastPage: {
-      pagination: {
-        pageNumber: number;
-        pageSize: number;
-        totalItems: number;
-        totalPages: number;
-      };
-    }) => {
+    getNextPageParam: (lastPage) => {
       const pagination = lastPage?.pagination;
 
       const hasNextPage =
