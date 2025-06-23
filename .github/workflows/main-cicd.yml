@@ -43,8 +43,8 @@ jobs:
 
       - name: Build and test Clinic Booking API
         run: |
-          dotnet restore BE/ClinicBooking.csproj
-          dotnet build BE/ClinicBooking.csproj --configuration Release
+          dotnet restore BE/ClinicBooking/ClinicBooking.csproj
+          dotnet build BE/ClinicBooking/ClinicBooking.csproj --configuration Release
           # Add tests if you have them
           # dotnet test ClinicBooking.Tests/ClinicBooking.Tests.csproj
 
