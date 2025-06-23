@@ -1,9 +1,10 @@
 {
-  "plugins": ["import"],
+  "plugins": ["import", "@tanstack/query"],
   "extends": [
     "next/core-web-vitals",
     "standard",
     "plugin:tailwindcss/recommended",
+    "plugin:@tanstack/eslint-plugin-query/recommended",
     "prettier"
   ],
   "rules": {
