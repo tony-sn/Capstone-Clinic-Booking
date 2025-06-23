@@ -48,4 +48,11 @@ jobs:
           # Add tests if you have them
           # dotnet test ClinicBooking.Tests/ClinicBooking.Tests.csproj
 
+      - name: Build and push Docker images
+        run: |
+          # Build and push CLINICBOOKING
+          docker build -t ${{ env.CLINICBOOKING_IMAGE_NAME_LOWER }}:${{ github.sha }} -t ${{ env.CLINICBOOKING_IMAGE_NAME_LOWER }}:latest ./GatewayAPI
+          docker push ${{ env.CLINICBOOKING_IMAGE_NAME_LOWER }}:${{ github.sha }}
+          docker push ${{ env.CLINICBOOKING_IMAGE_NAME_LOWER }}:latest
+
       
