@@ -51,7 +51,7 @@ jobs:
       - name: Build and push Docker images
         run: |
           # Build and push CLINICBOOKING
-          docker build -t ${{ env.CLINICBOOKING_IMAGE_NAME_LOWER }}:${{ github.sha }} -t ${{ env.CLINICBOOKING_IMAGE_NAME_LOWER }}:latest ./GatewayAPI
+          docker build -t ${{ env.CLINICBOOKING_IMAGE_NAME_LOWER }}:${{ github.sha }} -t ${{ env.CLINICBOOKING_IMAGE_NAME_LOWER }}:latest ./BE/ClinicBooking
           docker push ${{ env.CLINICBOOKING_IMAGE_NAME_LOWER }}:${{ github.sha }}
           docker push ${{ env.CLINICBOOKING_IMAGE_NAME_LOWER }}:latest
 
