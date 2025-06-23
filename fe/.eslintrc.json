@@ -4,7 +4,7 @@
     "next/core-web-vitals",
     "standard",
     "plugin:tailwindcss/recommended",
-    "plugin:@tanstack/eslint-plugin-query/recommended",
+    "plugin:@tanstack/query/recommended",
     "prettier"
   ],
   "rules": {
@@ -26,6 +26,7 @@
           "caseInsensitive": true
         }
       }
-    ]
+    ],
+    "@tanstack/query/exhaustive-deps": "error"
   }
 }

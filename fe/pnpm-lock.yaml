@@ -112,7 +112,7 @@ importers:
         version: 3.25.67
     devDependencies:
       '@tanstack/eslint-plugin-query':
-        specifier: 5.80.12
+        specifier: ^5.80.12
         version: 5.80.12(eslint@8.57.1)(typescript@5.8.3)
       '@tanstack/react-query-devtools':
         specifier: ^5.80.10
