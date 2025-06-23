@@ -113,8 +113,6 @@ jobs:
               --network clinic-network \
               -p 8082:80 \
               -e ASPNETCORE_ENVIRONMENT=Development \
-              ${{ env.CLINICBOOKING_IMAGE_NAME_LOWER }}:latest
-
               --restart unless-stopped \
               ${{ env.CLINICBOOKING_IMAGE_NAME_LOWER }}:latest
 
