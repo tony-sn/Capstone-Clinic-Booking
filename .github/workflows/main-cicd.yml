@@ -55,4 +55,104 @@ jobs:
           docker push ${{ env.CLINICBOOKING_IMAGE_NAME_LOWER }}:${{ github.sha }}
           docker push ${{ env.CLINICBOOKING_IMAGE_NAME_LOWER }}:latest
 
+      - name: Deploy to Digital Ocean
+        uses: appleboy/ssh-action@v1.0.0
+        with:
+          host: ${{ secrets.DIGITALOCEAN_HOST }}
+          username: ${{ secrets.DIGITALOCEAN_USERNAME }}
+          password: ${{ secrets.DIGITALOCEAN_PASSWORD }}
+          script: |
+            # Create deployment directory
+            mkdir -p /deployments/clinicbooking
+            cd /deployments/clinicbooking
+
+            # Login to GitHub Container Registry
+            echo ${{ secrets.GITHUB_TOKEN }} | docker login ghcr.io -u ${{ github.actor }} --password-stdin
+            
+            # Stop and remove existing microservice containers only
+            echo "Stopping existing microservice containers..."
+            docker stop clinicbooking 2>/dev/null || true
+            docker rm clinicbooking 2>/dev/null || true
+
+            # Remove old microservice images to ensure fresh deployment
+            echo "Removing old microservice images..."
+            docker rmi ${{ env.CLINICBOOKING_IMAGE_NAME_LOWER }}:latest 2>/dev/null || echo "Clinic image not found"
+
+            # Pull latest images
+            echo "Pulling latest images..."
+            docker pull ${{ env.CLINICBOOKING_IMAGE_NAME_LOWER }}:latest
+
+            # Create docker network
+            docker network create clinic-network 2>/dev/null || echo "Network already exists"
+
+            # Start SQL Server if not running
+            if ! docker ps | grep -q sqlserver; then
+                echo "Starting SQL Server..."
+                docker run -d \
+                  --name sqlserver \
+                  --network clinic-network \
+                  -p 1432:1433 \
+                  -e ACCEPT_EULA=Y \
+                  -e SA_PASSWORD=ClinicBooking@123 \
+                  -e MSSQL_PID=Express \
+                  -v sqlserver_data:/var/opt/mssql \
+                  --restart unless-stopped \
+                  mcr.microsoft.com/mssql/server:2022-latest
+                echo "Waiting for SQL Server to start..."
+                sleep 15
+            else
+                echo "SQL Server already running"
+                # Ensure SQL Server is connected to network
+                docker network connect clinic-network sqlserver 2>/dev/null || echo "SQL Server already on network"
+            fi
+
+            # Start Clinic Booking
+            echo "Starting Clinic Booking..."
+            docker run -d \
+              --name clinicbooking \
+              --network clinic-network \
+              -p 8082:80 \
+              -e ASPNETCORE_ENVIRONMENT=Development \
+
+              --restart unless-stopped \
+              ${{ env.CLINICBOOKING_IMAGE_NAME_LOWER }}:latest
+
+            # Wait for services to fully start
+            echo "Waiting for services to start..."
+            sleep 45
+
+            # Ensure clinicbooking are on the network after startup
+            echo "Final network connectivity check..."
+            docker network connect clinic-network clinicbooking 2>/dev/null || echo "ClinicBooking already on network"
+
+            # Check container status
+            echo "=== Container Status ==="
+            docker ps --format "table {{.Names}}\t{{.Status}}\t{{.Ports}}"
+            echo ""
+
+            # Check health status
+            echo "=== Health Check Results ==="
+            echo "Clinic Booking Health:"
+            curl -s http://localhost:8082/health && echo " - OK" || echo " - FAILED"
+
+            # Test Swagger endpoints
+            echo "=== Swagger Check Results ==="
+            echo "Clinic Booking Swagger JSON:"
+            curl -s http://localhost:8082/swagger/v1/swagger.json | head -1 && echo " - Swagger JSON OK" || echo " - Swagger JSON FAILED"
+
+            # Show recent logs
+            echo "=== Recent Logs ==="
+            echo "Clinic Booking logs:"
+            docker logs clinicbooking --tail=5 2>/dev/null || echo "No logs available"
+
+            echo "=== DEPLOYMENT COMPLETE ===" 
+            echo "=== ACCESS URLS ==="
+            echo "CinicBooking Swagger: http://152.42.255.58:8082/swagger"
+
+            # Cleanup unused Docker images to free up space
+            echo "=== Cleaning up unused Docker images ==="
+            docker image prune -f || echo "No unused images to remove"
+            docker system df || echo "Unable to show disk usage" 
+
+
       
