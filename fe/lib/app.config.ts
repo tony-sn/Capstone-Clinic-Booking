@@ -9,4 +9,5 @@ export const Endpoints = {
   DOCTORS: `${ENDPOINT}/api/doctors`,
   LABORATORY_TEST: `${ENDPOINT}/api/laboratorytest`,
   MEDICAL_HISTORY: `${ENDPOINT}/api/medicalhistory`,
+  MEDICINE: `${ENDPOINT}/api/medicine`,
 };
