@@ -4,7 +4,7 @@ import InfiniteScroll from "@/components/InfiniteScroll";
 import { useInfiniteMedicineInventoryEntries } from "@/hooks/medicine-inventory-entries/useMedicineInventoryEntries";
 import { flattenPages } from "@/lib/utils";
 
-export default function LaboratoryTestPage() {
+export default function MedicineInventoryEntryPage() {
   const {
     data,
     isLoading,
@@ -34,7 +34,7 @@ export default function LaboratoryTestPage() {
           <ul className="space-y-3">
             {entries.map((item, index) => (
               <li key={index} className="rounded border p-3">
-                {item.name}
+                {item.companyName}
               </li>
             ))}
           </ul>
