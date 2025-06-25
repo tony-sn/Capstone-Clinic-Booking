@@ -5,9 +5,10 @@ export const {
 } = process.env;
 
 export const Endpoints = {
-  APPOINTMENT: `${ENDPOINT}/api/appointment`,
-  DOCTORS: `${ENDPOINT}/api/doctors`,
-  LABORATORY_TEST: `${ENDPOINT}/api/laboratorytest`,
-  MEDICAL_HISTORY: `${ENDPOINT}/api/medicalhistory`,
-  MEDICINE: `${ENDPOINT}/api/medicine`,
+  APPOINTMENT: `${ENDPOINT}/api/Appointment`,
+  DOCTORS: `${ENDPOINT}/api/Doctors`,
+  LABORATORY_TEST: `${ENDPOINT}/api/LaboratoryTest`,
+  MEDICAL_HISTORY: `${ENDPOINT}/api/MedicalHistory`,
+  MEDICINE: `${ENDPOINT}/api/Medicine`,
+  MEDICINE_INVENTORY_ENTRY: `${ENDPOINT}/api/MedicineInventoryEntry`,
 };
