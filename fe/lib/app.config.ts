@@ -11,4 +11,5 @@ export const Endpoints = {
   MEDICAL_HISTORY: `${ENDPOINT}/api/MedicalHistory`,
   MEDICINE: `${ENDPOINT}/api/Medicine`,
   MEDICINE_INVENTORY_ENTRY: `${ENDPOINT}/api/MedicineInventoryEntry`,
+  PRESCRIPTION: `${ENDPOINT}/api/Prescription`,
 };
