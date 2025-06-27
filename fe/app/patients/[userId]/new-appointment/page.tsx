@@ -1,6 +1,7 @@
 import Image from "next/image";
 
 import { AppointmentForm } from "@/components/forms/AppointmentForm";
+import config from "@/config.json";
 import { getPatient } from "@/lib/actions/patient.actions";
 
 const Appointment = async ({ params: { userId } }: SearchParamProps) => {
@@ -24,7 +25,9 @@ const Appointment = async ({ params: { userId } }: SearchParamProps) => {
             type="create"
           />
 
-          <p className="copyright mt-10 py-12">© 2024 CarePluse</p>
+          <p className="copyright mt-10 py-12">
+            © {new Date().getFullYear()} {config.title}
+          </p>
         </div>
       </section>
 

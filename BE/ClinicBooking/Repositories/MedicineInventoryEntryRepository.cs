@@ -60,7 +60,7 @@ namespace ClinicBooking.Repositories
         {
             try
             {
-                var obj = await _context.MedicineInventoryEntries.AsTracking().FirstOrDefaultAsync(x => x.Id == medicineInventoryEntry.Id);
+                var obj = await _context.MedicineInventoryEntries.AsTracking().FirstOrDefaultAsync(x => x.Id == id);
                 if (obj == null)
                     throw new ArgumentException($"invalid id: {id}");
                 obj.MedicineID = medicineInventoryEntry.MedicineID;

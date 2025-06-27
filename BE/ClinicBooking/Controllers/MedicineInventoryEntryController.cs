@@ -11,9 +11,9 @@ namespace ClinicBooking.Controllers
     [ApiController]
     public class MedicineInventoryEntryController : ControllerBase
     {
-        private readonly MedicineInventoryEntryService _medicineInventoryEntryService;
+        private readonly IMedicineInventoryEntryService _medicineInventoryEntryService;
 
-        public MedicineInventoryEntryController(MedicineInventoryEntryService medicineInventoryEntryService)
+        public MedicineInventoryEntryController(IMedicineInventoryEntryService medicineInventoryEntryService)
         {
             _medicineInventoryEntryService = medicineInventoryEntryService;
         }

@@ -15,6 +15,7 @@ namespace ClinicBooking.Models.DTOs
         {
             return new MedicineInventoryEntryDTO
             {
+                Id = medicineInventoryEntry.Id,
                 MedicineID = medicineInventoryEntry.MedicineID,
                 ChangeType = medicineInventoryEntry.ChangeType,
                 CompanyName = medicineInventoryEntry.CompanyName,

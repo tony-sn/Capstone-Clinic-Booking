@@ -55,3 +55,15 @@ declare type UpdateAppointmentParams = {
   appointment: Appointment;
   type: string;
 };
+
+declare type PaginatedPage<T> = {
+  status: number;
+  message: string;
+  data: T[];
+  pagination: {
+    pageNumber: number;
+    pageSize: number;
+    totalItems: number;
+    totalPages: number;
+  };
+};
