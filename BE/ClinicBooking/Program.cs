@@ -24,8 +24,10 @@ builder.Services.AddOpenApi();
 
 // add DbContext
 builder.Services.AddDbContextFactory<ApplicationDbContext>(options =>
-    options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection"),
-        o => o.UseQuerySplittingBehavior(QuerySplittingBehavior.SplitQuery)));
+{
+    var connectionString = Environment.GetEnvironmentVariable("DEFAULT_CONNECTION");
+    options.UseSqlServer(connectionString, o => o.UseQuerySplittingBehavior(QuerySplittingBehavior.SplitQuery));
+});
 
 builder.Services.AddDataProtection()
     .SetApplicationName("ClinicBooking")
@@ -34,7 +36,17 @@ builder.Services.AddDataProtection()
 
 // HTTP, Email, Logging
 builder.Services.AddHttpClient();
-builder.Services.Configure<EmailSenderSettings>(builder.Configuration.GetSection("EmailSenderSettings"));
+builder.Services.Configure<EmailSenderSettings>(options =>
+{
+    options.SmtpServer = Environment.GetEnvironmentVariable("EMAILSENDERSETTINGS_SMTPSERVER");
+    options.SmtpPort = int.Parse(Environment.GetEnvironmentVariable("EMAILSENDERSETTINGS_SMTPPORT") ?? "587");
+    options.EnableSsl = bool.Parse(Environment.GetEnvironmentVariable("EMAILSENDERSETTINGS_ENABLESSL") ?? "true");
+    options.UserName = Environment.GetEnvironmentVariable("EMAILSENDERSETTINGS_USERNAME");
+    options.Password = Environment.GetEnvironmentVariable("EMAILSENDERSETTINGS_PASSWORD");
+});
+
+
+
 builder.Services.AddTransient(typeof(IEmailSender<>), typeof(EmailSender<>));
 
 // Identity & Role
