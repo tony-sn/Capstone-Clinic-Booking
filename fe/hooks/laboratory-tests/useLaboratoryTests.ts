@@ -1,3 +1,4 @@
+
 import { useInfiniteQuery, useQuery } from "@tanstack/react-query";
 
 import { getAllLaboratoryTest } from "@/lib/api/laboratory-test.actions";
@@ -19,11 +20,13 @@ export const useInfiniteLaboratoryTests = (pageSize = 5) =>
     queryKey: ["laboratoryTests", pageSize],
     queryFn: ({ pageParam }: { pageParam: number }) =>
       getAllLaboratoryTest({ pageNumber: pageParam, pageSize }),
-    getNextPageParam: (lastPage) => {
+      getNextPageParam: (lastPage) => {
       const pagination = lastPage?.pagination;
-      const hasNextPage =
-        pagination.pageNumber * pagination.pageSize < pagination.totalItems;
-      return hasNextPage ? pagination.pageNumber + 1 : undefined;
+      if (!pagination) return undefined;
+      // Nếu đã đến trang cuối thì không load nữa
+      if (pagination.pageNumber >= pagination.totalPages) return undefined;
+      // Ngược lại, trả về số trang tiếp theo
+      return pagination.pageNumber + 1;
     },
     initialPageParam: 1,
   });
