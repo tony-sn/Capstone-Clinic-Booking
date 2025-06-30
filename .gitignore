@@ -487,5 +487,6 @@ $RECYCLE.BIN/
 *.swp
 
 appsettings.Development.json
+appsettings.json
 ApplicationDbContextFactory.cs
 BE/ClinicBooking/obj/
