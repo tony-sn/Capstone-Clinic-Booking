@@ -2,17 +2,14 @@ using ClinicBooking.Data;
 using ClinicBooking.Extensions;
 using ClinicBooking.MiddleWares;
 using ClinicBooking.Models;
+using ClinicBooking.Models.DTOs;
 using ClinicBooking.Models.Settings;
 using ClinicBooking.Repositories;
 using ClinicBooking.Repositories.IRepositories;
 using ClinicBooking.Services;
+using ClinicBooking.Services.IServices;
 using Microsoft.AspNetCore.DataProtection;
 using Microsoft.AspNetCore.Identity;
-using ClinicBooking.Models.DTOs;
-using ClinicBooking.Repositories;
-using ClinicBooking.Repositories.IRepositories;
-using ClinicBooking.Services;
-using ClinicBooking.Services.IServices;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.FileProviders;
 using Microsoft.OpenApi.Models;
@@ -72,7 +69,10 @@ builder.Services.AddScoped<IRevenueReportRepository, RevenueReportRepository>();
 builder.Services.AddScoped<IRevenueReportService, RevenueReportService>();
 builder.Services.AddScoped<ITransactionRepository, TransactionRepository>();
 builder.Services.AddScoped<ITransactionService, TransactionService>();
-
+builder.Services.AddScoped<IDepartmentRepository, DepartmentRepository>();
+builder.Services.AddScoped<IDepartmentService, DepartmentService>();
+builder.Services.AddScoped<IDoctorRepository, DoctorRepository>();
+builder.Services.AddScoped<IDoctorService, DoctorService>();
 #endregion
 
 // Swagger
