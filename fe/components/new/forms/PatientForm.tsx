@@ -6,17 +6,21 @@ import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 
+import { AddUserModal } from "@/components/modal/AddUserModal";
 import { Form } from "@/components/ui/form";
-import { createUser } from "@/lib/actions/patient.actions";
+import { createUser } from "@/lib/api/patient.actions";
+import { generateStrongPassword } from "@/lib/utils";
 import { UserFormValidation } from "@/lib/validation";
 
 import "react-phone-number-input/style.css";
-import CustomFormField, { FormFieldType } from "../CustomFormField";
-import SubmitButton from "../SubmitButton";
+import CustomFormField, { FormFieldType } from "../../CustomFormField";
+import SubmitButton from "../../SubmitButton";
 
-export const PatientForm = () => {
+export function PatientForm() {
   const router = useRouter();
   const [isLoading, setIsLoading] = useState(false);
+  const [open, setOpen] = useState(false);
+  const [user, setUser] = useState<CreateUserParams>();
 
   const form = useForm<z.infer<typeof UserFormValidation>>({
     resolver: zodResolver(UserFormValidation),
@@ -31,10 +35,12 @@ export const PatientForm = () => {
     setIsLoading(true);
 
     try {
+      const password = generateStrongPassword();
       const user = {
         name: values.name,
         email: values.email,
         phone: values.phone,
+        password,
       };
 
       const newUser = await createUser(user);
@@ -44,7 +50,10 @@ export const PatientForm = () => {
       });
 
       if (newUser) {
-        router.push(`/patients/${newUser.$id}/register`);
+        setUser(newUser);
+        setOpen(true);
+
+        // router.push(`/patients/${newUser?.id}/register`);
       }
     } catch (error) {
       console.log(error);
@@ -89,8 +98,10 @@ export const PatientForm = () => {
           placeholder="(555) 123-4567"
         />
 
-        <SubmitButton isLoading={isLoading}>Get Started</SubmitButton>
+        <AddUserModal open={open} setOpen={setOpen} state={user}>
+          <SubmitButton isLoading={isLoading}>Get Started</SubmitButton>
+        </AddUserModal>
       </form>
     </Form>
   );
-};
+}
