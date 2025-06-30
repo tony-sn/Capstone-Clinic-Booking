@@ -5,7 +5,7 @@ import { getAllMedicalHistory, updateMedicalHistory, createMedicalHistory } from
 import type { MedicalHistory } from "@/types/medicalHistory";
 
 interface MedicalHistoryFormModalProps {
-    medicalHistoryId?: number; // Optional - if provided, it's edit mode
+    medicalHistoryId?: number|null; // Optional - if provided, it's edit mode
     isOpen: boolean;
     onClose: () => void;
     onSuccess?: () => void; // Callback after successful create/update
@@ -24,7 +24,7 @@ const MedicalHistoryFormModal = ({
 
     // Determine if this is create or edit mode
     const isEditMode = !!medicalHistoryId;
-    const modalTitle = isEditMode ? 'Edit Medical History' : 'Create New Medical History';
+    const modalTitle = 'Detail Medical History';
 
     // Form state
     const [formData, setFormData] = useState({
@@ -264,7 +264,7 @@ const MedicalHistoryFormModal = ({
                                     onChange={handleInputChange}
                                     className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
                                     required
-                                    min="1"
+                                    min="1" disabled
                                 />
                             </div>
 
@@ -286,7 +286,7 @@ const MedicalHistoryFormModal = ({
                                     onChange={handleInputChange}
                                     className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
                                     required
-                                    min="1"
+                                    min="1"disabled
                                 />
                             </div>
                         </div>
@@ -308,7 +308,7 @@ const MedicalHistoryFormModal = ({
                                 onChange={handleInputChange}
                                 rows={3}
                                 className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
-                                placeholder="Describe the patient's symptoms..."
+                                placeholder="Describe the patient's symptoms..." disabled
                             />
                         </div>
 
@@ -329,7 +329,7 @@ const MedicalHistoryFormModal = ({
                                 onChange={handleInputChange}
                                 rows={3}
                                 className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
-                                placeholder="Enter the medical diagnosis..."
+                                placeholder="Enter the medical diagnosis..." disabled
                             />
                         </div>
 
@@ -350,7 +350,7 @@ const MedicalHistoryFormModal = ({
                                 onChange={handleInputChange}
                                 rows={4}
                                 className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
-                                placeholder="Enter treatment instructions and plan..."
+                                placeholder="Enter treatment instructions and plan..." disabled
                             />
                         </div>
 
@@ -369,7 +369,7 @@ const MedicalHistoryFormModal = ({
                                     step="0.01"
                                     min="0"
                                     className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
-                                    required
+                                     disabled
                                 />
                             </div>
 
@@ -381,7 +381,7 @@ const MedicalHistoryFormModal = ({
                                         name="active"
                                         checked={formData.active}
                                         onChange={handleCheckboxChange}
-                                        className="h-4 w-4 text-blue-600 focus:ring-blue-500 border-gray-300 rounded"
+                                        className="h-4 w-4 text-blue-600 focus:ring-blue-500 border-gray-300 rounded" disabled
                                     />
                                     <label htmlFor="active" className="ml-2 text-sm text-gray-700">
                                         Active Treatment
@@ -399,20 +399,7 @@ const MedicalHistoryFormModal = ({
                             >
                                 Cancel
                             </button>
-                            <button
-                                type="submit"
-                                disabled={submitting}
-                                className="flex-1 bg-blue-600 text-white px-4 py-2 rounded-lg font-medium hover:bg-blue-700 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
-                            >
-                                {submitting ? (
-                                    <div className="flex items-center justify-center">
-                                        <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-white mr-2"></div>
-                                        {isEditMode ? 'Updating...' : 'Creating...'}
-                                    </div>
-                                ) : (
-                                    isEditMode ? 'Update Record' : 'Create Record'
-                                )}
-                            </button>
+                           
                         </div>
                     </form>
                 )}

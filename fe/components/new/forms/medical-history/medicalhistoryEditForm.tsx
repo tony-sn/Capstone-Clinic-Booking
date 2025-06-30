@@ -6,7 +6,7 @@ import { useDoctors, usePatients } from "@/hooks/users/useUsers"; // Add correct
 import type { MedicalHistory } from "@/types/medicalHistory";
 
 interface MedicalHistoryFormModalProps {
-    medicalHistoryId?: number; // Optional - if provided, it's edit mode
+    medicalHistoryId?: number|null; // Optional - if provided, it's edit mode
     isOpen: boolean;
     onClose: () => void;
     onSuccess?: () => void; // Callback after successful create/update
