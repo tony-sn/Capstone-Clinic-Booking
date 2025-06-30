@@ -2,8 +2,6 @@
 using ClinicBooking_Utility;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
-using System;
-using static Org.BouncyCastle.Asn1.Cmp.Challenge;
 
 namespace ClinicBooking.Data
 {
@@ -15,11 +13,11 @@ namespace ClinicBooking.Data
             {
                 var departments = new List<Department>
                 {
-                    new Department { DepartmentName = "Cardiology" },
-                    new Department { DepartmentName = "Neurology" },
-                    new Department { DepartmentName = "Pediatrics" },
-                    new Department { DepartmentName = "Orthopedics" },
-                    new Department { DepartmentName = "Oncology" }
+                    new() { DepartmentName = "Cardiology" },
+                    new() { DepartmentName = "Neurology" },
+                    new() { DepartmentName = "Pediatrics" },
+                    new() { DepartmentName = "Orthopedics" },
+                    new() { DepartmentName = "Oncology" }
                 };
                 context.Departments.AddRange(departments);
                 await context.SaveChangesAsync();
