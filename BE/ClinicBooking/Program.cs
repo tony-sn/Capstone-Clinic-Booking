@@ -38,7 +38,9 @@ builder.Services.AddDataProtection()
 builder.Services.AddHttpClient();
 builder.Services.Configure<EmailSenderSettings>(options =>
 {
-    options.SmtpServer = Environment.GetEnvironmentVariable("EMAILSENDERSETTINGS_SMTPSERVER");
+    var smtpServer = Environment.GetEnvironmentVariable("EMAILSENDERSETTINGS_SMTPSERVER") 
+                 ?? throw new InvalidOperationException("Missing SMTP server env var");
+    options.SmtpServer = smtpServer;
     options.SmtpPort = int.Parse(Environment.GetEnvironmentVariable("EMAILSENDERSETTINGS_SMTPPORT") ?? "587");
     options.EnableSsl = bool.Parse(Environment.GetEnvironmentVariable("EMAILSENDERSETTINGS_ENABLESSL") ?? "true");
     options.UserName = Environment.GetEnvironmentVariable("EMAILSENDERSETTINGS_USERNAME");
