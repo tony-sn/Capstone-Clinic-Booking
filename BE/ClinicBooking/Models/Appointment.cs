@@ -10,19 +10,19 @@ namespace ClinicBooking.Models
         [Required]
         [ForeignKey("User")]
         public int DoctorId { get; set; }
-        public required User Doctor { get; set; }
+        public User Doctor { get; set; }
         [Required]
         [ForeignKey("BookByUser")]
         public int BookByUserID { get; set; }
-        public required User BookByUser { get; set; }
+        public User BookByUser { get; set; }
         public DateTime StartTime { get; set; }
         [Required]
         public DateTime EndTime { get; set; }
         public decimal? Price { get; set; }
         [Required]
         public AppointmentStatus AppointmentStatus { get; set; }
-        public int MedicalHistoryId { get; set; }
-        public required MedicalHistory MedicalHistory { get; set; }
+        public int? MedicalHistoryId { get; set; }
+        public MedicalHistory MedicalHistory { get; set; }
     }
 
     public enum AppointmentStatus

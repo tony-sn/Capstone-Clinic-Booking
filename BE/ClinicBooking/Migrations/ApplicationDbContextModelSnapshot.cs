@@ -57,7 +57,7 @@ namespace ClinicBooking.Migrations
                     b.Property<int>("Id")
                         .HasColumnType("int");
 
-                    b.Property<int>("MedicalHistoryId")
+                    b.Property<int?>("MedicalHistoryId")
                         .HasColumnType("int");
 
                     b.Property<decimal?>("Price")
@@ -314,11 +314,11 @@ namespace ClinicBooking.Migrations
 
             modelBuilder.Entity("ClinicBooking.Models.MedicalHistory", b =>
                 {
-                    b.Property<int>("Id")
+                    b.Property<int>("MedicalHistoryId")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int");
 
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("MedicalHistoryId"));
 
                     b.Property<bool>("Active")
                         .HasColumnType("bit");
@@ -333,27 +333,24 @@ namespace ClinicBooking.Migrations
                         .HasColumnType("bit");
 
                     b.Property<string>("Diagnosis")
-                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<int>("DoctorId")
                         .HasColumnType("int");
 
-                    b.Property<int>("MedicalHistoryId")
+                    b.Property<int>("Id")
                         .HasColumnType("int");
 
                     b.Property<int>("PatientId")
                         .HasColumnType("int");
 
-                    b.Property<decimal>("Price")
-                        .HasColumnType("decimal(18,2)");
-
                     b.Property<string>("Symptoms")
-                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<decimal>("TotalAmount")
+                        .HasColumnType("decimal(18,2)");
+
                     b.Property<string>("TreatmentInstructions")
-                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<DateTime?>("Updated")
@@ -362,7 +359,7 @@ namespace ClinicBooking.Migrations
                     b.Property<string>("UpdatedBy")
                         .HasColumnType("nvarchar(max)");
 
-                    b.HasKey("Id");
+                    b.HasKey("MedicalHistoryId");
 
                     b.HasIndex("DoctorId");
 
@@ -454,7 +451,7 @@ namespace ClinicBooking.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int>("PrescriptionID")
+                    b.Property<int?>("PrescriptionID")
                         .HasColumnType("int");
 
                     b.Property<int>("Quantity")
@@ -779,19 +776,9 @@ namespace ClinicBooking.Migrations
                     b.Property<int>("RoleId")
                         .HasColumnType("int");
 
-                    b.Property<int>("RoleId1")
-                        .HasColumnType("int");
-
-                    b.Property<int>("UserId1")
-                        .HasColumnType("int");
-
                     b.HasKey("UserId", "RoleId");
 
                     b.HasIndex("RoleId");
-
-                    b.HasIndex("RoleId1");
-
-                    b.HasIndex("UserId1");
 
                     b.ToTable("AspNetUserRoles", (string)null);
                 });
@@ -900,9 +887,7 @@ namespace ClinicBooking.Migrations
 
                     b.HasOne("ClinicBooking.Models.MedicalHistory", "MedicalHistory")
                         .WithMany()
-                        .HasForeignKey("MedicalHistoryId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .HasForeignKey("MedicalHistoryId");
 
                     b.Navigation("BookByUser");
 
@@ -995,9 +980,7 @@ namespace ClinicBooking.Migrations
 
                     b.HasOne("ClinicBooking.Models.Prescription", "Prescription")
                         .WithMany()
-                        .HasForeignKey("PrescriptionID")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .HasForeignKey("PrescriptionID");
 
                     b.Navigation("Medicine");
 
@@ -1051,27 +1034,15 @@ namespace ClinicBooking.Migrations
 
             modelBuilder.Entity("ClinicBooking.Models.UserRole", b =>
                 {
-                    b.HasOne("ClinicBooking.Models.Role", null)
-                        .WithMany()
+                    b.HasOne("ClinicBooking.Models.Role", "Role")
+                        .WithMany("UserRoles")
                         .HasForeignKey("RoleId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("ClinicBooking.Models.Role", "Role")
-                        .WithMany("UserRoles")
-                        .HasForeignKey("RoleId1")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("ClinicBooking.Models.User", null)
-                        .WithMany()
-                        .HasForeignKey("UserId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
                     b.HasOne("ClinicBooking.Models.User", "User")
-                        .WithMany()
-                        .HasForeignKey("UserId1")
+                        .WithMany("UserRoles")
+                        .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
@@ -1132,6 +1103,11 @@ namespace ClinicBooking.Migrations
                 });
 
             modelBuilder.Entity("ClinicBooking.Models.Role", b =>
+                {
+                    b.Navigation("UserRoles");
+                });
+
+            modelBuilder.Entity("ClinicBooking.Models.User", b =>
                 {
                     b.Navigation("UserRoles");
                 });

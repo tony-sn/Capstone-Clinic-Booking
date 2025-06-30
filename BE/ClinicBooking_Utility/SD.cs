@@ -2,15 +2,6 @@
 
 namespace ClinicBooking_Utility
 {
-    public static class SD
-    {
-        public enum AppointmentStatus
-        {
-            Booked,
-            Pending,
-            Examnined
-        }
-    }
     public static class Constants
     {
         #region ErrorCodes
@@ -48,5 +39,7 @@ namespace ClinicBooking_Utility
 
         #endregion
 
+        public static decimal MedicalFee = 50;
+        
     }
 }
