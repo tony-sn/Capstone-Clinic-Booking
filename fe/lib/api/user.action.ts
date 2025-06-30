@@ -6,8 +6,9 @@ import type { User } from "@/types/user";
 export const getAllUsers = async (): Promise<User[]> => {
   try {
     console.log('🚀 Client: Fetching users from:', Endpoints.USERS);
+       console.log('🔧 Environment:', process.env.NEXT_PUBLIC_ENDPOINT);
     
-    const res = await fetch(`https://localhost:5000/api/Admin/users-with-roles`, {
+    const res = await fetch(`${process.env.NEXT_PUBLIC_ENDPOINT}/api/Admin/users-with-roles`, {
       cache: "no-store",
       method: 'GET',
       headers: {
