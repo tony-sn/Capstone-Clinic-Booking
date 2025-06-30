@@ -5,6 +5,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
 namespace ClinicBooking.Controllers;
+
 public class AdminController(UserManager<User> userManager) : BaseApiController
 {
     [Authorize(Policy = "Admin")]
@@ -32,7 +33,9 @@ public class AdminController(UserManager<User> userManager) : BaseApiController
         return Ok(await userManager.GetRolesAsync(user));
     }
 
-    [Authorize(Policy = "Admin")]
+
+    // [Authorize(Policy = "Admin")]
+    [AllowAnonymous]
     [HttpGet("users-with-roles")]
     public async Task<ActionResult> GetUsersWithRoles()
     {

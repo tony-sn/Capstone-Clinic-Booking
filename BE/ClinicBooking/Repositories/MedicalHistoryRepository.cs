@@ -16,7 +16,7 @@ public class MedicalHistoryRepository : IMedicalHistoryRepository
 
     public async Task<IEnumerable<MedicalHistory>> GetAllAsync()
     {
-        return await _context.MedicalHistories.ToListAsync();
+        return await _context.MedicalHistories.OrderByDescending(x => x.MedicalHistoryId).ToListAsync();
     }
 
     public async Task<MedicalHistory?> GetById(int id)
