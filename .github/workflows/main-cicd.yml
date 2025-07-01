@@ -113,12 +113,12 @@ jobs:
               --network clinic-network \
               -p 8082:80 \
               -e ASPNETCORE_ENVIRONMENT=Development \
-              -e "ConnectionStrings__DefaultConnection=${{ secrets.DEFAULT_CONNECTION }}" \
-              -e "EmailSenderSettings__SmtpServer=${{ secrets.EMAILSENDERSETTINGS_SMTPSERVER }}" \
-              -e "EmailSenderSettings__SmtpPort=${{ secrets.EMAILSENDERSETTINGS_SMTPPORT }}" \
-              -e "EmailSenderSettings__EnableSsl=${{ secrets.EMAILSENDERSETTINGS_ENABLESSL }}" \
-              -e "EmailSenderSettings__Username=${{ secrets.EMAILSENDERSETTINGS_USERNAME }}" \
-              -e "EmailSenderSettings__Password=${{ secrets.EMAILSENDERSETTINGS_PASSWORD }}" \
+              -e DEFAULT_CONNECTION="${{ secrets.DEFAULT_CONNECTION }}" \
+              -e EMAILSENDERSETTINGS_SMTPSERVER="${{ secrets.EMAILSENDERSETTINGS_SMTPSERVER }}" \
+              -e EMAILSENDERSETTINGS_SMTPPORT="${{ secrets.EMAILSENDERSETTINGS_SMTPPORT }}" \
+              -e EMAILSENDERSETTINGS_ENABLESSL="${{ secrets.EMAILSENDERSETTINGS_ENABLESSL }}" \
+              -e EMAILSENDERSETTINGS_USERNAME="${{ secrets.EMAILSENDERSETTINGS_USERNAME }}" \
+              -e EMAILSENDERSETTINGS_PASSWORD="${{ secrets.EMAILSENDERSETTINGS_PASSWORD }}" \
               --restart unless-stopped \
               ${{ env.CLINICBOOKING_IMAGE_NAME_LOWER }}:latest
 
