@@ -49,10 +49,19 @@ public class MedicalHistoryRepository : IMedicalHistoryRepository
 
     public async Task<MedicalHistory> DeleteById(int id)
     {
-        var item = await _context.MedicalHistories.FindAsync(id);
-        if (item == null) throw new ArgumentException($"invalid id: {id}");
-        _context.MedicalHistories.Remove(item);
-        await _context.SaveChangesAsync();
-        return item;
+        try
+        {
+            var item = await _context.MedicalHistories.FindAsync(id);
+            if (item == null) throw new ArgumentException($"invalid id: {id}");
+            item.Active = false;
+            _context.MedicalHistories.Update(item);
+            await _context.SaveChangesAsync();
+            return item;
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine(ex.Message);
+            return null;
+        }
     }
 }

@@ -2,6 +2,7 @@ import { useMutation } from "@tanstack/react-query";
 import {
   createMedicalHistory,
   updateMedicalHistory,
+  deleteMedicalHistoryById
   // deleteMedicalHistoryById, // Add this if you have delete function
 } from "@/lib/api/medical-history.action";
 
@@ -15,14 +16,14 @@ export const useEditMedicalHistory = () => {
       updateMedicalHistory(id, formData),
   });
 
-  // Uncomment if you have delete function
-  // const remove = useMutation({
-  //   mutationFn: (id: number) => deleteMedicalHistoryById(id),
-  // });
+  const remove = useMutation({
+    mutationFn: (id: number) => deleteMedicalHistoryById(id),
+  });
 
-  return { 
-    create, 
-    update, 
-    // remove 
+
+  return {
+    create,
+    update,
+    remove
   };
 };

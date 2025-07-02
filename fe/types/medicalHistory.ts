@@ -14,11 +14,16 @@ export interface Pagination {
   totalItems: number;
   totalPages: number;
 }
-export interface MedicalHistoryResponse {
+export interface MedicalHistoriesResponse {
   status: number;
   message: string;
   data: MedicalHistory[];
   pagination: Pagination;
+}
+export interface MedicalHistoryResponse {
+  status: number;
+  message: string;
+  data: MedicalHistory;
 }
 export interface MedicalHistoryParams {
   pageSize?: number;

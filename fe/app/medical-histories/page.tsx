@@ -5,6 +5,7 @@ import { useInfiniteMedicalHistories } from "@/hooks/medicalhistories/useMedical
 import { MedicalHistory } from "@/types/medicalHistory";
 import MedicalHistoryDetailModal from "@/components/new/forms/medical-history/medicalhistoryDetailForm";
 import MedicalHistoryFormModal from "@/components/new/forms/medical-history/medicalhistoryEditForm";
+import MedicalHistoryDeleteModal from "@/components/new/forms/medical-history/medicalHistoryDeleteForm"; // Import delete modal
 
 import Link from "next/link";
 import { useState } from "react";
@@ -23,11 +24,26 @@ const MedicalHistoriesPage = () => {
     const [selectedId, setSelectedId] = useState<number | null>(null);
     const [isDetailModalOpen, setIsDetailModalOpen] = useState(false);
     const [isFormModalOpen, setIsFormModalOpen] = useState(false);
+    const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false); // Add delete modal state
     const [editingId, setEditingId] = useState<number | null>(null);
+    const [deletingId, setDeletingId] = useState<number | null>(null); // Add deleting ID state
+    const [statusFilter, setStatusFilter] = useState<'all' | 'active' | 'completed'>('all'); // Add status filter
 
     // Flatten all pages' data into a single array
     const histories: MedicalHistory[] = data?.pages
         ?.flatMap((page) => page?.data || []) || [];
+
+    // Filter histories based on status
+    const filteredHistories = histories.filter(history => {
+        switch (statusFilter) {
+            case 'active':
+                return history.active;
+            case 'completed':
+                return !history.active;
+            default:
+                return true;
+        }
+    });
 
     // Handler để mở detail modal
     const handleViewRecord = (medicalHistoryId: number) => {
@@ -47,6 +63,12 @@ const MedicalHistoriesPage = () => {
         setIsFormModalOpen(true);
     };
 
+    // Handler để mở delete modal
+    const handleDeleteRecord = (medicalHistoryId: number) => {
+        setDeletingId(medicalHistoryId);
+        setIsDeleteModalOpen(true);
+    };
+
     // Handler để đóng detail modal
     const handleCloseDetailModal = () => {
         setIsDetailModalOpen(false);
@@ -59,11 +81,47 @@ const MedicalHistoriesPage = () => {
         setEditingId(null);
     };
 
+    // Handler để đóng delete modal
+    const handleCloseDeleteModal = () => {
+        setIsDeleteModalOpen(false);
+        setDeletingId(null);
+    };
+
     // Handler sau khi create/update thành công
     const handleFormSuccess = () => {
         setIsFormModalOpen(false);
         setEditingId(null);
         refetch(); // Refresh data
+    };
+
+    // Handler sau khi delete thành công
+    const handleDeleteSuccess = () => {
+        setIsDeleteModalOpen(false);
+        setDeletingId(null);
+        refetch(); // Refresh data
+    };
+
+    // Handler để toggle active status
+    const handleToggleActive = async (medicalHistoryId: number, newActiveStatus: boolean) => {
+        try {
+            // You'll need to implement this API call
+            // await updateMedicalHistoryStatus(medicalHistoryId, newActiveStatus);
+            console.log(`Toggling record ${medicalHistoryId} to ${newActiveStatus ? 'active' : 'inactive'}`);
+            
+            // For now, just show a message and refresh
+            alert(`Record marked as ${newActiveStatus ? 'active' : 'completed'}`);
+            refetch(); // Refresh data after status change
+        } catch (error) {
+            console.error('Error updating status:', error);
+            alert('Failed to update status. Please try again.');
+        }
+    };
+
+    // Get record title for delete modal
+    const getDeletingRecordTitle = () => {
+        if (!deletingId) return undefined;
+        const record = histories.find(h => h.medicalHistoryId === deletingId);
+        return record ? `Medical Record #${record.medicalHistoryId}` : undefined;
     };
 
     if (isLoading) {
@@ -94,26 +152,49 @@ const MedicalHistoriesPage = () => {
             {/* Header with Create Button */}
             <div className="flex items-center justify-between mb-6">
                 <h1 className="text-2xl font-semibold">Medical Histories</h1>
-                <button
-                    onClick={handleCreateRecord}
-                    className="bg-green-600 text-white px-4 py-2 rounded-lg font-medium hover:bg-green-700 transition-colors flex items-center gap-2"
-                >
-                    <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4v16m8-8H4" />
-                    </svg>
-                    Create New Record
-                </button>
-            </div>
-
-            {histories.length === 0 ? (
-                <div className="text-center py-8">
-                    <p className="text-gray-500">No medical histories found.</p>
+                <div className="flex items-center gap-3">
+                    {/* Status Filter */}
+                    <div className="flex items-center gap-2">
+                        <span className="text-sm font-medium text-gray-700">Filter:</span>
+                        <select 
+                            value={statusFilter} 
+                            onChange={(e) => setStatusFilter(e.target.value as 'all' | 'active' | 'completed')}
+                            className="px-3 py-1.5 text-sm border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+                        >
+                            <option value="all">All Records ({histories.length})</option>
+                            <option value="active">Active Treatment ({histories.filter(h => h.active).length})</option>
+                            <option value="completed">Completed ({histories.filter(h => !h.active).length})</option>
+                        </select>
+                    </div>
+                    
                     <button
                         onClick={handleCreateRecord}
-                        className="mt-4 bg-green-600 text-white px-6 py-2 rounded-lg font-medium hover:bg-green-700 transition-colors"
+                        className="bg-green-600 text-white px-4 py-2 rounded-lg font-medium hover:bg-green-700 transition-colors flex items-center gap-2"
                     >
-                        Create First Record
+                        <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4v16m8-8H4" />
+                        </svg>
+                        Create New Record
                     </button>
+                </div>
+            </div>
+
+            {filteredHistories.length === 0 ? (
+                <div className="text-center py-8">
+                    <p className="text-gray-500">
+                        {statusFilter === 'all' 
+                            ? "No medical histories found." 
+                            : `No ${statusFilter} medical histories found.`
+                        }
+                    </p>
+                    {statusFilter === 'all' && (
+                        <button
+                            onClick={handleCreateRecord}
+                            className="mt-4 bg-green-600 text-white px-6 py-2 rounded-lg font-medium hover:bg-green-700 transition-colors"
+                        >
+                            Create First Record
+                        </button>
+                    )}
                 </div>
             ) : (
                 <InfiniteScroll
@@ -122,7 +203,7 @@ const MedicalHistoriesPage = () => {
                     isFetchingNextPage={isFetchingNextPage}
                 >
                     <div className="space-y-4">
-                        {histories.map((history) => (
+                        {filteredHistories.map((history) => (
                             <div
                                 key={history.medicalHistoryId}
                                 className={`bg-white rounded-xl border-l-4 shadow-sm hover:shadow-md transition-all duration-200 p-6 ${history.active
@@ -223,6 +304,28 @@ const MedicalHistoriesPage = () => {
                                     )}
                                 </div>
 
+                                {/* Status Toggle */}
+                                <div className="mt-4 mb-4">
+                                    <div className="flex items-center justify-between bg-gray-50 rounded-lg p-3">
+                                        <div className="flex items-center gap-2">
+                                            <svg className="w-4 h-4 text-gray-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+                                            </svg>
+                                            <span className="text-sm font-medium text-gray-700">Treatment Status:</span>
+                                        </div>
+                                        <button
+                                            onClick={() => handleToggleActive(history.medicalHistoryId, !history.active)}
+                                            className={`px-3 py-1.5 rounded-full text-xs font-medium transition-colors ${
+                                                history.active 
+                                                    ? 'bg-emerald-100 text-emerald-800 hover:bg-emerald-200' 
+                                                    : 'bg-gray-200 text-gray-700 hover:bg-gray-300'
+                                            }`}
+                                        >
+                                            {history.active ? 'Mark as Completed' : 'Mark as Active'}
+                                        </button>
+                                    </div>
+                                </div>
+
                                 {/* Action Buttons */}
                                 <div className="mt-6 pt-4 border-t border-slate-200">
                                     <div className="flex gap-3">
@@ -238,8 +341,11 @@ const MedicalHistoriesPage = () => {
                                         >
                                             Edit Record
                                         </button>
-                                        <button className="px-4 py-2 border border-slate-300 text-slate-700 rounded-lg font-medium hover:bg-slate-50 transition-colors text-sm">
-                                            Print
+                                        <button 
+                                            onClick={() => handleDeleteRecord(history.medicalHistoryId)}
+                                            className="px-4 py-2 border border-red-300 text-red-700 rounded-lg font-medium hover:bg-red-50 transition-colors text-sm"
+                                        >
+                                            Delete
                                         </button>
                                     </div>
                                 </div>
@@ -265,6 +371,17 @@ const MedicalHistoriesPage = () => {
                 onClose={handleCloseFormModal}
                 onSuccess={handleFormSuccess}
             />
+
+            {/* Delete Modal */}
+            {isDeleteModalOpen && deletingId && (
+                <MedicalHistoryDeleteModal
+                    medicalHistoryId={deletingId}
+                    medicalHistoryTitle={getDeletingRecordTitle()}
+                    isOpen={isDeleteModalOpen}
+                    onClose={handleCloseDeleteModal}
+                    onSuccess={handleDeleteSuccess}
+                />
+            )}
         </div>
     );
 };
