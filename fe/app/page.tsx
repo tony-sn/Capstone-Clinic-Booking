@@ -4,30 +4,11 @@ import Link from "next/link";
 import { PatientForm } from "@/components/new/forms/PatientForm";
 import { PasskeyModal } from "@/components/PasskeyModal";
 import config from "@/config.json";
-import { UNSPLASH_ACCESS_KEY } from "@/lib/app.config";
 
 const Home = async ({ searchParams }: SearchParamProps) => {
   const isAdmin = searchParams?.admin === "true";
 
-  const unsplash = async () => {
-    const res = await fetch(
-      "https://api.unsplash.com/photos/random?query=doctor",
-      {
-        method: "GET",
-        headers: {
-          Authorization: `Client-ID ${UNSPLASH_ACCESS_KEY}`,
-        },
-        mode: "cors",
-      },
-    );
-    return res.json();
-  };
   let coverURL: string | undefined;
-
-  if (UNSPLASH_ACCESS_KEY) {
-    const data = await unsplash();
-    coverURL = data?.urls?.full;
-  }
 
   const srcSource = coverURL ?? "/assets/images/onboarding-img.png";
 
