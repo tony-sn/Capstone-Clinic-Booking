@@ -1,12 +1,19 @@
 import type { Metadata } from "next";
 import "./globals.css";
-import { Plus_Jakarta_Sans as FontSans } from "next/font/google";
+import {
+  Plus_Jakarta_Sans as FontSans,
+  Playfair_Display as Playfair,
+} from "next/font/google";
 
 import { Providers } from "@/components/Providers";
 import { Toaster } from "@/components/ui/toaster";
 import config from "@/config.json";
 import { cn } from "@/lib/utils";
 
+const playfair = Playfair({
+  subsets: ["latin"],
+  variable: "--font-playfair",
+});
 const fontSans = FontSans({
   subsets: ["latin"],
   weight: ["300", "400", "500", "600", "700"],
@@ -31,8 +38,9 @@ export default function RootLayout({
     <html lang="en">
       <body
         className={cn(
-          "min-h-screen bg-dark-300 font-sans antialiased",
+          "min-h-screen bg-dark-300 font-sans font-playfair antialiased",
           fontSans.variable,
+          playfair.variable,
         )}
       >
         <Providers>{children}</Providers>
