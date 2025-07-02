@@ -12,5 +12,6 @@ export const Endpoints = {
   MEDICINE: `${ENDPOINT}/api/Medicine`,
   MEDICINE_INVENTORY_ENTRY: `${ENDPOINT}/api/MedicineInventoryEntry`,
   PRESCRIPTION: `${ENDPOINT}/api/Prescription`,
-  USERS:`${ENDPOINT}/api/Admin/users-with-roles`
+  USERS: `${ENDPOINT}/api/Admin/users-with-roles`,
+  REGISTER: `${ENDPOINT}/api/register`,
 };

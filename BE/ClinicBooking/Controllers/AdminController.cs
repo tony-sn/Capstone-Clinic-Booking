@@ -6,6 +6,15 @@ using Microsoft.EntityFrameworkCore;
 
 namespace ClinicBooking.Controllers;
 
+public class CreateUserDTO
+{
+    public required string Email { get; set; }
+    public required string Password { get; set; }
+    public required string FirstName { get; set; }
+    public required string LastName { get; set; }
+    public List<string> Roles { get; set; } = [];
+}
+
 public class AdminController(UserManager<User> userManager) : BaseApiController
 {
     [Authorize(Policy = "Admin")]
@@ -33,9 +42,41 @@ public class AdminController(UserManager<User> userManager) : BaseApiController
         return Ok(await userManager.GetRolesAsync(user));
     }
 
+    [Authorize(Policy = "Admin")]
+    [HttpPost("create-user")]
+    public async Task<ActionResult> CreateUser(CreateUserDTO dto)
+    {
+        var user = new User
+        {
+            UserName = dto.Email,
+            Email = dto.Email,
+            FirstName = dto.FirstName,
+            LastName = dto.LastName
+        };
 
-    // [Authorize(Policy = "Admin")]
-    [AllowAnonymous]
+        var result = await userManager.CreateAsync(user, dto.Password);
+
+        if (!result.Succeeded)
+            return BadRequest(result.Errors);
+
+        // Gán các role nếu có
+        if (dto.Roles.Count > 0)
+        {
+            var roleResult = await userManager.AddToRolesAsync(user, dto.Roles);
+            if (!roleResult.Succeeded)
+                return BadRequest(roleResult.Errors);
+        }
+
+        // Thiết lập cờ yêu cầu đổi mật khẩu
+        await userManager.SetLockoutEnabledAsync(user, false);
+        await userManager.UpdateSecurityStampAsync(user);
+        await userManager.SetAuthenticationTokenAsync(user, "Default", "ForcePasswordChange", "true");
+
+        return Ok("User created. Password change required on first login.");
+    }
+
+
+    [Authorize(Policy = "Admin")]
     [HttpGet("users-with-roles")]
     public async Task<ActionResult> GetUsersWithRoles()
     {
@@ -52,4 +93,3 @@ public class AdminController(UserManager<User> userManager) : BaseApiController
         return Ok(users);
     }
 }
-

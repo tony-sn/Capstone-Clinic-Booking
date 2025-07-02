@@ -123,8 +123,18 @@ public static class IdentityApiEndpointRouteBuilderExtensions
                 return TypedResults.Problem(result.ToString(), statusCode: StatusCodes.Status401Unauthorized);
             }
 
-            // The signInManager already produced the needed response in the form of a cookie or bearer token.
+
+            var user = await signInManager.UserManager.FindByEmailAsync(login.Email);
+            var forceChange = await signInManager.UserManager.GetAuthenticationTokenAsync(user, "Default", "ForcePasswordChange");
+
+            if (forceChange == "true")
+            {
+                // Trả về trạng thái yêu cầu đổi mật khẩu
+                return TypedResults.Problem("Password change required", statusCode: StatusCodes.Status428PreconditionRequired);
+            }
+
             return TypedResults.Empty;
+
         });
 
         routeGroup.MapPost("/refresh", async Task<Results<Ok<AccessTokenResponse>, UnauthorizedHttpResult, SignInHttpResult, ChallengeHttpResult>>
@@ -304,6 +314,7 @@ public static class IdentityApiEndpointRouteBuilderExtensions
                 {
                     return CreateValidationProblem(changePasswordResult);
                 }
+                await userManager.RemoveAuthenticationTokenAsync(user, "Default", "ForcePasswordChange");
             }
 
             if (!string.IsNullOrEmpty(infoRequest.NewEmail))
