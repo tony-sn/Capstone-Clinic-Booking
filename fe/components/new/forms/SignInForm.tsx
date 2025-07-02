@@ -1,42 +1,42 @@
 "use client";
 
 import { zodResolver } from "@hookform/resolvers/zod";
-import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 
 import { Form } from "@/components/ui/form";
-import { createUser } from "@/lib/actions/patient.actions";
-import { UserFormValidation } from "@/lib/validation";
+import { createUser } from "@/lib/api/patient.actions";
+import { generateStrongPassword } from "@/lib/utils";
+import { UserLoginValidation } from "@/lib/validation";
 
 import "react-phone-number-input/style.css";
-import CustomFormField, { FormFieldType } from "../CustomFormField";
-import SubmitButton from "../SubmitButton";
+import CustomFormField, { FormFieldType } from "../../CustomFormField";
+import SubmitButton from "../../SubmitButton";
 
-export const PatientForm = () => {
-  const router = useRouter();
+export function SignInForm() {
+  // const router = useRouter();
   const [isLoading, setIsLoading] = useState(false);
 
-  const form = useForm<z.infer<typeof UserFormValidation>>({
-    resolver: zodResolver(UserFormValidation),
+  const form = useForm<z.infer<typeof UserLoginValidation>>({
+    resolver: zodResolver(UserLoginValidation),
     defaultValues: {
-      name: "",
       email: "",
-      phone: "",
+      password: "",
     },
   });
 
-  const onSubmit = async (values: z.infer<typeof UserFormValidation>) => {
+  const onSubmit = async (values: z.infer<typeof UserLoginValidation>) => {
     setIsLoading(true);
 
     try {
+      const password = generateStrongPassword();
       const user = {
-        name: values.name,
         email: values.email,
-        phone: values.phone,
+        password,
       };
 
+      // TODO: change this to login endpoint to get cookie
       const newUser = await createUser(user);
       console.log({
         user,
@@ -44,7 +44,7 @@ export const PatientForm = () => {
       });
 
       if (newUser) {
-        router.push(`/patients/${newUser.$id}/register`);
+        // router.push(`/patients/${newUser?.id}/register`);
       }
     } catch (error) {
       console.log(error);
@@ -58,18 +58,8 @@ export const PatientForm = () => {
       <form onSubmit={form.handleSubmit(onSubmit)} className="flex-1 space-y-6">
         <section className="mb-12 space-y-4">
           <h1 className="header">Hi there 👋</h1>
-          <p className="text-dark-700">Get started with appointments.</p>
+          <p className="text-dark-700">Please login first.</p>
         </section>
-
-        <CustomFormField
-          fieldType={FormFieldType.INPUT}
-          control={form.control}
-          name="name"
-          label="Full name"
-          placeholder="John Doe"
-          iconSrc="/assets/icons/user.svg"
-          iconAlt="user"
-        />
 
         <CustomFormField
           fieldType={FormFieldType.INPUT}
@@ -82,15 +72,17 @@ export const PatientForm = () => {
         />
 
         <CustomFormField
-          fieldType={FormFieldType.PHONE_INPUT}
+          fieldType={FormFieldType.PASSWORD}
           control={form.control}
-          name="phone"
-          label="Phone number"
-          placeholder="(555) 123-4567"
+          name="password"
+          label="Password"
+          placeholder="password"
+          iconSrc="/assets/icons/user.svg"
+          iconAlt="user"
         />
 
-        <SubmitButton isLoading={isLoading}>Get Started</SubmitButton>
+        <SubmitButton isLoading={isLoading}>Login</SubmitButton>
       </form>
     </Form>
   );
-};
+}
