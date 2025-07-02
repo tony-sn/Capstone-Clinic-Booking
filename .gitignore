@@ -486,5 +486,6 @@ $RECYCLE.BIN/
 # Vim temporary swap files
 *.swp
 
-appsettings.Development.json
+appsettings*.json
+ApplicationDbContextFactory.cs
 BE/ClinicBooking/obj/

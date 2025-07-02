@@ -2,17 +2,14 @@ using ClinicBooking.Data;
 using ClinicBooking.Extensions;
 using ClinicBooking.MiddleWares;
 using ClinicBooking.Models;
+using ClinicBooking.Models.DTOs;
 using ClinicBooking.Models.Settings;
 using ClinicBooking.Repositories;
 using ClinicBooking.Repositories.IRepositories;
 using ClinicBooking.Services;
+using ClinicBooking.Services.IServices;
 using Microsoft.AspNetCore.DataProtection;
 using Microsoft.AspNetCore.Identity;
-using ClinicBooking.Models.DTOs;
-using ClinicBooking.Repositories;
-using ClinicBooking.Repositories.IRepositories;
-using ClinicBooking.Services;
-using ClinicBooking.Services.IServices;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.FileProviders;
 using Microsoft.OpenApi.Models;
@@ -27,8 +24,10 @@ builder.Services.AddOpenApi();
 
 // add DbContext
 builder.Services.AddDbContextFactory<ApplicationDbContext>(options =>
-    options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection"),
-        o => o.UseQuerySplittingBehavior(QuerySplittingBehavior.SplitQuery)));
+{
+    var connectionString = Environment.GetEnvironmentVariable("DEFAULT_CONNECTION");
+    options.UseSqlServer(connectionString, o => o.UseQuerySplittingBehavior(QuerySplittingBehavior.SplitQuery));
+});
 
 builder.Services.AddDataProtection()
     .SetApplicationName("ClinicBooking")
@@ -37,7 +36,19 @@ builder.Services.AddDataProtection()
 
 // HTTP, Email, Logging
 builder.Services.AddHttpClient();
-builder.Services.Configure<EmailSenderSettings>(builder.Configuration.GetSection("EmailSenderSettings"));
+builder.Services.Configure<EmailSenderSettings>(options =>
+{
+    var smtpServer = Environment.GetEnvironmentVariable("EMAILSENDERSETTINGS_SMTPSERVER") 
+                 ?? throw new InvalidOperationException("Missing SMTP server env var");
+    options.SmtpServer = smtpServer;
+    options.SmtpPort = int.Parse(Environment.GetEnvironmentVariable("EMAILSENDERSETTINGS_SMTPPORT") ?? "587");
+    options.EnableSsl = bool.Parse(Environment.GetEnvironmentVariable("EMAILSENDERSETTINGS_ENABLESSL") ?? "true");
+    options.UserName = Environment.GetEnvironmentVariable("EMAILSENDERSETTINGS_USERNAME");
+    options.Password = Environment.GetEnvironmentVariable("EMAILSENDERSETTINGS_PASSWORD");
+});
+
+
+
 builder.Services.AddTransient(typeof(IEmailSender<>), typeof(EmailSender<>));
 
 // Identity & Role
@@ -72,7 +83,10 @@ builder.Services.AddScoped<IRevenueReportRepository, RevenueReportRepository>();
 builder.Services.AddScoped<IRevenueReportService, RevenueReportService>();
 builder.Services.AddScoped<ITransactionRepository, TransactionRepository>();
 builder.Services.AddScoped<ITransactionService, TransactionService>();
-
+builder.Services.AddScoped<IDepartmentRepository, DepartmentRepository>();
+builder.Services.AddScoped<IDepartmentService, DepartmentService>();
+builder.Services.AddScoped<IDoctorRepository, DoctorRepository>();
+builder.Services.AddScoped<IDoctorService, DoctorService>();
 #endregion
 
 // Swagger
