@@ -22,4 +22,5 @@ export interface LaboratoryTestReport {
 }
 
 // Usage example
-export type LaboratoryTestReportResponse = ApiResponse<LaboratoryTestReport[]>;
+export type LaboratoryTestReportsResponse = ApiResponse<LaboratoryTestReport[]>;
+//export type LaboratoryTestReportResponse = ApiResponse<LaboratoryTestReport>;

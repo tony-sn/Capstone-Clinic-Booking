@@ -4,7 +4,7 @@
 import { revalidatePath } from "next/cache";
 
 import { Endpoints } from "@/lib/app.config";
-import type {ApiResponse,LaboratoryTestReport} from "@/types/laboratoryTest"
+import type { ApiResponse, LaboratoryTestReport } from "@/types/laboratoryTest"
 
 export const getAllLaboratoryTest = async ({
   pageSize = 5,
@@ -19,9 +19,9 @@ export const getAllLaboratoryTest = async ({
     if (!res.ok) {
       throw new Error("Failed to fetch laboratory tests");
     }
-    
+
     const result = await res.json();
-    
+
     // Return full response, không chỉ data
     return result;
   } catch (error) {
@@ -33,7 +33,7 @@ export const getAllLaboratoryTest = async ({
   }
 };
 
-export const getLaboratoryTestById = async (id: number) => {
+export const getLaboratoryTestById = async (id: number): Promise<LaboratoryTestReport> => {
   const res = await fetch(`${Endpoints.LABORATORY_TEST}/${id}`, {
     cache: "no-store",
   });
@@ -41,8 +41,9 @@ export const getLaboratoryTestById = async (id: number) => {
   if (!res.ok) {
     throw new Error("Failed to fetch laboratory test by ID");
   }
+  var data = await res.json();
 
-  return res.json();
+  return data.data;
 };
 
 export const createLaboratoryTest = async (formData: FormData) => {
