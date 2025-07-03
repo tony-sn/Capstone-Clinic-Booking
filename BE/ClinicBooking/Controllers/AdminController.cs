@@ -5,6 +5,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
 namespace ClinicBooking.Controllers;
+
 public class CreateUserDTO
 {
     public required string Email { get; set; }
@@ -75,7 +76,7 @@ public class AdminController(UserManager<User> userManager) : BaseApiController
     }
 
 
-    [Authorize(Policy = "Admin")]
+   // [Authorize(Policy = "Admin")]
     [HttpGet("users-with-roles")]
     public async Task<ActionResult> GetUsersWithRoles()
     {
