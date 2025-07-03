@@ -4,7 +4,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { useEffect, useState } from "react";
 
-import MobileMenu from "@/components/MobileMenu";
+import MobileMenu from "@/components/layout/MobileMenu";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 
@@ -72,10 +72,13 @@ const Navbar = () => {
             className={cn(
               "font-medium",
               !isScrolled &&
-                "text-theme border-theme-500 hover:bg-theme-600/20 hover:text-white",
+              "text-theme border-theme-500 hover:bg-theme-600/20 hover:text-white",
             )}
+            asChild
           >
-            Book Consultation
+            <Link href="/sign-in">
+              Login
+            </Link>
           </Button>
         </div>
 

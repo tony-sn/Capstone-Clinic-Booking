@@ -5,9 +5,9 @@ import Link from "next/link";
 import { useState } from "react";
 
 import { Button } from "@/components/ui/button";
+import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
 import { cn } from "@/lib/utils";
 
-import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
 
 interface MobileMenuProps {
   isScrolled: boolean;
@@ -35,8 +35,8 @@ const MobileMenu = ({ isScrolled }: MobileMenuProps) => {
         <SheetContent side="right" className="pr-0">
           <div className="flex flex-col gap-4 px-4">
             <div className="flex items-center justify-between">
-              <span className="font-playfair text-xl font-medium">
-                The Holistic Hub
+              <span className="font-sans text-xl font-medium">
+                Cyber Clinic
               </span>
               <Button
                 variant="ghost"
@@ -60,15 +60,17 @@ const MobileMenu = ({ isScrolled }: MobileMenuProps) => {
                 <Link
                   key={item}
                   href={`#${item.toLowerCase()}`}
-                  className="hover:text-theme-600 text-base font-medium transition-colors"
+                  className="text-base font-medium transition-colors hover:text-theme-600"
                   onClick={() => setOpen(false)}
                 >
                   {item}
                 </Link>
               ))}
             </nav>
-            <Button className="text-theme-600 mt-4 w-full">
-              Book Consultation
+            <Button className="mt-4 w-full text-theme-600" asChild>
+              <Link href="/sign-in">
+                Login
+              </Link>
             </Button>
           </div>
         </SheetContent>
