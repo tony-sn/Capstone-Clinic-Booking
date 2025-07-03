@@ -63,7 +63,8 @@ namespace ClinicBooking.Services
             {
                 Name = laboratoryTestRequest.Name,
                 Description = laboratoryTestRequest.Description,
-                Price = laboratoryTestRequest.Price
+                Price = laboratoryTestRequest.Price,
+                Active = laboratoryTestRequest.Active
             };
             var result = await _laboratoryTestRepository.Update(id, item);
             return LaboratoryTestDTO.ConvertToDTO(result);
