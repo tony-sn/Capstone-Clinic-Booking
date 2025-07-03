@@ -1,6 +1,10 @@
+
 import { useInfiniteQuery, useQuery } from "@tanstack/react-query";
 
-import { getAllLaboratoryTest } from "@/lib/api/laboratory-test.actions";
+import { getAllLaboratoryTest, getLaboratoryTestById } from "@/lib/api/laboratory-test.actions";
+
+import { MedicalHistoryResponse } from "@/types/medicalHistory";
+import { LaboratoryTestReport } from "@/types/laboratoryTest";
 
 export const useLaboratoryTests = ({
   pageSize = 5,
@@ -21,9 +25,16 @@ export const useInfiniteLaboratoryTests = (pageSize = 5) =>
       getAllLaboratoryTest({ pageNumber: pageParam, pageSize }),
     getNextPageParam: (lastPage) => {
       const pagination = lastPage?.pagination;
-      const hasNextPage =
-        pagination.pageNumber * pagination.pageSize < pagination.totalItems;
-      return hasNextPage ? pagination.pageNumber + 1 : undefined;
+      if (!pagination) return undefined;
+      // Nếu đã đến trang cuối thì không load nữa
+      if (pagination.pageNumber >= pagination.totalPages) return undefined;
+      // Ngược lại, trả về số trang tiếp theo
+      return pagination.pageNumber + 1;
     },
     initialPageParam: 1,
   });
+
+export const laboratoryTestDetail = ({ laboratoryTestId }: { laboratoryTestId: number }) => useQuery<LaboratoryTestReport>({
+  queryKey: ["laboratoryTest", laboratoryTestId],
+  queryFn: () => getLaboratoryTestById(laboratoryTestId)
+});

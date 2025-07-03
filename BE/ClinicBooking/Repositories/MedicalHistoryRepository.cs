@@ -16,7 +16,7 @@ public class MedicalHistoryRepository : IMedicalHistoryRepository
 
     public async Task<IEnumerable<MedicalHistory>> GetAllAsync()
     {
-        return await _context.MedicalHistories.ToListAsync();
+        return await _context.MedicalHistories.OrderByDescending(x => x.MedicalHistoryId).ToListAsync();
     }
 
     public async Task<MedicalHistory?> GetById(int id)
@@ -49,10 +49,19 @@ public class MedicalHistoryRepository : IMedicalHistoryRepository
 
     public async Task<MedicalHistory> DeleteById(int id)
     {
-        var item = await _context.MedicalHistories.FindAsync(id);
-        if (item == null) throw new ArgumentException($"invalid id: {id}");
-        _context.MedicalHistories.Remove(item);
-        await _context.SaveChangesAsync();
-        return item;
+        try
+        {
+            var item = await _context.MedicalHistories.FindAsync(id);
+            if (item == null) throw new ArgumentException($"invalid id: {id}");
+            item.Active = false;
+            _context.MedicalHistories.Update(item);
+            await _context.SaveChangesAsync();
+            return item;
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine(ex.Message);
+            return null;
+        }
     }
 }
