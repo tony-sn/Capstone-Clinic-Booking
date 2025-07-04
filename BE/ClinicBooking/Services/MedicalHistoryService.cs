@@ -1,8 +1,8 @@
-using ClinicBooking_Utility;
-using ClinicBooking.Models;
+﻿using ClinicBooking.Models;
 using ClinicBooking.Models.DTOs;
 using ClinicBooking.Repositories.IRepositories;
 using ClinicBooking.Services.IServices;
+using ClinicBooking_Utility;
 
 namespace ClinicBooking.Services
 {
@@ -14,6 +14,26 @@ namespace ClinicBooking.Services
         {
             _repository = repository;
         }
+
+        public async Task<MedicalHistoryDTO> CalculateTotalAmount(int medicalHistoryId)
+        {
+            var history = await _repository.GetById(medicalHistoryId);
+            if (history == null) return null;
+
+            var appointmentPrice = await _repository.GetAppointmentPriceByMedicalHistoryId(medicalHistoryId);
+
+            var prescriptionAmount = await _repository.GetPrescriptionTotalAmountByMedicalHistoryId(medicalHistoryId);
+
+            var labTestAmount = await _repository.GetTotalLaboratoryTestPriceByMedicalHistoryId(medicalHistoryId);
+
+            var total = appointmentPrice + prescriptionAmount + labTestAmount;
+
+            history.TotalAmount = total;
+            await _repository.Update(medicalHistoryId, history);
+
+            return MedicalHistoryDTO.ConvertToDTO(history);
+        }
+
 
         public async Task<PageResultUlt<IEnumerable<MedicalHistoryDTO>>> GetAll(int pageSize = 0, int pageNumber = 1)
         {
@@ -44,7 +64,7 @@ namespace ClinicBooking.Services
         {
             var entity = new MedicalHistory
             {
-                TotalAmount = request.TotalAmount,  
+                TotalAmount = request.TotalAmount,
                 Symptoms = request.Symptoms,
                 Diagnosis = request.Diagnosis,
                 TreatmentInstructions = request.TreatmentInstructions,
