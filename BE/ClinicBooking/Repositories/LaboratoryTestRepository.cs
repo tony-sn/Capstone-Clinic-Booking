@@ -46,6 +46,7 @@ namespace ClinicBooking.Repositories
                 item.Name = laboratoryTest.Name;
                 item.Description = laboratoryTest.Description;
                 item.Price = laboratoryTest.Price;
+                item.Active = laboratoryTest.Active;
                 _context.LaboratoryTests.Update(item);
                 await _context.SaveChangesAsync();
                 return await _context.LaboratoryTests.AsTracking().FirstOrDefaultAsync(x => x.LaboratoryTestId == id);
