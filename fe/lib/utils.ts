@@ -86,3 +86,28 @@ export function decryptKey(passkey: string) {
 export function flattenPages<T>(pages: PaginatedPage<T>[]): T[] {
   return pages.flatMap((page) => page.data);
 }
+
+export function generateStrongPassword(length = 12): string {
+  const lowercase = "abcdefghijklmnopqrstuvwxyz";
+  const uppercase = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+  const digits = "0123456789";
+  const symbols = "!@#$%^&*()-_=+[]{};:,.<>?";
+
+  const allChars = lowercase + uppercase + digits + symbols;
+  const getRandom = (str: string) =>
+    str[Math.floor(Math.random() * str.length)];
+
+  const password = [
+    getRandom(lowercase),
+    getRandom(uppercase),
+    getRandom(digits),
+    getRandom(symbols),
+  ];
+  // Fill the rest of the password length with random characters
+  for (let i = 4; i < length; i++) {
+    password.push(getRandom(allChars));
+  }
+
+  // Shuffle to avoid predictable order
+  return password.sort(() => 0.5 - Math.random()).join("");
+}

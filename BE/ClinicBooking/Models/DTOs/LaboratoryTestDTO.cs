@@ -31,5 +31,6 @@ namespace ClinicBooking.Models.DTOs
         [Required]
         [Range(0, double.MaxValue)]
         public decimal Price { get; set; }
+        public bool Active { get; set; }
     }
 }
