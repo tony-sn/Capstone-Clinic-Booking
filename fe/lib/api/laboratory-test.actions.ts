@@ -7,7 +7,7 @@ import { Endpoints } from "@/lib/app.config";
 import type { ApiResponse, LaboratoryTestReport } from "@/types/laboratoryTest"
 
 export const getAllLaboratoryTest = async ({
-  pageSize = 5,
+  pageSize = 0,
   pageNumber = 1,
 }): Promise<ApiResponse<LaboratoryTestReport[]>> => {
   try {
@@ -20,9 +20,9 @@ export const getAllLaboratoryTest = async ({
       throw new Error("Failed to fetch laboratory tests");
     }
 
-    const result = await res.json();
+    const result: ApiResponse<LaboratoryTestReport[]> = await res.json();
 
-    // Return full response, không chỉ data
+    // Return full response object, not just data
     return result;
   } catch (error) {
     console.error(

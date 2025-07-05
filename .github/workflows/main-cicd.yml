@@ -115,6 +115,7 @@ jobs:
               -e EMAILSENDERSETTINGS_ENABLESSL="${{ secrets.EMAILSENDERSETTINGS_ENABLESSL }}" \
               -e EMAILSENDERSETTINGS_USERNAME="${{ secrets.EMAILSENDERSETTINGS_USERNAME }}" \
               -e EMAILSENDERSETTINGS_PASSWORD="${{ secrets.EMAILSENDERSETTINGS_PASSWORD }}" \
+              -e EMAILSENDERSETTINGS_FROM="${{ secrets.EMAILSENDERSETTINGS_FROM }}" \
               --restart unless-stopped \
               ${{ env.CLINICBOOKING_IMAGE_NAME_LOWER }}:latest
 
