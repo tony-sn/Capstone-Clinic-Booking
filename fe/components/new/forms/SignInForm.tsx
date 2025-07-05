@@ -1,12 +1,13 @@
 "use client";
 
+import { useRouter } from "next/navigation";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 
 import { Form } from "@/components/ui/form";
-import { createUser } from "@/lib/api/patient.actions";
+import { login } from "@/lib/api/patient.actions";
 import { generateStrongPassword } from "@/lib/utils";
 import { UserLoginValidation } from "@/lib/validation";
 
@@ -15,7 +16,7 @@ import CustomFormField, { FormFieldType } from "../../CustomFormField";
 import SubmitButton from "../../SubmitButton";
 
 export function SignInForm() {
-  // const router = useRouter();
+  const router = useRouter();
   const [isLoading, setIsLoading] = useState(false);
 
   const form = useForm<z.infer<typeof UserLoginValidation>>({
@@ -37,14 +38,14 @@ export function SignInForm() {
       };
 
       // TODO: change this to login endpoint to get cookie
-      const newUser = await createUser(user);
+      const loginUser = await login(user);
       console.log({
         user,
         newUser,
       });
 
-      if (newUser) {
-        // router.push(`/patients/${newUser?.id}/register`);
+      if (loginUser) {
+        router.push(`/patients/${loginUser?.id}/register`);
       }
     } catch (error) {
       console.log(error);

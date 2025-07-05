@@ -15,6 +15,8 @@ declare interface CreateUserParams {
   phone: string;
   password: string;
 }
+
+declare type LoginUserParams = Omit<CreateUserParams, "name" | "phone">;
 declare interface User extends CreateUserParams {
   $id: string;
 }
