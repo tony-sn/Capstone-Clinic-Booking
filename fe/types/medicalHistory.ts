@@ -1,12 +1,12 @@
-export interface MedicalHistory  {
-    medicalHistoryId :number;
-    totalAmount:number;
-    symptoms :  string | null;
-    diagnosis: string | null;
-    treatmentInstructions: string | null;
-    doctorId: number;
-    patientId: number;
-    active: boolean
+export interface MedicalHistory {
+  medicalHistoryId: number;
+  totalAmount: number;
+  symptoms: string | null;
+  diagnosis: string | null;
+  treatmentInstructions: string | null;
+  doctorId: number;
+  patientId: number;
+  active: boolean
 }
 export interface Pagination {
   pageNumber: number;
@@ -20,6 +20,7 @@ export interface MedicalHistoriesResponse {
   data: MedicalHistory[];
   pagination: Pagination;
 }
+
 export interface MedicalHistoryResponse {
   status: number;
   message: string;
@@ -27,5 +28,5 @@ export interface MedicalHistoryResponse {
 }
 export interface MedicalHistoryParams {
   pageSize?: number;
-  pageNumber?: number|null;
+  pageNumber?: number | null;
 }

@@ -7,16 +7,23 @@ import { MedicalHistoryResponse } from "@/types/medicalHistory";
 import { LaboratoryTestReport } from "@/types/laboratoryTest";
 
 export const useLaboratoryTests = ({
-  pageSize = 5,
+  pageSize = 0,
   pageNumber = 1,
 }: {
   pageSize?: number;
   pageNumber?: number;
-}) =>
-  useQuery({
+}) => {
+  return useQuery({
     queryKey: ["laboratoryTests", pageSize, pageNumber],
-    queryFn: () => getAllLaboratoryTest({ pageSize, pageNumber }),
+    queryFn: async () => {
+      const response = await getAllLaboratoryTest({ pageSize, pageNumber });
+      // Extract data from ApiResponse
+      return response.data || [];
+    },
+    staleTime: 5 * 60 * 1000, // 5 minutes
+    refetchOnWindowFocus: false,
   });
+};
 
 export const useInfiniteLaboratoryTests = (pageSize = 5) =>
   useInfiniteQuery({

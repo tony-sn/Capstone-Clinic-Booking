@@ -18,10 +18,15 @@ public class LaboratoryTestReportController : BaseApiController
     }
 
     [HttpPost]
-    public async Task<IActionResult> CreateLaboratoryTestReportAsync([FromBody] CreateLaboratoryTestReportRequest request)
+    public async Task<ActionResult<ApiResponse<LaboratoryTestReportDTO>>> CreateLaboratoryTestReportAsync([FromBody] CreateLaboratoryTestReportRequest request)
     {
         var result = await _laboratoryTestReportService.CreateLaboratoryTestReportAsync(request);
-        return Ok(result);
+        return Ok(new ApiResponse<LaboratoryTestReportDTO>
+        {
+            Status = Constants.SUCCESS_CREATE_CODE,
+            Message = Constants.SUCCESS_CREATE_MSG,
+            Data = result
+        });
     }
 
     [HttpPut]
