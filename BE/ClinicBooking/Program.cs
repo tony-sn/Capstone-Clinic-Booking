@@ -145,6 +145,8 @@ builder.Services.AddCors(options =>
     });
 });
 
+builder.Services.AddHealthChecks();
+
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
@@ -174,6 +176,8 @@ app.UseHttpsRedirection();
 
 
 app.UseAuthorization();
+
+app.MapHealthChecks("/health");
 
 app.MapControllers();
 app.MapGroup("api").MapCustomIdentityApi<User>();
