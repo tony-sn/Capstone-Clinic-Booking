@@ -177,11 +177,11 @@ export const updateLaboratoryTestReport = async (
             laboratoryTestId,
             result: data.result,
             technicianId: data.technicianId,
-            status: data.active // Convert 'active' to 'status'
+            status: data.status // Convert 'active' to 'status'
         };
 
         const res = await fetch(
-            `https://localhost:5000/api/LaboratoryTestReport`,
+            `${Endpoints.LABORATORY_TEST_REPORT}`,
             {
                 method: 'PUT',
                 headers: {
@@ -221,11 +221,11 @@ export const deleteLaboratoryTestReport = async (
 ): Promise<{ success: boolean; error?: string }> => {
     try {
         const res = await fetch(
-            `${Endpoints.LABORATORY_TEST_REPORT}/${medicalHistoryId}/${laboratoryTestId}`,
+            `${Endpoints.LABORATORY_TEST_REPORT}/Delete/${medicalHistoryId}/${laboratoryTestId}`, // Added /Delete
             {
-                method: 'DELETE',
+                method: 'PUT', // Keep PUT as per your curl example
                 headers: {
-                    'Accept': 'application/json',
+                    'Accept': 'text/plain',
                     'Content-Type': 'application/json'
                 }
             }
@@ -233,7 +233,7 @@ export const deleteLaboratoryTestReport = async (
 
         const responseData = await handleApiResponse(res);
 
-        if (responseData && responseData.status === 200) {
+        if (responseData.status === 204) { // Changed from 204 to 200
             revalidatePath('/laboratory-test-reports');
             return { success: true };
         }

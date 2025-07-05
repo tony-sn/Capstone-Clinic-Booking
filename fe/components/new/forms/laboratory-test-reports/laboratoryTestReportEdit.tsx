@@ -8,6 +8,7 @@ import {
   useCreateLaboratoryTestReport 
 } from "@/hooks/laboratory-test-report/useEditLaboratoryTestReport";
 import { useDoctors } from "@/hooks/users/useUsers"; // Import your custom hook
+import { useLaboratoryTests } from "@/hooks/laboratory-tests/useLaboratoryTests"; // Import laboratory tests hook
 
 interface LaboratoryTestReportEditProps {
   medicalHistoryId?: number;
@@ -62,6 +63,13 @@ export default function LaboratoryTestReportEdit({
     error: doctorsError 
   } = useDoctors();
 
+  // Fetch laboratory tests list (get all with pageSize: 0)
+  const { 
+    data: laboratoryTests = [], 
+    isLoading: isLoadingLabTests,
+    error: labTestsError 
+  } = useLaboratoryTests({ pageSize: 0, pageNumber: 1 });
+
   // Mutations
   const createMutation = useCreateLaboratoryTestReport();
   const updateMutation = useUpdateLaboratoryTestReport();
@@ -87,7 +95,7 @@ export default function LaboratoryTestReportEdit({
         active: true
       });
     }
-  }, [existingReport, isEditMode, medicalHistoryId, laboratoryTestId, doctors]);
+  }, [existingReport, isEditMode, medicalHistoryId, laboratoryTestId, doctors, laboratoryTests]);
 
   // Handle form submission
   const handleSubmit = async (e: React.FormEvent) => {
@@ -100,7 +108,7 @@ export default function LaboratoryTestReportEdit({
         laboratoryTestId: formData.laboratoryTestId,
         data: {
           result: formData.result,
-          active: formData.active,
+          status: formData.active,
           technicianId: formData.technicianId
         }
       }, {
@@ -148,7 +156,7 @@ export default function LaboratoryTestReportEdit({
   };
 
   // Loading state for edit mode
-  if (isEditMode && (isLoadingReport || isLoadingDoctors)) {
+  if (isEditMode && (isLoadingReport || isLoadingDoctors || isLoadingLabTests)) {
     return (
       <div className="fixed inset-0 z-50 overflow-y-auto">
         <div className="flex items-center justify-center min-h-screen px-4 pt-4 pb-20 text-center sm:block sm:p-0">
@@ -170,7 +178,7 @@ export default function LaboratoryTestReportEdit({
   if (!isOpen) return null;
 
   const isLoading = createMutation.isPending || updateMutation.isPending || deleteMutation.isPending;
-  const error = createMutation.error || updateMutation.error || deleteMutation.error || reportError || doctorsError;
+  const error = createMutation.error || updateMutation.error || deleteMutation.error || reportError || doctorsError || labTestsError;
 
   return (
     <div className="fixed inset-0 z-50 overflow-y-auto">
@@ -255,20 +263,33 @@ export default function LaboratoryTestReportEdit({
               
               <div>
                 <label className="block text-sm font-semibold text-gray-700 mb-2">
-                  🧪 Laboratory Test ID
+                  🧪 Laboratory Test
                 </label>
-                <input
-                  type="number"
+                <select
                   value={formData.laboratoryTestId}
                   onChange={(e) => setFormData(prev => ({
                     ...prev,
                     laboratoryTestId: parseInt(e.target.value) || 0
                   }))}
-                  disabled={isEditMode}
+                  disabled={isEditMode || isLoadingLabTests}
                   className="w-full px-4 py-3 border-2 border-gray-200 rounded-xl focus:ring-4 focus:ring-blue-200 focus:border-blue-400 transition-all disabled:bg-gray-100 disabled:cursor-not-allowed"
-                  placeholder="Enter laboratory test ID"
                   required
-                />
+                >
+                  {isLoadingLabTests ? (
+                    <option value="">Loading laboratory tests...</option>
+                  ) : laboratoryTests.length === 0 ? (
+                    <option value="">No laboratory tests available</option>
+                  ) : (
+                    <>
+                      <option value="">Select laboratory test</option>
+                      {laboratoryTests.map((test) => (
+                        <option key={test.id} value={test.id}>
+                          {test.name} - {test.price || 'Not yet'}
+                        </option>
+                      ))}
+                    </>
+                  )}
+                </select>
               </div>
             </div>
 
@@ -314,7 +335,7 @@ export default function LaboratoryTestReportEdit({
                     <option value="">Select technician</option>
                     {doctors.map((doctor) => (
                       <option key={doctor.id} value={doctor.id}>
-                        Dr. {doctor.username} 
+                        Dr. {doctor.username} - {doctor.roles.toString() || 'General'}
                       </option>
                     ))}
                   </>
@@ -344,7 +365,7 @@ export default function LaboratoryTestReportEdit({
               {/* Save/Create Button */}
               <button
                 type="submit"
-                disabled={isLoading || isLoadingDoctors}
+                disabled={isLoading || isLoadingDoctors || isLoadingLabTests}
                 className="flex-1 bg-gradient-to-r from-blue-500 to-purple-600 text-white px-6 py-3 rounded-xl font-bold hover:from-blue-600 hover:to-purple-700 transition-all shadow-lg hover:shadow-xl transform hover:scale-[1.02] disabled:opacity-50 disabled:cursor-not-allowed disabled:transform-none"
               >
                 {isLoading ? (
