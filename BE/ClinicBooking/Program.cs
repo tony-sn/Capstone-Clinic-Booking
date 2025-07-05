@@ -41,10 +41,11 @@ builder.Services.Configure<EmailSenderSettings>(options =>
     var smtpServer = Environment.GetEnvironmentVariable("EMAILSENDERSETTINGS_SMTPSERVER") 
                  ?? throw new InvalidOperationException("Missing SMTP server env var");
     options.SmtpServer = smtpServer;
-    options.SmtpPort = int.Parse(Environment.GetEnvironmentVariable("EMAILSENDERSETTINGS_SMTPPORT") ?? "587");
+    options.SmtpPort = int.Parse(Environment.GetEnvironmentVariable("EMAILSENDERSETTINGS_SMTPPORT") ?? "2525");
     options.EnableSsl = bool.Parse(Environment.GetEnvironmentVariable("EMAILSENDERSETTINGS_ENABLESSL") ?? "true");
     options.UserName = Environment.GetEnvironmentVariable("EMAILSENDERSETTINGS_USERNAME");
     options.Password = Environment.GetEnvironmentVariable("EMAILSENDERSETTINGS_PASSWORD");
+    options.From = Environment.GetEnvironmentVariable("EMAILSENDERSETTINGS_FROM");
 });
 
 

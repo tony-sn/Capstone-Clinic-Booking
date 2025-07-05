@@ -34,7 +34,7 @@ namespace ClinicBooking.Services
         {
             //string firstName = (user as User)?.FirstName ?? "bạn";
             var email = new MimeMessage();
-            email.From.Add(new MailboxAddress("Connectify", _settings.UserName));
+            email.From.Add(new MailboxAddress("Connectify", _settings.From));
             email.To.Add(new MailboxAddress((user as User)?.FirstName ?? "bạn", toEmail));
             email.Subject = subject;
 

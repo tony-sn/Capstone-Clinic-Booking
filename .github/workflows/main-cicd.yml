@@ -4,10 +4,6 @@ on:
   push:
     branches:
       - main
-  pull_request:
-    types: [closed]
-    branches:
-      - main
 
 env:
   REGISTRY: ghcr.io
@@ -106,6 +102,14 @@ jobs:
                 docker network connect clinic-network sqlserver 2>/dev/null || echo "SQL Server already on network"
             fi
 
+            #Print Environment Variable
+              echo "SMTP Server: ${{ secrets.EMAILSENDERSETTINGS_SMTPSERVER }}"
+              echo "SMTP Port: ${{ secrets.EMAILSENDERSETTINGS_SMTPPORT }}"
+              echo "Enable SSL: ${{ secrets.EMAILSENDERSETTINGS_ENABLESSL }}"
+              echo "Username: ${{ secrets.EMAILSENDERSETTINGS_USERNAME }}"
+              echo "Password: ${{ secrets.EMAILSENDERSETTINGS_PASSWORD }}"
+              echo "From: ${{ secrets.EMAILSENDERSETTINGS_FROM }}"
+
             # Start Clinic Booking
             echo "Starting Clinic Booking..."
             docker run -d \
@@ -119,6 +123,7 @@ jobs:
               -e EMAILSENDERSETTINGS_ENABLESSL="${{ secrets.EMAILSENDERSETTINGS_ENABLESSL }}" \
               -e EMAILSENDERSETTINGS_USERNAME="${{ secrets.EMAILSENDERSETTINGS_USERNAME }}" \
               -e EMAILSENDERSETTINGS_PASSWORD="${{ secrets.EMAILSENDERSETTINGS_PASSWORD }}" \
+              -e EMAILSENDERSETTINGS_FROM="${{ secrets.EMAILSENDERSETTINGS_FROM }}" \
               --restart unless-stopped \
               ${{ env.CLINICBOOKING_IMAGE_NAME_LOWER }}:latest
 

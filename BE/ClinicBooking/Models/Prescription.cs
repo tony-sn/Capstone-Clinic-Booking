@@ -10,7 +10,7 @@ namespace ClinicBooking.Models
         public MedicalHistory MedicalHistory { get; set; }
 
         [Range(0, double.MaxValue)]
-        public decimal TotalAmount { get; set; }
+        public decimal TotalAmount { get; set; } //PrescriptionDetail.Amount.GellAll()
 
         public ICollection<PrescriptionDetail> PrescriptionDetails
         {

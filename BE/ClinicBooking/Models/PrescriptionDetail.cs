@@ -15,7 +15,7 @@ namespace ClinicBooking.Models
         public int Quantity { get; set; }
 
         [Range(0, double.MaxValue)]
-        public decimal Amount { get; set; }
+        public decimal Amount { get; set; } // Quantity * Medicine.UnitPrice
 
         public string Usage { get; set; }
 
