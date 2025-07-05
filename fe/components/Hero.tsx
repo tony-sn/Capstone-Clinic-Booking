@@ -1,5 +1,5 @@
 "use client";
-
+import Image from "next/image"
 import { useState, useEffect } from "react";
 
 import { Button } from "@/components/ui/button";
@@ -19,6 +19,15 @@ const Hero = () => {
       id="home"
       className="relative mx-auto overflow-hidden pt-28 md:pt-32 lg:pt-36"
     >
+      <div className="absolute inset-0 z-0">
+        <Image
+          src="/assets/images/doctor-ready.jpg"
+          alt="Serene water background"
+          fill
+          className="object-cover brightness-[0.25]"
+          priority
+        />
+      </div>
       <div className="container relative z-10 mx-auto px-4 pb-20 md:pb-28 lg:pb-36">
         <div className="mx-auto flex max-w-4xl flex-col items-center text-center">
           <motion.div
@@ -26,7 +35,7 @@ const Hero = () => {
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.8 }}
           >
-            <h1 className="font-playfair text-4xl leading-tight text-white md:text-5xl lg:text-6xl">
+            <h1 className="font-sans text-4xl leading-tight text-white md:text-5xl lg:text-6xl">
               Experience the Best Clinic{" "}
               <span className="text-green-500">Services</span>
             </h1>
@@ -52,7 +61,7 @@ const Hero = () => {
           >
             <Button
               size="lg"
-              className="bg-theme-600 hover:bg-theme-700 px-8 text-white"
+              className="bg-theme-600 px-8 text-white hover:bg-theme-700"
             >
               Book Your Session
             </Button>
@@ -67,7 +76,7 @@ const Hero = () => {
         </div>
       </div>
 
-      <div className="from-background absolute inset-x-0 bottom-0 z-10 h-24 bg-gradient-to-t to-transparent" />
+      <div className="absolute inset-x-0 bottom-0 z-10 h-24 bg-gradient-to-t from-background to-transparent" />
     </section>
   );
 };

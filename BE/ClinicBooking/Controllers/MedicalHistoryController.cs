@@ -1,6 +1,6 @@
 using ClinicBooking.Models.DTOs;
-using ClinicBooking_Utility;
 using ClinicBooking.Services.IServices;
+using ClinicBooking_Utility;
 using Microsoft.AspNetCore.Mvc;
 
 namespace ClinicBooking.Controllers
@@ -16,6 +16,20 @@ namespace ClinicBooking.Controllers
             _service = service;
         }
 
+        [HttpPost("calculate-amount/{id}")]
+        public async Task<ActionResult<ApiResponse<MedicalHistoryDTO>>> CalculateAmount(int id)
+        {
+            var item = await _service.CalculateTotalAmount(id);
+            if (item == null) return NotFound();
+            return Ok(new ApiResponse<MedicalHistoryDTO>
+            {
+                Status = Constants.SUCCESS_READ_CODE,
+                Message = Constants.SUCCESS_READ_MSG,
+                Data = item
+            });
+        }
+
+
         [HttpGet]
         public async Task<ActionResult<ApiResponseWithPagination<IEnumerable<MedicalHistoryDTO>>>> GetAll(int pageSize = 5, int pageNumber = 1)
         {
@@ -28,7 +42,7 @@ namespace ClinicBooking.Controllers
                 Data = result.Items,
                 Pagination = new Pagination
                 {
-                    PageSize =pageSize,
+                    PageSize = pageSize,
                     PageNumber = pageNumber,
                     TotalItems = result.TotalItems
                 }
