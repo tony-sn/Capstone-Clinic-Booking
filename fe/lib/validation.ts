@@ -11,6 +11,11 @@ export const UserFormValidation = z.object({
     .refine((phone) => /^\+\d{10,15}$/.test(phone), "Invalid phone number"),
 });
 
+export const UserLoginValidation = z.object({
+  email: z.string().email("Invalid email address"),
+  password: z.string().min(1, "Password must be at least 1 character"),
+});
+
 export const PatientFormValidation = z.object({
   name: z
     .string()
@@ -38,7 +43,7 @@ export const PatientFormValidation = z.object({
     .string()
     .refine(
       (emergencyContactNumber) => /^\+\d{10,15}$/.test(emergencyContactNumber),
-      "Invalid phone number"
+      "Invalid phone number",
     ),
   primaryPhysician: z.string().min(2, "Select at least one doctor"),
   insuranceProvider: z

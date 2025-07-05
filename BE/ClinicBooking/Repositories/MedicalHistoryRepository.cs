@@ -1,6 +1,6 @@
-using ClinicBooking.Repositories.IRepositories;
-using ClinicBooking.Data;
+﻿using ClinicBooking.Data;
 using ClinicBooking.Models;
+using ClinicBooking.Repositories.IRepositories;
 using Microsoft.EntityFrameworkCore;
 
 namespace ClinicBooking.Repositories;
@@ -12,6 +12,41 @@ public class MedicalHistoryRepository : IMedicalHistoryRepository
     public MedicalHistoryRepository(ApplicationDbContext context)
     {
         _context = context;
+    }
+    public async Task<decimal> GetAppointmentPriceByMedicalHistoryId(int medicalHistoryId)
+    {
+        return await _context.Appointments
+            .Where(a => a.MedicalHistoryId == medicalHistoryId)
+            .Select(a => a.Price ?? 0)
+            .FirstOrDefaultAsync();
+    }
+
+    public async Task<decimal> GetPrescriptionTotalAmountByMedicalHistoryId(int medicalHistoryId)
+    {
+        var prescription = await _context.Prescriptions
+            .Include(p => p.PrescriptionDetails)
+            .Where(p => p.MedicalHistoryID == medicalHistoryId)
+            .FirstOrDefaultAsync();
+
+        if (prescription == null || prescription.PrescriptionDetails == null)
+            return 0;
+
+        var totalAmount = prescription.PrescriptionDetails.Sum(d => d.Amount);
+
+        //cập nhật lại Prescription.TotalAmount trong DB
+        prescription.TotalAmount = totalAmount;
+        await _context.SaveChangesAsync();
+
+        return totalAmount;
+    }
+
+    public async Task<decimal> GetTotalLaboratoryTestPriceByMedicalHistoryId(int medicalHistoryId)
+    {
+        return await _context.LaboratoryTestReports
+            .Where(ltr => ltr.MedicalHistoryId == medicalHistoryId)
+            .Include(ltr => ltr.LaboratoryTest)
+            .Select(ltr => ltr.LaboratoryTest.Price)
+            .SumAsync();
     }
 
     public async Task<IEnumerable<MedicalHistory>> GetAllAsync()
