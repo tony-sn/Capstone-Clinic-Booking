@@ -1,14 +1,14 @@
 "use client";
 
-import {Eye, EyeOff} from "lucide-react";
-import { useRouter } from "next/navigation";
 import { zodResolver } from "@hookform/resolvers/zod";
+import { Eye, EyeOff } from "lucide-react";
+import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 
 import { Form } from "@/components/ui/form";
-import {getUserInfo, login} from "@/lib/api/patient.actions";
+import { getUserInfo, login } from "@/lib/api/patient.actions";
 import { UserLoginValidation } from "@/lib/validation";
 
 import "react-phone-number-input/style.css";
@@ -46,9 +46,9 @@ export function SignInForm() {
 
       const info = await getUserInfo();
       console.log({
-        info
-      })
-      if (info?.roles?.some((r: string) => r!== "User")) {
+        info,
+      });
+      if (info?.roles?.some((r: string) => r !== "User")) {
         router.push("/(authenticated)/admin");
       } else {
         router.push("/(authenticated)/prescriptions");
@@ -59,7 +59,7 @@ export function SignInForm() {
       // }
     } catch (error) {
       console.log(error);
-      router.push("/register");
+      // router.push("/register");
     }
 
     setIsLoading(false);
@@ -91,7 +91,7 @@ export function SignInForm() {
           placeholder="password"
           iconSrc="/assets/icons/user.svg"
           iconAlt="user"
-          Icon={passwordShown ? Eye : EyeOff }
+          Icon={passwordShown ? Eye : EyeOff}
           type={passwordShown ? "text" : "password"}
           onClick={togglePasswordVisibility}
         />
