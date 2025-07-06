@@ -200,7 +200,7 @@ public static class IdentityApiEndpointRouteBuilderExtensions
             }
 
             return TypedResults.Text("Thank you for confirming your email.");
-        })
+        }).WithName("ConfirmEmail")
         .Add(endpointBuilder =>
         {
             var finalPattern = ((RouteEndpointBuilder)endpointBuilder).RoutePattern.RawText;
