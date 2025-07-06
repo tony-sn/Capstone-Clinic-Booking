@@ -1,6 +1,6 @@
 import { cookies } from "next/headers";
 
-export const SESSION_COOKIE_NAME = "session";
+export const SESSION_COOKIE_NAME = "clinic-booking-session";
 
 export const setSessionCookie = async (
   sessionToken: string,

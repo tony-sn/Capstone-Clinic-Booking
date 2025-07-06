@@ -31,17 +31,16 @@ export function SignInForm() {
     setIsLoading(true);
 
     try {
-      const password = generateStrongPassword();
       const user = {
         email: values.email,
-        password,
+        password: values.password,
       };
 
       // TODO: change this to login endpoint to get cookie
       const loginUser = await login(user);
       console.log({
         user,
-        newUser,
+        loginUser,
       });
 
       if (loginUser) {
