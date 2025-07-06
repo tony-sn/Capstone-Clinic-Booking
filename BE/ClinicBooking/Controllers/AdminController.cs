@@ -2,7 +2,10 @@
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.WebUtilities;
 using Microsoft.EntityFrameworkCore;
+using System.Text;
+using System.Text.Encodings.Web;
 
 namespace ClinicBooking.Controllers;
 
@@ -15,7 +18,7 @@ public class CreateUserDTO
     public List<string> Roles { get; set; } = [];
 }
 
-public class AdminController(UserManager<User> userManager) : BaseApiController
+public class AdminController(UserManager<User> userManager, IEmailSender<User> emailSender, LinkGenerator linkGenerator, IHttpContextAccessor httpContextAccessor) : BaseApiController
 {
     [Authorize(Policy = "Admin")]
     [HttpPost("edit-roles/{username}")]
@@ -72,11 +75,23 @@ public class AdminController(UserManager<User> userManager) : BaseApiController
         await userManager.UpdateSecurityStampAsync(user);
         await userManager.SetAuthenticationTokenAsync(user, "Default", "ForcePasswordChange", "true");
 
+        // Gửi email xác nhận
+        var code = await userManager.GenerateEmailConfirmationTokenAsync(user);
+        code = WebEncoders.Base64UrlEncode(Encoding.UTF8.GetBytes(code));
+
+        var userId = await userManager.GetUserIdAsync(user);
+        var confirmUrl = linkGenerator.GetUriByRouteValues(
+            httpContextAccessor.HttpContext!,
+            routeName: "ConfirmEmail",
+            values: new { userId, code },
+            scheme: httpContextAccessor.HttpContext.Request.Scheme);
+
+        await emailSender.SendConfirmationLinkAsync(user, user.Email, HtmlEncoder.Default.Encode(confirmUrl));
         return Ok("User created. Password change required on first login.");
     }
 
 
-   // [Authorize(Policy = "Admin")]
+    // [Authorize(Policy = "Admin")]
     [HttpGet("users-with-roles")]
     public async Task<ActionResult> GetUsersWithRoles()
     {

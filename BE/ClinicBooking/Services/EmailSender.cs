@@ -19,22 +19,44 @@ namespace ClinicBooking.Services
 
         public async Task SendConfirmationLinkAsync(TUser user, string email, string confirmationLink)
         {
-            var subject = "Xác nhận tài khoản";
-            var message = $"Vui lòng xác nhận tài khoản bằng cách nhấn vào liên kết sau: <a href='{confirmationLink}'>Xác nhận</a>";
+            var subject = "Confirm Your Account";
+            var message = $@"
+    <div style='font-family:Segoe UI, sans-serif; font-size:14px; color:#333;'>
+        <h2 style='color:#2d8cf0;'>Welcome to ClinicBooking!</h2>
+        <p>Hi {(user as User)?.FirstName ?? "there"},</p>
+        <p>Thank you for registering. Please confirm your email by clicking the button below:</p>
+        <p style='text-align:center; margin:20px 0;'>
+            <a href='{confirmationLink}' style='background-color:#2d8cf0;color:#fff;padding:10px 20px;text-decoration:none;border-radius:5px;'>Confirm Email</a>
+        </p>
+        <p>If you didn't create this account, you can ignore this email.</p>
+        <p>Best regards,<br>ClinicBooking Team</p>
+    </div>";
+
             await SendEmailAsync(user, email, subject, message);
         }
 
         public async Task SendPasswordResetLinkAsync(TUser user, string email, string resetLink)
         {
-            var subject = "Đặt lại mật khẩu";
-            var message = $"Bạn có thể đặt lại mật khẩu bằng cách nhấn vào liên kết sau: <a href='{resetLink}'>Đặt lại mật khẩu</a>";
+            var subject = "Reset Your Password";
+            var message = $@"
+    <div style='font-family:Segoe UI, sans-serif; font-size:14px; color:#333;'>
+        <h2 style='color:#f56c6c;'>Reset Password Request</h2>
+        <p>Hi {(user as User)?.FirstName ?? "there"},</p>
+        <p>We received a request to reset your password. Click the button below to proceed:</p>
+        <p style='text-align:center; margin:20px 0;'>
+            <a href='{resetLink}' style='background-color:#f56c6c;color:#fff;padding:10px 20px;text-decoration:none;border-radius:5px;'>Reset Password</a>
+        </p>
+        <p>If you didn't request a password reset, no action is needed.</p>
+        <p>Best regards,<br>ClinicBooking Team</p>
+    </div>";
+
             await SendEmailAsync(user, email, subject, message);
         }
         private async Task SendEmailAsync(TUser user, string toEmail, string subject, string body)
         {
             //string firstName = (user as User)?.FirstName ?? "bạn";
             var email = new MimeMessage();
-            email.From.Add(new MailboxAddress("Connectify", _settings.From));
+            email.From.Add(new MailboxAddress("ClinicBooking", _settings.From));
             email.To.Add(new MailboxAddress((user as User)?.FirstName ?? "bạn", toEmail));
             email.Subject = subject;
 
@@ -50,14 +72,18 @@ namespace ClinicBooking.Services
 
         public async Task SendPasswordResetCodeAsync(TUser user, string email, string resetCode)
         {
-            var subject = "Mã đặt lại mật khẩu";
+            var subject = "Your Password Reset Code";
             var message = $@"
-        <p>Bạn đã yêu cầu đặt lại mật khẩu.</p>
-        <p>Mã đặt lại mật khẩu của bạn là: <strong>{resetCode}</strong></p>
-        <p>Vui lòng nhập mã này trong ứng dụng để tiếp tục quá trình.</p>";
+    <div style='font-family:Segoe UI, sans-serif; font-size:14px; color:#333;'>
+        <h2 style='color:#f39c12;'>Password Reset Code</h2>
+        <p>Hi {(user as User)?.FirstName ?? "there"},</p>
+        <p>You requested to reset your password. Use the following code in the app to continue:</p>
+        <p style='font-size:20px; font-weight:bold; color:#f39c12; text-align:center; margin:20px 0;'>{resetCode}</p>
+        <p>This code will expire soon. If you did not request this, please ignore this message.</p>
+        <p>Best regards,<br>ClinicBooking Team</p>
+    </div>";
 
             await SendEmailAsync(user, email, subject, message);
         }
-
     }
 }
