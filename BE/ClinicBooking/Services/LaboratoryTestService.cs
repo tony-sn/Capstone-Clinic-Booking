@@ -41,7 +41,7 @@ namespace ClinicBooking.Services
             var totalItems = laboratoryTestList.Count();
             if (pageSize > 0)
             {
-                laboratoryTestList = laboratoryTestList.Skip((1 - pageNumber) * pageSize).Take(pageSize).ToList();
+                laboratoryTestList = laboratoryTestList.Skip((pageNumber - 1) * pageSize).Take(pageSize).ToList();
             }
             return new PageResultUlt<IEnumerable<LaboratoryTestDTO>>
             {
