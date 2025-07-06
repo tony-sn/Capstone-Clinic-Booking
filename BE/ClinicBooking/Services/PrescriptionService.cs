@@ -44,7 +44,7 @@ namespace ClinicBooking.Services.IServices
             var totalItems = prescriptionList.Count();
             if (pageSize > 0)
             {
-                prescriptionList = prescriptionList.Skip((1 - pageNumber) * pageSize).Take(pageSize).ToList();
+                prescriptionList = prescriptionList.Skip((pageNumber - 1) * pageSize).Take(pageSize).ToList();
             }
             return new PageResultUlt<IEnumerable<PrescriptionDTO>>
             {
@@ -64,7 +64,7 @@ namespace ClinicBooking.Services.IServices
             var totalItems = prescriptionList.Count();
             if (pageSize > 0)
             {
-                prescriptionList = prescriptionList.Skip((1 - pageNumber) * pageSize).Take(pageSize).ToList();
+                prescriptionList = prescriptionList.Skip((pageNumber - 1) * pageSize).Take(pageSize).ToList();
             }
             return new PageResultUlt<IEnumerable<PrescriptionDTO>>
             {

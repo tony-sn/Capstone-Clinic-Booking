@@ -32,7 +32,7 @@ namespace ClinicBooking.Services
             var totalItems = departmentList.Count();
             if (pageSize > 0)
             {
-                departmentList = departmentList.Skip((1 - pageNumber) * pageSize).Take(pageSize).ToList();
+                departmentList = departmentList.Skip((pageNumber - 1) * pageSize).Take(pageSize).ToList();
             }
             return new PageResultUlt<IEnumerable<DepartmentDTO>>
             {

@@ -44,7 +44,7 @@ namespace ClinicBooking.Services
             var totalItems = list.Count();
             if (pageSize > 0)
             {
-                list = list.Skip((1 - pageNumber) * pageSize).Take(pageSize).ToList();
+                list = list.Skip((pageNumber - 1) * pageSize).Take(pageSize).ToList();
             }
 
             return new PageResultUlt<IEnumerable<MedicalHistoryDTO>>
