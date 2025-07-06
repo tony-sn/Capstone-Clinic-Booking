@@ -1,5 +1,6 @@
 "use client";
 
+import {Eye, EyeOff} from "lucide-react";
 import { useRouter } from "next/navigation";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useState } from "react";
@@ -7,8 +8,7 @@ import { useForm } from "react-hook-form";
 import { z } from "zod";
 
 import { Form } from "@/components/ui/form";
-import { login } from "@/lib/api/patient.actions";
-import { generateStrongPassword } from "@/lib/utils";
+import {getUserInfo, login} from "@/lib/api/patient.actions";
 import { UserLoginValidation } from "@/lib/validation";
 
 import "react-phone-number-input/style.css";
@@ -18,6 +18,8 @@ import SubmitButton from "../../SubmitButton";
 export function SignInForm() {
   const router = useRouter();
   const [isLoading, setIsLoading] = useState(false);
+  const [passwordShown, setPasswordShown] = useState(false);
+  const togglePasswordVisibility = () => setPasswordShown(!passwordShown);
 
   const form = useForm<z.infer<typeof UserLoginValidation>>({
     resolver: zodResolver(UserLoginValidation),
@@ -31,23 +33,33 @@ export function SignInForm() {
     setIsLoading(true);
 
     try {
-      const user = {
+      const credentials = {
         email: values.email,
         password: values.password,
       };
 
       // TODO: change this to login endpoint to get cookie
-      const loginUser = await login(user);
+      const loginUser = await login(credentials);
       console.log({
-        user,
         loginUser,
       });
 
-      if (loginUser) {
-        router.push(`/patients/${loginUser?.id}/register`);
+      const info = await getUserInfo();
+      console.log({
+        info
+      })
+      if (info?.roles?.some((r: string) => r!== "User")) {
+        router.push("/(authenticated)/admin");
+      } else {
+        router.push("/(authenticated)/prescriptions");
       }
+
+      // if (loginUser) {
+      //   router.push(`/patients/${loginUser?.id}/register`);
+      // }
     } catch (error) {
       console.log(error);
+      router.push("/register");
     }
 
     setIsLoading(false);
@@ -79,6 +91,9 @@ export function SignInForm() {
           placeholder="password"
           iconSrc="/assets/icons/user.svg"
           iconAlt="user"
+          Icon={passwordShown ? Eye : EyeOff }
+          type={passwordShown ? "text" : "password"}
+          onClick={togglePasswordVisibility}
         />
 
         <SubmitButton isLoading={isLoading}>Login</SubmitButton>

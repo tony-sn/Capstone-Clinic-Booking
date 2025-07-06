@@ -27,7 +27,16 @@ export const validateSession = async (
     }
 
     const data = await res.json();
-    return data;
+    const {user, ...session} = data;
+
+    // if the session is expired, delete it
+    if (Date.now() >= session.expiresIn) {
+      return {session: null, user: null};
+    }
+
+
+
+    return {session, user};
   } catch (err) {
     console.error("Failed to validate session:", err);
 
