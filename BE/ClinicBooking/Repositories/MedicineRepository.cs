@@ -30,7 +30,7 @@ namespace ClinicBooking.Repositories
         {
             try
             {
-                var obj = await _context.Medicines.AsTracking().FirstOrDefaultAsync(x => x.Id == id);
+                var obj = await _context.Medicines.AsTracking().FirstOrDefaultAsync(x => x.MedicineID == id);
                 if (obj == null)
                     throw new ArgumentException($"invalid id: {id}");
                 obj.Active = false;
@@ -58,7 +58,7 @@ namespace ClinicBooking.Repositories
         {
             try
             {
-                var obj = await _context.Medicines.AsTracking().FirstOrDefaultAsync(x => x.Id == id);
+                var obj = await _context.Medicines.AsTracking().FirstOrDefaultAsync(x => x.MedicineID == id);
                 if (obj == null)
                     throw new ArgumentException($"invalid id: {id}");
                 obj.Description = medicine.Description;
@@ -67,7 +67,7 @@ namespace ClinicBooking.Repositories
                 obj.UnitPrice = medicine.UnitPrice;
                 _context.Medicines.Update(obj);
                 await _context.SaveChangesAsync();
-                return await _context.Medicines.AsTracking().FirstOrDefaultAsync(x => x.Id == id);
+                return await _context.Medicines.AsTracking().FirstOrDefaultAsync(x => x.MedicineID == id);
             }
             catch (Exception ex)
             {
