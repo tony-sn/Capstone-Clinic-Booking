@@ -1,4 +1,5 @@
-﻿using ClinicBooking.Models;
+﻿using System.Linq.Expressions;
+using ClinicBooking.Models;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
@@ -62,6 +63,20 @@ namespace ClinicBooking.Data
                 .WithOne(u => u.Role)
                 .HasForeignKey(ur => ur.RoleId)
                 .IsRequired();
+
+            // Add Global Query Filter for all entities derived from EntityBase
+            foreach (var entityType in builder.Model.GetEntityTypes())
+            {
+                if (typeof(EntityBase).IsAssignableFrom(entityType.ClrType))
+                {
+                    var parameter = Expression.Parameter(entityType.ClrType, "e");
+                    var prop = Expression.Property(parameter, nameof(EntityBase.Deleted));
+                    var condition = Expression.Equal(prop, Expression.Constant(false));
+                    var lambda = Expression.Lambda(condition, parameter);
+
+                    builder.Entity(entityType.ClrType).HasQueryFilter(lambda);
+                }
+            }
         }
     }
 }

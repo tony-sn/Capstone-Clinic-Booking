@@ -47,7 +47,7 @@ namespace ClinicBooking.Services
             var totalItems = itemList.Count();
             if (pageSize > 0)
             {
-                itemList = itemList.Skip((1 - pageNumber) * pageSize).Take(pageSize).ToList();
+                itemList = itemList.Skip((pageNumber - 1) * pageSize).Take(pageSize).ToList();
             }
             return new PageResultUlt<IEnumerable<MedicineInventoryEntryDTO>>
             {

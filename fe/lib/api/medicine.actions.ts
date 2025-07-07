@@ -57,7 +57,7 @@ export const updateMedicine = async (id: number, formData: FormData) => {
     throw new Error("Failed to update medicine");
   }
 
-  revalidatePath("/medicines");
+  revalidatePath("/medicine");
   return res.json();
 };
 
