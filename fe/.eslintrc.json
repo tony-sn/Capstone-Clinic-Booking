@@ -5,6 +5,7 @@
     "standard",
     "plugin:tailwindcss/recommended",
     "plugin:@tanstack/query/recommended",
+    "plugin:prettier/recommended",
     "prettier"
   ],
   "rules": {
