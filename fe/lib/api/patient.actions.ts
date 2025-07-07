@@ -27,6 +27,7 @@ export const login = async (formData: FormData | LoginUserParams) => {
     const res = await fetch(loginEndpoint, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
+      credentials: "include",
       body: JSON.stringify(formData),
     });
 
@@ -38,19 +39,17 @@ export const login = async (formData: FormData | LoginUserParams) => {
 
     const tokenData = await res.json();
 
-    return {
-      tokeType: tokenData.tokenType,
-      accessToken: tokenData.accessToken,
-      refreshToken: tokenData.refreshToken,
-      expiresIn: tokenData.expiresIn,
-    };
-  } catch {
-    return true;
+    return tokenData;
+  } catch (error) {
+    console.error("Error logging in:", error);
+    throw error;
   }
 };
 
 export const getUserInfo = async () => {
-  const res = await fetch(`${apiUrl}/manage/info`);
+  const res = await fetch(`${apiUrl}/manage/info`, {
+    credentials: "include",
+  });
 
   if (!res.ok) {
     throw new Error("Failed to fetch user info");

@@ -44,14 +44,16 @@ export function SignInForm() {
         loginUser,
       });
 
-      const info = await getUserInfo();
-      console.log({
-        info,
-      });
-      if (info?.roles?.some((r: string) => r !== "User")) {
-        router.push("/(authenticated)/admin");
-      } else {
-        router.push("/(authenticated)/prescriptions");
+      if (loginUser) {
+        const info = await getUserInfo();
+        console.log({
+          info,
+        });
+        if (info?.roles?.some((r: string) => r !== "User")) {
+          router.push("/(authenticated)/admin");
+        } else {
+          router.push("/(authenticated)/prescriptions");
+        }
       }
 
       // if (loginUser) {

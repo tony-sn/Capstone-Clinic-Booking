@@ -1,10 +1,10 @@
 import { cookies } from "next/headers";
 
-export const SESSION_COOKIE_NAME = "clinic-booking-session";
+export const SESSION_COOKIE_NAME = ".AspNetCore.Identity.Application";
 
 export const setSessionCookie = async (
   sessionToken: string,
-  expiresAt: Date,
+  expiresAt: Date
 ) => {
   const cookie = {
     name: SESSION_COOKIE_NAME,

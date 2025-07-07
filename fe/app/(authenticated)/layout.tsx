@@ -1,17 +1,17 @@
 import Navbar from "@/components/layout/Navbar";
-import {getAuthOrRedirect} from "@/features/auth/queries/get-auth-or-redirect";
+import { getAuthOrRedirect } from "@/features/auth/queries/get-auth-or-redirect";
 
 export default async function AuthenticatedLayout({
-                                                      children,
-                                                  }: Readonly<{
-    children: React.ReactNode;
+  children,
+}: Readonly<{
+  children: React.ReactNode;
 }>) {
-    await getAuthOrRedirect();
+  await getAuthOrRedirect();
 
-    return (
-        <>
-            <Navbar/>
-            <main>{children}</main>
-        </>
-    );
+  return (
+    <>
+      <Navbar />
+      <main>{children}</main>
+    </>
+  );
 }
