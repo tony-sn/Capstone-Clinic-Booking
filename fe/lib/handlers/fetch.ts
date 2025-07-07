@@ -31,7 +31,7 @@ export async function fetchHandler<T>(
   const defaultHeaders: HeadersInit = {
     "Content-Type": "application/json",
     Accept: "application/json",
-    Authorization: `Bearer ${session?.accessToken}`,
+    Authorization: `Bearer ${session?.session?.accessToken}`,
   };
 
   const headers: HeadersInit = { ...defaultHeaders, ...customHeaders };

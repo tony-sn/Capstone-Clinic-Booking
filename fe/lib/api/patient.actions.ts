@@ -1,8 +1,6 @@
 import { Endpoints } from "@/lib/app.config";
 
 const apiUrl = process.env.NEXT_PUBLIC_API_BASE_URL;
-const useCookies = process.env.NEXT_PUBLIC_USE_COOKIE;
-const useSessionCookies = process.env.NEXT_PUBLIC_USE_SESSION_COOKIE;
 export const createUser = async (formData: FormData | CreateUserParams) => {
   const registerEndpoint = `${apiUrl}/register`;
   console.log({
@@ -38,18 +36,21 @@ export const login = async (formData: FormData | LoginUserParams) => {
       throw new Error("Failed to login user");
     }
 
-    const result = await res.json();
-    console.log({ result });
-    return result;
+    const tokenData = await res.json();
+
+    return {
+      tokeType: tokenData.tokenType,
+      accessToken: tokenData.accessToken,
+      refreshToken: tokenData.refreshToken,
+      expiresIn: tokenData.expiresIn,
+    };
   } catch {
     return true;
   }
 };
 
 export const getUserInfo = async () => {
-  const res = await fetch(`${apiUrl}/manage/info`, {
-    credentials: "include",
-  });
+  const res = await fetch(`${apiUrl}/manage/info`);
 
   if (!res.ok) {
     throw new Error("Failed to fetch user info");
