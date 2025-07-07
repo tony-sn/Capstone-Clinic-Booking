@@ -90,7 +90,12 @@ const RenderInput = ({ field, props }: { field: any; props: CustomProps }) => {
               className="shad-input border-0"
             />
           </FormControl>
-          {props.Icon && <props.Icon className="mr-2 h-auto bg-[#cde9df]" onClick={props.onClick} />}
+          {props.Icon && (
+            <props.Icon
+              className="mr-2 h-auto text-[#cde9df]"
+              onClick={props.onClick}
+            />
+          )}
         </div>
       );
     case FormFieldType.TEXTAREA:

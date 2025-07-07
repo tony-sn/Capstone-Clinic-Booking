@@ -21,6 +21,7 @@ const nextConfig = {
       },
     ],
   },
+  serverExternalPackages: ["pino", "pino-pretty"],
   headers: [
     {
       source: "/api/:path*",

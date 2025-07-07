@@ -24,26 +24,23 @@ export const createUser = async (formData: FormData | CreateUserParams) => {
 };
 
 export const login = async (formData: FormData | LoginUserParams) => {
-  const loginEndpoint = `${apiUrl}/login?useCookies=false&useSessionCookies=true`;
-  const res = await fetch(loginEndpoint, {
-    method: "POST",
-    headers: { "Content-Type": "application/json" },
-    credentials: "include",
-    body: JSON.stringify(formData),
-  });
-
-  if (res.status === 204) {
-    return true;
-  }
-
-  if (!res.ok) {
-    const error = await res.text();
-    console.error("Login failed", error);
-    throw new Error("Failed to login user");
-  }
-
+  const loginEndpoint = `${apiUrl}/login?useCookies=true&useSessionCookies=true`;
   try {
-    return await res.json();
+    const res = await fetch(loginEndpoint, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(formData),
+    });
+
+    if (!res.ok) {
+      const error = await res.text();
+      console.error("Login failed", error);
+      throw new Error("Failed to login user");
+    }
+
+    const result = await res.json();
+    console.log({ result });
+    return result;
   } catch {
     return true;
   }
