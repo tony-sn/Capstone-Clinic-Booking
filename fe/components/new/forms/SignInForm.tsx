@@ -8,7 +8,7 @@ import { useForm } from "react-hook-form";
 import { z } from "zod";
 
 import { Form } from "@/components/ui/form";
-import { getUserInfo, login } from "@/lib/api/patient.actions";
+import { login } from "@/lib/api/patient.actions";
 import { UserLoginValidation } from "@/lib/validation";
 
 import "react-phone-number-input/style.css";
@@ -45,20 +45,9 @@ export function SignInForm() {
       });
 
       if (loginUser) {
-        const info = await getUserInfo();
-        console.log({
-          info,
-        });
-        if (info?.roles?.some((r: string) => r !== "User")) {
-          router.push("/(authenticated)/admin");
-        } else {
-          router.push("/(authenticated)/prescriptions");
-        }
+        router.replace("/admin");
+        return true;
       }
-
-      // if (loginUser) {
-      //   router.push(`/patients/${loginUser?.id}/register`);
-      // }
     } catch (error) {
       console.log(error);
       // router.push("/register");

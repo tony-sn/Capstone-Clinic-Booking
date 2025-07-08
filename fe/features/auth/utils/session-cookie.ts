@@ -1,11 +1,11 @@
+"use server";
 import { cookies } from "next/headers";
-
-export const SESSION_COOKIE_NAME = ".AspNetCore.Identity.Application";
 
 export const setSessionCookie = async (
   sessionToken: string,
   expiresAt: Date
 ) => {
+  const SESSION_COOKIE_NAME = ".AspNetCore.Identity.Application";
   const cookie = {
     name: SESSION_COOKIE_NAME,
     value: sessionToken,
@@ -22,6 +22,7 @@ export const setSessionCookie = async (
 };
 
 export const deleteSessionCookie = async () => {
+  const SESSION_COOKIE_NAME = ".AspNetCore.Identity.Application";
   const cookie = {
     name: SESSION_COOKIE_NAME,
     value: "",

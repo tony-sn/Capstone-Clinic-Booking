@@ -22,12 +22,11 @@ export const createUser = async (formData: FormData | CreateUserParams) => {
 };
 
 export const login = async (formData: FormData | LoginUserParams) => {
-  const loginEndpoint = `${apiUrl}/login?useCookies=true&useSessionCookies=true`;
+  const loginEndpoint = `/api/login`;
   try {
     const res = await fetch(loginEndpoint, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
-      credentials: "include",
       body: JSON.stringify(formData),
     });
 
@@ -37,17 +36,22 @@ export const login = async (formData: FormData | LoginUserParams) => {
       throw new Error("Failed to login user");
     }
 
-    const tokenData = await res.json();
-
-    return tokenData;
+    return true;
   } catch (error) {
     console.error("Error logging in:", error);
     throw error;
   }
 };
 
-export const getUserInfo = async () => {
+export const getUserInfo = async (options?: {
+  headers?: Record<string, string>;
+}) => {
   const res = await fetch(`${apiUrl}/manage/info`, {
+    method: "GET",
+    headers: {
+      Accept: "application/json",
+      ...options?.headers,
+    },
     credentials: "include",
   });
 
@@ -55,5 +59,8 @@ export const getUserInfo = async () => {
     throw new Error("Failed to fetch user info");
   }
 
-  return res.json();
+  return {
+    response: res,
+    data: await res.json(),
+  };
 };

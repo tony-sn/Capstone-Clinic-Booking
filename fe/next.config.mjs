@@ -21,8 +21,7 @@ const nextConfig = {
       },
     ],
   },
-  serverExternalPackages: ["pino", "pino-pretty"],
-  headers: [
+  headers: async () => [
     {
       source: "/api/:path*",
       headers: [
@@ -41,6 +40,28 @@ const nextConfig = {
             "X-CSRF-Token, X-Requested-With, Accept, Accept-Version, Content-Length, Content-MD5, Content-Type, Date, X-Api-Version",
         },
       ],
+    },
+  ],
+  rewrites: async () => [
+    {
+      source: "/",
+      destination: "/admin",
+    },
+    {
+      source: "/LabTests",
+      destination: "/laboratory-tests",
+    },
+    {
+      source: "/TestReports",
+      destination: "/laboratory-test-reports",
+    },
+    {
+      source: "/Prescriptions",
+      destination: "/prescriptions",
+    },
+    {
+      source: "/Medicines",
+      destination: "/medicines",
     },
   ],
 };

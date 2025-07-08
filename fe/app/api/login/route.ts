@@ -1,45 +1,57 @@
-export async function POST(request: Request) {
-  try {
-    const body = await request.json();
-    const loginEndpoint = `${process.env.API_BASE_URL}/login?useCookies=true&useSessionCookies=true`;
+import { NextResponse, NextRequest } from "next/server";
+import * as z from "zod";
 
-    const res = await fetch(loginEndpoint, {
+export async function POST(request: NextRequest) {
+  const payload = await request.json();
+
+  try {
+    const apiUrl = process.env.NEXT_PUBLIC_API_BASE_URL;
+    const loginEndpoint = `${apiUrl}/login?useCookies=true&useSessionCookies=true`;
+    const response = await fetch(loginEndpoint, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
       },
-      body: JSON.stringify(body),
+      credentials: "include",
+      body: JSON.stringify(payload),
     });
 
-    if (!res.ok) {
-      const error = await res.text();
-      return Response.json(
-        { error: `Login failed: ${error}` },
-        { status: res.status }
+    if (!response.ok) {
+      const errorData = await response.json();
+      return NextResponse.json(
+        {
+          message: errorData.message || "Authentication failed",
+        },
+        { status: 401 }
       );
     }
 
-    const tokenData = await res.json();
-
-    // Get the Set-Cookie headers from the backend response
-    const setCookieHeaders = res.headers.get("set-cookie");
-
-    // Create the response
-    const response = Response.json({
-      tokenType: tokenData.tokenType,
-      accessToken: tokenData.accessToken,
-      refreshToken: tokenData.refreshToken,
-      expiresIn: tokenData.expiresIn,
-    });
-
-    // Forward the Set-Cookie headers to the client
-    if (setCookieHeaders) {
-      response.headers.set("Set-Cookie", setCookieHeaders);
+    const raw = response.headers.get("set-cookie");
+    console.log({ raw });
+    if (!raw) {
+      return NextResponse.json(
+        { error: "No cookie returned" },
+        { status: 502 }
+      );
     }
 
-    return response;
+    const cookie = raw.replace(/; *Domain=[^;]+/i, "");
+    console.log({ cookie });
+
+    const res = NextResponse.json({ success: true });
+    res.headers.set("Set-Cookie", cookie);
+    return res;
   } catch (error) {
-    console.error("Login error:", error);
-    return Response.json({ error: "Internal server error" }, { status: 500 });
+    if (error instanceof z.ZodError) {
+      return NextResponse.json(
+        { message: "Validation error", errors: error.errors },
+        { status: 400 }
+      );
+    }
+    console.error("Server error:", error);
+    return NextResponse.json(
+      { message: "Internal server error" },
+      { status: 500 }
+    );
   }
 }
