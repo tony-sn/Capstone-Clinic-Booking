@@ -8,7 +8,7 @@ export const getAllAppointment = async ({ pageSize = 5, pageNumber = 1 }) => {
   try {
     const res = await fetch(
       `${Endpoints.APPOINTMENT}?pageSize=${pageSize}&pageNumber=${pageNumber}`,
-      { cache: "no-store" },
+      { cache: "no-store" }
     );
 
     if (!res.ok) {
@@ -21,7 +21,7 @@ export const getAllAppointment = async ({ pageSize = 5, pageNumber = 1 }) => {
   } catch (error) {
     console.error(
       "An error occurred while retrieving all appointments:",
-      error,
+      error
     );
   }
 };

@@ -8,7 +8,6 @@ import { Button } from "@/components/ui/button";
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
 import { cn } from "@/lib/utils";
 
-
 interface MobileMenuProps {
   isScrolled: boolean;
 }
@@ -25,7 +24,7 @@ const MobileMenu = ({ isScrolled }: MobileMenuProps) => {
             size="sm"
             className={cn(
               "px-0 text-base hover:bg-transparent focus-visible:bg-transparent focus-visible:ring-0 focus-visible:ring-offset-0",
-              isScrolled ? "text-gray-900" : "text-white",
+              isScrolled ? "text-gray-900" : "text-white"
             )}
           >
             <Menu className="size-6" />
@@ -68,9 +67,7 @@ const MobileMenu = ({ isScrolled }: MobileMenuProps) => {
               ))}
             </nav>
             <Button className="mt-4 w-full text-theme-600" asChild>
-              <Link href="/sign-in">
-                Login
-              </Link>
+              <Link href="/sign-in">Login</Link>
             </Button>
           </div>
         </SheetContent>

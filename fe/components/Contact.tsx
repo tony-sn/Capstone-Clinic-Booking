@@ -66,7 +66,7 @@ const Contact = () => {
               "transition-all duration-700 transform",
               isInView
                 ? "opacity-100 translate-x-0"
-                : "opacity-0 -translate-x-12",
+                : "opacity-0 -translate-x-12"
             )}
           >
             <Card>
@@ -75,7 +75,8 @@ const Contact = () => {
                   Send a Message
                 </CardTitle>
                 <CardDescription>
-                  Fill out the form below and we&apos;ll respond within 24 hours.
+                  Fill out the form below and we&apos;ll respond within 24
+                  hours.
                 </CardDescription>
               </CardHeader>
               <CardContent>
@@ -133,7 +134,7 @@ const Contact = () => {
               "space-y-6 transition-all duration-700 transform",
               isInView
                 ? "opacity-100 translate-x-0"
-                : "opacity-0 translate-x-12",
+                : "opacity-0 translate-x-12"
             )}
           >
             <div className="rounded-lg border border-gray-100 bg-white p-6 dark:border-gray-800 dark:bg-gray-900">
@@ -169,8 +170,8 @@ const Contact = () => {
                 Your First Visit
               </h3>
               <p className="mb-4">
-                New to our clinic? We make your first experience comfortable
-                and informative.
+                New to our clinic? We make your first experience comfortable and
+                informative.
               </p>
               <ul className="space-y-3">
                 <li className="flex items-start">

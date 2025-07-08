@@ -55,12 +55,17 @@ export const getUserInfo = async (options?: {
     credentials: "include",
   });
 
-  if (!res.ok) {
-    throw new Error("Failed to fetch user info");
+  let data: any | undefined;
+  if (res.ok) {
+    try {
+      data = await res.json();
+    } catch {
+      data = undefined;
+    }
   }
 
   return {
     response: res,
-    data: await res.json(),
+    data,
   };
 };

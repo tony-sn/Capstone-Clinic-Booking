@@ -40,7 +40,7 @@ export default function RootLayout({
         className={cn(
           "min-h-screen bg-dark-300 font-sans font-playfair antialiased",
           fontSans.variable,
-          playfair.variable,
+          playfair.variable
         )}
       >
         <Providers>{children}</Providers>

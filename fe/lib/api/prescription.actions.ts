@@ -8,7 +8,7 @@ export const getAllPrescriptions = async ({ pageSize = 5, pageNumber = 1 }) => {
   try {
     const res = await fetch(
       `${Endpoints.PRESCRIPTION}?pageSize=${pageSize}&pageNumber=${pageNumber}`,
-      { cache: "no-store" },
+      { cache: "no-store" }
     );
 
     if (!res.ok) {

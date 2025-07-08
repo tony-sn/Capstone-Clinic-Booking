@@ -1,6 +1,7 @@
 "use server";
 
 import { revalidatePath } from "next/cache";
+
 import { Endpoints } from "@/lib/app.config";
 
 // --- Log inventory activity ---

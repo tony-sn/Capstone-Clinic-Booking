@@ -28,7 +28,7 @@ export default function InfiniteScroll({
           fetchNextPage();
         }
       },
-      { rootMargin: "100px" },
+      { rootMargin: "100px" }
     );
 
     const current = loadMoreRef.current;

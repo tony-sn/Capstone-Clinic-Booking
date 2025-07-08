@@ -11,7 +11,7 @@ export const getAllMedicineInventoryEntries = async ({
   try {
     const res = await fetch(
       `${Endpoints.MEDICINE_INVENTORY_ENTRY}?pageSize=${pageSize}&pageNumber=${pageNumber}`,
-      { cache: "no-store" },
+      { cache: "no-store" }
     );
 
     if (!res.ok) {
@@ -22,7 +22,7 @@ export const getAllMedicineInventoryEntries = async ({
   } catch (error) {
     console.error(
       "An error occurred while retrieving medicine inventory entries:",
-      error,
+      error
     );
   }
 };
@@ -55,7 +55,7 @@ export const createMedicineInventoryEntry = async (formData: FormData) => {
 
 export const updateMedicineInventoryEntry = async (
   id: number,
-  formData: FormData,
+  formData: FormData
 ) => {
   const res = await fetch(`${Endpoints.MEDICINE_INVENTORY_ENTRY}/${id}`, {
     method: "PUT",
@@ -75,7 +75,7 @@ export const deleteMedicineInventoryEntryById = async (id: number) => {
     `${Endpoints.MEDICINE_INVENTORY_ENTRY}/DeleteById/${id}`,
     {
       method: "PUT",
-    },
+    }
   );
 
   if (!res.ok) {

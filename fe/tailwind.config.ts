@@ -46,7 +46,7 @@ const config = {
           700: "#ABB8C4",
         },
         theme: {
-          initial: "#ECFDF3",  // light green
+          initial: "#ECFDF3", // light green
           50: "#ECFDF3",
           100: "#D1FAE5",
           200: "#A7F3D0",

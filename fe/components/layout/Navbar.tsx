@@ -9,7 +9,7 @@ import { Button } from "@/components/ui/button";
 import { publicNav, privateNav } from "@/constants";
 import { cn } from "@/lib/utils";
 
-const Navbar = ({ isAuthed }: { isAuthed: boolean }) => {
+const Navbar = ({ isAuthed }: { isAuthed?: boolean }) => {
   const [isScrolled, setIsScrolled] = useState(false);
   const navList = isAuthed ? privateNav : publicNav;
   const getHref = (item: string) =>

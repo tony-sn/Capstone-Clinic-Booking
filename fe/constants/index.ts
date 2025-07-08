@@ -100,3 +100,5 @@ export const privateNav = [
   "Prescriptions",
   "Medicines",
 ];
+
+export const SESSION_COOKIE_NAME = ".AspNetCore.Identity.Application";

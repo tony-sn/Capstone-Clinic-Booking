@@ -19,7 +19,7 @@ export default async function AuthenticatedLayout({
   if (response.status !== 200 || userInfo === undefined) {
     redirect("/sign-in");
   } else if (userInfo?.roles[0] === "User") {
-    redirect(`/patients/${userInfo?.id}`);
+    redirect(`/patients/${userInfo?.id}/register`);
   }
 
   return (

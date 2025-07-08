@@ -5,7 +5,7 @@ import Hero from "@/components/Hero";
 import Footer from "@/components/layout/Footer";
 import Navbar from "@/components/layout/Navbar";
 import Process from "@/components/Process";
-import Services from '@/components/Services'
+import Services from "@/components/Services";
 import Testimonials from "@/components/Testimonials";
 
 const Home = async ({ searchParams }: SearchParamProps) => {
