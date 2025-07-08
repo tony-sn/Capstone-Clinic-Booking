@@ -14,12 +14,15 @@ export default async function AuthenticatedLayout({
   const { response, data: userInfo } = await getUserInfo({
     headers: headersObj,
   });
+  const role = userInfo?.roles?.[0];
 
   console.log({ userInfo });
-  if (response.status !== 200 || userInfo === undefined) {
+  if (response.status !== 200 || !userInfo) {
     redirect("/sign-in");
-  } else if (userInfo?.roles[0] === "User") {
-    redirect(`/patients/${userInfo?.id}/register`);
+  } else if (role === "User") {
+    redirect(`/patients/${userInfo?.id}/new-appointment`);
+  } else if (!["Staff", "Admin", "Doctor"].includes(role ?? "")) {
+    redirect("/sign-in");
   }
 
   return (

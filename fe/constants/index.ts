@@ -102,3 +102,4 @@ export const privateNav = [
 ];
 
 export const SESSION_COOKIE_NAME = ".AspNetCore.Identity.Application";
+export const ROLE = "ROLE";
