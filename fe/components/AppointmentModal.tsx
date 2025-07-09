@@ -2,6 +2,8 @@
 
 import { useState } from "react";
 
+import { AppointmentForm } from "./forms/AppointmentForm";
+
 import { Button } from "@/components/ui/button";
 import {
   Dialog,
@@ -12,8 +14,6 @@ import {
   DialogTrigger,
 } from "@/components/ui/dialog";
 import { Appointment } from "@/types/appwrite.types";
-
-import { AppointmentForm } from "./forms/AppointmentForm";
 
 import "react-datepicker/dist/react-datepicker.css";
 

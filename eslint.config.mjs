@@ -14,7 +14,12 @@ const compat = new FlatCompat({
 
 const eslintConfig = [
   {
-    ignores: ["./fe/components/ui/**/*", "./fe/lib/actions/*"],
+    ignores: [
+      "./fe/components/ui/**/*",
+      "./fe/lib/actions/*",
+      "./fe/.next/**/*",
+      "node_modules/**/*",
+    ],
   },
   ...compat.extends(
     "next/core-web-vitals",
@@ -24,6 +29,11 @@ const eslintConfig = [
     "prettier"
   ),
   {
+    settings: {
+      next: {
+        rootDir: "fe/",
+      },
+    },
     plugins: {
       import: importPlugin,
       "@tanstack/query": tanstackQueryPlugin,

@@ -7,6 +7,10 @@ import { Dispatch, SetStateAction, useState } from "react";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 
+import CustomFormField, { FormFieldType } from "../CustomFormField";
+import SubmitButton from "../SubmitButton";
+import { Form } from "../ui/form";
+
 import { SelectItem } from "@/components/ui/select";
 import { Doctors } from "@/constants";
 import {
@@ -18,16 +22,12 @@ import { Appointment } from "@/types/appwrite.types";
 
 import "react-datepicker/dist/react-datepicker.css";
 
-import CustomFormField, { FormFieldType } from "../CustomFormField";
-import SubmitButton from "../SubmitButton";
-import { Form } from "../ui/form";
-
 export const AppointmentForm = ({
   userId,
   patientId,
   type = "create",
   appointment,
-  setOpen,
+  setOpen = (open) => !open,
 }: {
   userId: string;
   patientId: string;
@@ -45,7 +45,7 @@ export const AppointmentForm = ({
     defaultValues: {
       primaryPhysician: appointment ? appointment?.primaryPhysician : "",
       schedule: appointment
-        ? new Date(appointment?.schedule!)
+        ? new Date(appointment.schedule ? appointment.schedule : "")
         : new Date(Date.now()),
       reason: appointment ? appointment.reason : "",
       note: appointment?.note || "",
@@ -93,7 +93,7 @@ export const AppointmentForm = ({
       } else {
         const appointmentToUpdate = {
           userId,
-          appointmentId: appointment?.$id!,
+          appointmentId: appointment?.$id ? appointment.$id : "",
           appointment: {
             primaryPhysician: values.primaryPhysician,
             schedule: new Date(values.schedule),
@@ -101,12 +101,13 @@ export const AppointmentForm = ({
             cancellationReason: values.cancellationReason,
           },
           type,
+          timeZone: "Asia/Ho_Chi_Minh",
         };
 
         const updatedAppointment = await updateAppointment(appointmentToUpdate);
 
         if (updatedAppointment) {
-          setOpen && setOpen(false);
+          setOpen(false);
           form.reset();
         }
       }
