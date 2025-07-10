@@ -1,3 +1,4 @@
+using ClinicBooking.Models;
 using ClinicBooking.Models.DTOs;
 using ClinicBooking.Services;
 using ClinicBooking_Utility;
@@ -80,6 +81,26 @@ namespace ClinicBooking.Controllers
                 Status = Constants.SUCCESS_DELETE_CODE,
                 Message = Constants.SUCCESS_DELETE_MSG,
                 Data = deleted
+            });
+        }
+
+        [HttpGet("filter")]
+        public async Task<ActionResult<ApiResponseWithPagination<IEnumerable<RevenueReportDTO>>>> FilterByType(RevenueType type, int pageSize = 10, int pageNumber = 1)
+        {
+            var result = await _service.FilterByType(type, pageSize, pageNumber);
+            if (result == null) return NotFound();
+
+            return Ok(new ApiResponseWithPagination<IEnumerable<RevenueReportDTO>>
+            {
+                Status = Constants.SUCCESS_READ_CODE,
+                Message = Constants.SUCCESS_READ_MSG,
+                Data = result.Items,
+                Pagination = new Pagination
+                {
+                    PageSize = pageSize,
+                    PageNumber = pageNumber,
+                    TotalItems = result.TotalItems
+                }
             });
         }
     }
