@@ -1,3 +1,4 @@
+using ClinicBooking.Models;
 using ClinicBooking.Models.DTOs;
 using ClinicBooking.Services;
 using ClinicBooking_Utility;
@@ -16,10 +17,24 @@ namespace ClinicBooking.Controllers
         }
 
         [HttpGet]
-        public async Task<ActionResult<ApiResponseWithPagination<IEnumerable<TransactionDTO>>>> GetAll(int pageSize = 5, int pageNumber = 1)
+        public async Task<ActionResult<ApiResponseWithPagination<IEnumerable<TransactionDTO>>>> GetAll(
+            int pageSize = 5,
+            int pageNumber = 1,
+            bool? paid = null,
+            PaymentType? paymentType = null,
+            DateTime? fromDate = null,
+            DateTime? toDate = null)
         {
-            var result = await _service.GetAll(pageSize: pageSize, pageNumber: pageNumber);
+            var result = await _service.GetAll(
+                pageSize: pageSize,
+                pageNumber: pageNumber,
+                paid: paid,
+                paymentType: paymentType,
+                fromDate: fromDate,
+                toDate: toDate);
+
             if (result == null) return NotFound();
+
             return Ok(new ApiResponseWithPagination<IEnumerable<TransactionDTO>>
             {
                 Status = Constants.SUCCESS_READ_CODE,
@@ -33,6 +48,7 @@ namespace ClinicBooking.Controllers
                 }
             });
         }
+
 
         [HttpGet("{id:int}")]
         public async Task<ActionResult<ApiResponse<TransactionDTO>>> GetById(int id)

@@ -30,6 +30,33 @@ namespace ClinicBooking.Services
                 TotalItems = totalItems
             };
         }
+        public async Task<PageResultUlt<IEnumerable<TransactionDTO>>> GetAll(
+            int pageSize,
+            int pageNumber,
+            bool? paid,
+            PaymentType? paymentType,
+            DateTime? fromDate,
+            DateTime? toDate)
+        {
+            if (pageSize < 0) throw new ArgumentException($"invalid page size: {pageSize}");
+            if (pageNumber <= 0) throw new ArgumentException($"invalid page number: {pageNumber}");
+
+            var list = await _repository.GetFilteredAsync(paid, paymentType, fromDate, toDate);
+            if (list == null) return null;
+
+            var totalItems = list.Count();
+
+            if (pageSize > 0)
+            {
+                list = list.Skip((pageNumber - 1) * pageSize).Take(pageSize).ToList();
+            }
+
+            return new PageResultUlt<IEnumerable<TransactionDTO>>
+            {
+                Items = list.Select(TransactionDTO.ConvertToDTO),
+                TotalItems = totalItems
+            };
+        }
 
         public async Task<TransactionDTO> GetById(int id)
         {
