@@ -1,12 +1,16 @@
 {
   "name": "cyberclinic",
-  "version": "0.1.0",
+  "version": "1.0.0",
   "private": true,
   "scripts": {
-    "dev": "next dev",
-    "build": "next build",
-    "start": "next start",
-    "lint": "next lint"
+    "dev": "dotenv -- concurrently -k -c auto -n fe,be \"npm run dev:fe\" \"npm run dev:be\"",
+    "dev:fe": "next dev fe --turbopack",
+    "dev:be": "dotnet watch run --project ./BE/ClinicBooking/ClinicBooking.csproj",
+    "lint-fe": "eslint fe --ext .js,.jsx,.ts,.tsx",
+    "build": "next build fe",
+    "start": "next start fe",
+    "lint": "next lint fe",
+    "prepare": "husky"
   },
   "dependencies": {
     "@hookform/resolvers": "^3.3.4",
@@ -32,13 +36,13 @@
     "input-otp": "^1.2.4",
     "libphonenumber-js": "^1.12.8",
     "lucide-react": "^0.378.0",
-    "next": "14.2.3",
+    "next": "15.1.6",
     "next-themes": "^0.3.0",
     "node-appwrite": "^12.0.1",
     "prettier": "^3.2.5",
-    "react": "^18",
+    "react": "^19.0.0",
     "react-datepicker": "^6.9.0",
-    "react-dom": "^18",
+    "react-dom": "^19.0.0",
     "react-dropzone": "^14.2.3",
     "react-hook-form": "^7.51.4",
     "react-phone-number-input": "^3.4.1",
@@ -49,20 +53,38 @@
     "zod": "^3.23.6"
   },
   "devDependencies": {
+    "@eslint/eslintrc": "3",
     "@tanstack/eslint-plugin-query": "^5.80.12",
     "@tanstack/react-query-devtools": "^5.80.10",
     "@types/node": "^20",
-    "@types/react": "^18",
+    "@types/react": "19",
     "@types/react-datepicker": "^6.2.0",
-    "@types/react-dom": "^18",
-    "eslint": "^8",
-    "eslint-config-next": "14.2.3",
-    "eslint-config-prettier": "^9.1.0",
+    "@types/react-dom": "19",
+    "autoprefixer": "^10.4.21",
+    "concurrently": "9.1.2",
+    "dotenv": "16.4.7",
+    "eslint": "9",
+    "eslint-config-next": "15.1.6",
+    "eslint-config-prettier": "^10.0.1",
     "eslint-config-standard": "^17.1.0",
     "eslint-plugin-import": "^2.29.1",
     "eslint-plugin-tailwindcss": "^3.15.1",
+    "husky": "9.1.7",
+    "lint-staged": "15.4.3",
     "postcss": "^8",
     "tailwindcss": "^3.4.1",
     "typescript": "^5"
-  }
+  },
+  "lint-staged": {
+    "fe/**/*.{js,jsx,ts,tsx}": [
+      "eslint --fix",
+      "prettier --write"
+    ],
+    "fe/**/*": "prettier --write --ignore-unknown"
+  },
+  "workspaces": [
+    "Be/*",
+    "fe/*"
+  ],
+  "packageManager": "pnpm@10.12.4"
 }
