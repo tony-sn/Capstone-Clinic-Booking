@@ -24,7 +24,7 @@ jobs:
       - name: Setup .NET
         uses: actions/setup-dotnet@v3
         with:
-          dotnet-version: '9.0.x'
+          dotnet-version: "9.0.x"
 
       - name: Set up Docker image names
         run: |
@@ -64,11 +64,11 @@ jobs:
 
             # Login to GitHub Container Registry
             echo ${{ secrets.GITHUB_TOKEN }} | docker login ghcr.io -u ${{ github.actor }} --password-stdin
-            
+
             # Stop and remove existing microservice containers only
             echo "Stopping existing microservice containers..."
-            docker stop clinicbooking 2>/dev/null || true
-            docker rm clinicbooking 2>/dev/null || true
+            docker stop clinicbooking nginx-proxy 2>/dev/null || true
+            docker rm clinicbooking nginx-proxy 2>/dev/null || true
 
             # Remove old microservice images to ensure fresh deployment
             echo "Removing old microservice images..."
@@ -107,7 +107,6 @@ jobs:
             docker run -d \
               --name clinicbooking \
               --network clinic-network \
-              -p 8082:80 \
               -e ASPNETCORE_ENVIRONMENT=Development \
               -e DEFAULT_CONNECTION="${{ secrets.DEFAULT_CONNECTION }}" \
               -e EMAILSENDERSETTINGS_SMTPSERVER="${{ secrets.EMAILSENDERSETTINGS_SMTPSERVER }}" \
@@ -118,6 +117,97 @@ jobs:
               -e EMAILSENDERSETTINGS_FROM="${{ secrets.EMAILSENDERSETTINGS_FROM }}" \
               --restart unless-stopped \
               ${{ env.CLINICBOOKING_IMAGE_NAME_LOWER }}:latest
+
+            # Create Nginx configuration
+            echo "Creating Nginx configuration..."
+            mkdir -p /deployments/nginx
+            cat > /deployments/nginx/nginx.conf << 'EOF'
+            events {
+                worker_connections 1024;
+            }
+
+            http {
+                upstream clinicbooking {
+                    server clinicbooking:80;
+                }
+
+                # Redirect HTTP to HTTPS
+                server {
+                    listen 80;
+                    server_name api.cyber-clinic.cloud;
+                    return 301 https://$server_name$request_uri;
+                }
+
+                # HTTPS server
+                server {
+                    listen 443 ssl;
+                    server_name api.cyber-clinic.cloud;
+
+                    ssl_certificate /etc/nginx/ssl/fullchain.pem;
+                    ssl_certificate_key /etc/nginx/ssl/privkey.pem;
+
+                    # SSL configuration
+                    ssl_protocols TLSv1.2 TLSv1.3;
+                    ssl_ciphers HIGH:!aNULL:!MD5;
+                    ssl_prefer_server_ciphers on;
+
+                    # Security headers
+                    add_header X-Frame-Options DENY;
+                    add_header X-Content-Type-Options nosniff;
+                    add_header X-XSS-Protection "1; mode=block";
+
+                    location / {
+                        proxy_pass http://clinicbooking;
+                        proxy_set_header Host $host;
+                        proxy_set_header X-Real-IP $remote_addr;
+                        proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+                        proxy_set_header X-Forwarded-Proto $scheme;
+                        proxy_redirect off;
+                    }
+                }
+            }
+            EOF
+
+            # Install Certbot and obtain SSL certificate if not exists
+            if [ ! -f /deployments/nginx/ssl/fullchain.pem ]; then
+                echo "Installing Certbot and obtaining SSL certificate..."
+                
+                # Install certbot
+                apt-get update
+                apt-get install -y certbot
+                
+                # Create SSL directory
+                mkdir -p /deployments/nginx/ssl
+                
+                # Obtain SSL certificate
+                certbot certonly --standalone \
+                  --preferred-challenges http \
+                  --email ${{ secrets.CERTBOT_EMAIL }} \
+                  --agree-tos \
+                  --non-interactive \
+                  -d api.cyber-clinic.cloud
+                
+                # Copy certificates to nginx directory
+                cp /etc/letsencrypt/live/api.cyber-clinic.cloud/fullchain.pem /deployments/nginx/ssl/
+                cp /etc/letsencrypt/live/api.cyber-clinic.cloud/privkey.pem /deployments/nginx/ssl/
+                
+                # Set up automatic renewal
+                echo "0 12 * * * /usr/bin/certbot renew --quiet && docker restart nginx-proxy" | crontab -
+            else
+                echo "SSL certificate already exists"
+            fi
+
+            # Start Nginx reverse proxy
+            echo "Starting Nginx reverse proxy..."
+            docker run -d \
+              --name nginx-proxy \
+              --network clinic-network \
+              -p 80:80 \
+              -p 443:443 \
+              -v /deployments/nginx/nginx.conf:/etc/nginx/nginx.conf:ro \
+              -v /deployments/nginx/ssl:/etc/nginx/ssl:ro \
+              --restart unless-stopped \
+              nginx:alpine
 
             # Wait for services to fully start
             echo "Waiting for services to start..."
@@ -135,18 +225,20 @@ jobs:
             # Check health status
             echo "=== Health Check Results ==="
             echo "Clinic Booking Health:"
-            curl -s http://localhost:8082/health && echo " - OK" || echo " - FAILED"
+            curl -k -s https://api.cyber-clinic.cloud/health && echo " - OK" || echo " - FAILED"
 
             # Test Swagger endpoints
             echo "=== Swagger Check Results ==="
             echo "Clinic Booking Swagger JSON:"
-            curl -s http://localhost:8082/swagger/v1/swagger.json | head -1 && echo " - Swagger JSON OK" || echo " - Swagger JSON FAILED"
+            curl -s https://api.cyber-clinic.cloud/swagger/v1/swagger.json | head -1 && echo " - Swagger JSON OK" || echo " - Swagger JSON FAILED"
 
             # Show recent logs
             echo "=== Recent Logs ==="
             echo "Clinic Booking logs:"
             docker logs clinicbooking --tail=5 2>/dev/null || echo "No logs available"
 
+            echo "=== NGINX logs ==="
+            docker logs nginx-proxy --tail=5 2>/dev/null || echo "No logs available"
             echo "=== DEPLOYMENT COMPLETE ===" 
             echo "=== ACCESS URLS ==="
             echo "CinicBooking Swagger: http://152.42.255.58:8082/swagger"
@@ -154,7 +246,4 @@ jobs:
             # Cleanup unused Docker images to free up space
             echo "=== Cleaning up unused Docker images ==="
             docker image prune -f || echo "No unused images to remove"
-            docker system df || echo "Unable to show disk usage" 
-
-
-      
+            docker system df || echo "Unable to show disk usage"

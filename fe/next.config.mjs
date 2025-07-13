@@ -21,7 +21,7 @@ const nextConfig = {
       },
     ],
   },
-  headers: [
+  headers: async () => [
     {
       source: "/api/:path*",
       headers: [
