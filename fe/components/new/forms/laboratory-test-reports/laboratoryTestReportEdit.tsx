@@ -1,14 +1,15 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import { 
-  useMedicalHistoryReport, 
-  useUpdateLaboratoryTestReport, 
+
+import {
+  useMedicalHistoryReport,
+  useUpdateLaboratoryTestReport,
   useDeleteLaboratoryTestReport,
-  useCreateLaboratoryTestReport 
+  useCreateLaboratoryTestReport,
 } from "@/hooks/laboratory-test-report/useEditLaboratoryTestReport";
-import { useDoctors } from "@/hooks/users/useUsers"; // Import your custom hook
 import { useLaboratoryTests } from "@/hooks/laboratory-tests/useLaboratoryTests"; // Import laboratory tests hook
+import { useDoctors } from "@/hooks/users/useUsers"; // Import your custom hook
 
 interface LaboratoryTestReportEditProps {
   medicalHistoryId?: number;
@@ -31,14 +32,14 @@ export default function LaboratoryTestReportEdit({
   laboratoryTestId,
   isOpen,
   onClose,
-  onSuccess
+  onSuccess,
 }: LaboratoryTestReportEditProps) {
   const [formData, setFormData] = useState<FormData>({
     medicalHistoryId: medicalHistoryId || 0,
     laboratoryTestId: laboratoryTestId || 0,
     result: "",
     technicianId: 1,
-    active: true
+    active: true,
   });
   const [showDeleteConfirm, setShowDeleteConfirm] = useState(false);
 
@@ -46,28 +47,28 @@ export default function LaboratoryTestReportEdit({
   const isEditMode = !!(medicalHistoryId && laboratoryTestId);
 
   // Fetch existing data for edit mode
-  const { 
-    data: existingReport, 
+  const {
+    data: existingReport,
     isLoading: isLoadingReport,
-    error: reportError 
+    error: reportError,
   } = useMedicalHistoryReport(
-    medicalHistoryId || 0, 
-    laboratoryTestId || 0, 
+    medicalHistoryId || 0,
+    laboratoryTestId || 0,
     isEditMode && isOpen
   );
 
   // Fetch doctors list
-  const { 
-    data: doctors = [], 
+  const {
+    data: doctors = [],
     isLoading: isLoadingDoctors,
-    error: doctorsError 
+    error: doctorsError,
   } = useDoctors();
 
   // Fetch laboratory tests list (get all with pageSize: 0)
-  const { 
-    data: laboratoryTests = [], 
+  const {
+    data: laboratoryTests = [],
     isLoading: isLoadingLabTests,
-    error: labTestsError 
+    error: labTestsError,
   } = useLaboratoryTests({ pageSize: 0, pageNumber: 1 });
 
   // Mutations
@@ -83,7 +84,7 @@ export default function LaboratoryTestReportEdit({
         laboratoryTestId: existingReport.laboratoryTestId,
         result: existingReport.result,
         technicianId: existingReport.technician.id,
-        active: existingReport.active
+        active: existingReport.active,
       });
     } else if (!isEditMode) {
       // Reset form for create mode
@@ -92,10 +93,17 @@ export default function LaboratoryTestReportEdit({
         laboratoryTestId: laboratoryTestId || 0,
         result: "",
         technicianId: doctors.length > 0 ? doctors[0].id : 1, // Set first doctor as default
-        active: true
+        active: true,
       });
     }
-  }, [existingReport, isEditMode, medicalHistoryId, laboratoryTestId, doctors, laboratoryTests]);
+  }, [
+    existingReport,
+    isEditMode,
+    medicalHistoryId,
+    laboratoryTestId,
+    doctors,
+    laboratoryTests,
+  ]);
 
   // Handle form submission
   const handleSubmit = async (e: React.FormEvent) => {
@@ -103,37 +111,43 @@ export default function LaboratoryTestReportEdit({
 
     if (isEditMode) {
       // Update existing report
-      updateMutation.mutate({
-        medicalHistoryId: formData.medicalHistoryId,
-        laboratoryTestId: formData.laboratoryTestId,
-        data: {
-          result: formData.result,
-          status: formData.active,
-          technicianId: formData.technicianId
+      updateMutation.mutate(
+        {
+          medicalHistoryId: formData.medicalHistoryId,
+          laboratoryTestId: formData.laboratoryTestId,
+          data: {
+            result: formData.result,
+            status: formData.active,
+            technicianId: formData.technicianId,
+          },
+        },
+        {
+          onSuccess: (result) => {
+            if (result.success) {
+              onSuccess?.();
+              onClose();
+            }
+          },
         }
-      }, {
-        onSuccess: (result) => {
-          if (result.success) {
-            onSuccess?.();
-            onClose();
-          }
-        }
-      });
+      );
     } else {
       // Create new report
-      createMutation.mutate({
-        medicalHistoryId: formData.medicalHistoryId,
-        laboratoryTestId: formData.laboratoryTestId,
-        result: formData.result,
-        technicianId: formData.technicianId
-      }, {
-        onSuccess: (result) => {
-          if (result.success) {
-            onSuccess?.();
-            onClose();
-          }
+      createMutation.mutate(
+        {
+          medicalHistoryId: formData.medicalHistoryId,
+          laboratoryTestId: formData.laboratoryTestId,
+          result: formData.result,
+          technicianId: formData.technicianId,
+        },
+        {
+          onSuccess: (result) => {
+            if (result.success) {
+              onSuccess?.();
+              onClose();
+            }
+          },
         }
-      });
+      );
     }
   };
 
@@ -141,33 +155,39 @@ export default function LaboratoryTestReportEdit({
   const handleDelete = () => {
     if (!isEditMode) return;
 
-    deleteMutation.mutate({
-      medicalHistoryId: formData.medicalHistoryId,
-      laboratoryTestId: formData.laboratoryTestId
-    }, {
-      onSuccess: (result) => {
-        if (result.success) {
-          setShowDeleteConfirm(false);
-          onSuccess?.();
-          onClose();
-        }
+    deleteMutation.mutate(
+      {
+        medicalHistoryId: formData.medicalHistoryId,
+        laboratoryTestId: formData.laboratoryTestId,
+      },
+      {
+        onSuccess: (result) => {
+          if (result.success) {
+            setShowDeleteConfirm(false);
+            onSuccess?.();
+            onClose();
+          }
+        },
       }
-    });
+    );
   };
 
   // Loading state for edit mode
-  if (isEditMode && (isLoadingReport || isLoadingDoctors || isLoadingLabTests)) {
+  if (
+    isEditMode &&
+    (isLoadingReport || isLoadingDoctors || isLoadingLabTests)
+  ) {
     return (
       <div className="fixed inset-0 z-50 overflow-y-auto">
-        <div className="flex items-center justify-center min-h-screen px-4 pt-4 pb-20 text-center sm:block sm:p-0">
-          <div className="fixed inset-0 transition-opacity bg-gray-500 bg-opacity-75" />
-          <div className="inline-block w-full max-w-md my-8 overflow-hidden text-left align-middle transition-all transform bg-white shadow-xl rounded-2xl">
+        <div className="flex min-h-screen items-center justify-center px-4 pb-20 pt-4 text-center sm:block sm:p-0">
+          <div className="fixed inset-0 bg-gray-500 bg-opacity-75 transition-opacity" />
+          <div className="my-8 inline-block w-full max-w-md overflow-hidden rounded-2xl bg-white text-left align-middle shadow-xl transition-all">
             <div className="p-8 text-center">
               <div className="relative mb-6">
-                <div className="animate-spin rounded-full h-12 w-12 border-4 border-blue-200 mx-auto"></div>
-                <div className="animate-spin rounded-full h-12 w-12 border-4 border-blue-600 border-t-transparent absolute top-0 left-1/2 transform -translate-x-1/2"></div>
+                <div className="mx-auto size-12 animate-spin rounded-full border-4 border-blue-200"></div>
+                <div className="absolute left-1/2 top-0 size-12 -translate-x-1/2 animate-spin rounded-full border-4 border-blue-600 border-t-transparent"></div>
               </div>
-              <p className="text-gray-600 font-medium">Loading data...</p>
+              <p className="font-medium text-gray-600">Loading data...</p>
             </div>
           </div>
         </div>
@@ -177,48 +197,77 @@ export default function LaboratoryTestReportEdit({
 
   if (!isOpen) return null;
 
-  const isLoading = createMutation.isPending || updateMutation.isPending || deleteMutation.isPending;
-  const error = createMutation.error || updateMutation.error || deleteMutation.error || reportError || doctorsError || labTestsError;
+  const isLoading =
+    createMutation.isPending ||
+    updateMutation.isPending ||
+    deleteMutation.isPending;
+  const error =
+    createMutation.error ||
+    updateMutation.error ||
+    deleteMutation.error ||
+    reportError ||
+    doctorsError ||
+    labTestsError;
 
   return (
     <div className="fixed inset-0 z-50 overflow-y-auto">
-      <div className="flex items-center justify-center min-h-screen px-4 pt-4 pb-20 text-center sm:block sm:p-0">
+      <div className="flex min-h-screen items-center justify-center px-4 pb-20 pt-4 text-center sm:block sm:p-0">
         {/* Backdrop */}
-        <div 
-          className="fixed inset-0 transition-opacity bg-gray-500 bg-opacity-75"
+        <div
+          className="fixed inset-0 bg-gray-500 bg-opacity-75 transition-opacity"
           onClick={onClose}
         />
 
         {/* Modal Content */}
-        <div className="inline-block w-full max-w-2xl my-8 overflow-hidden text-left align-middle transition-all transform bg-white shadow-xl rounded-2xl">
-          
+        <div className="my-8 inline-block w-full max-w-2xl overflow-hidden rounded-2xl bg-white text-left align-middle shadow-xl transition-all">
           {/* Header */}
           <div className="bg-gradient-to-r from-blue-500 to-purple-600 px-6 py-4">
             <div className="flex items-center justify-between">
               <div className="flex items-center gap-3">
-                <div className="p-2 bg-white/20 rounded-xl">
-                  <svg className="h-6 w-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+                <div className="rounded-xl bg-white/20 p-2">
+                  <svg
+                    className="size-6 text-white"
+                    fill="none"
+                    stroke="currentColor"
+                    viewBox="0 0 24 24"
+                  >
+                    <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      strokeWidth={2}
+                      d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"
+                    />
                   </svg>
                 </div>
                 <div>
                   <h3 className="text-xl font-bold text-white">
-                    {isEditMode ? '✏️ Edit Laboratory Test Report' : '➕ Create Laboratory Test Report'}
+                    {isEditMode
+                      ? "✏️ Edit Laboratory Test Report"
+                      : "➕ Create Laboratory Test Report"}
                   </h3>
-                  <p className="text-blue-100 text-sm">
-                    {isEditMode 
+                  <p className="text-sm text-blue-100">
+                    {isEditMode
                       ? `Medical History ID: ${medicalHistoryId} | Lab Test ID: ${laboratoryTestId}`
-                      : 'Create a new laboratory test report'
-                    }
+                      : "Create a new laboratory test report"}
                   </p>
                 </div>
               </div>
               <button
                 onClick={onClose}
-                className="p-2 text-white hover:bg-white/20 rounded-xl transition-colors"
+                className="rounded-xl p-2 text-white transition-colors hover:bg-white/20"
               >
-                <svg className="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+                <svg
+                  className="size-5"
+                  fill="none"
+                  stroke="currentColor"
+                  viewBox="0 0 24 24"
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeWidth={2}
+                    d="M6 18L18 6M6 6l12 12"
+                  />
                 </svg>
               </button>
             </div>
@@ -226,53 +275,66 @@ export default function LaboratoryTestReportEdit({
 
           {/* Error Display */}
           {error && (
-            <div className="mx-6 mt-4 p-4 bg-red-50 border border-red-200 rounded-xl">
+            <div className="mx-6 mt-4 rounded-xl border border-red-200 bg-red-50 p-4">
               <div className="flex items-center gap-2">
-                <svg className="h-5 w-5 text-red-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                <svg
+                  className="size-5 text-red-500"
+                  fill="none"
+                  stroke="currentColor"
+                  viewBox="0 0 24 24"
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeWidth={2}
+                    d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"
+                  />
                 </svg>
-                <p className="text-red-700 font-medium">
-                  {error instanceof Error ? error.message : 'An error occurred'}
+                <p className="font-medium text-red-700">
+                  {error instanceof Error ? error.message : "An error occurred"}
                 </p>
               </div>
             </div>
           )}
 
           {/* Form */}
-          <form onSubmit={handleSubmit} className="p-6 space-y-6">
-            
+          <form onSubmit={handleSubmit} className="space-y-6 p-6">
             {/* Medical History ID & Lab Test ID */}
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
               <div>
-                <label className="block text-sm font-semibold text-gray-700 mb-2">
+                <label className="mb-2 block text-sm font-semibold text-gray-700">
                   🏥 Medical History ID
                 </label>
                 <input
                   type="number"
                   value={formData.medicalHistoryId}
-                  onChange={(e) => setFormData(prev => ({
-                    ...prev,
-                    medicalHistoryId: parseInt(e.target.value) || 0
-                  }))}
+                  onChange={(e) =>
+                    setFormData((prev) => ({
+                      ...prev,
+                      medicalHistoryId: parseInt(e.target.value) || 0,
+                    }))
+                  }
                   disabled={isEditMode}
-                  className="w-full px-4 py-3 border-2 border-gray-200 rounded-xl focus:ring-4 focus:ring-blue-200 focus:border-blue-400 transition-all disabled:bg-gray-100 disabled:cursor-not-allowed"
+                  className="w-full rounded-xl border-2 border-gray-200 px-4 py-3 transition-all focus:border-blue-400 focus:ring-4 focus:ring-blue-200 disabled:cursor-not-allowed disabled:bg-gray-100"
                   placeholder="Enter medical history ID"
                   required
                 />
               </div>
-              
+
               <div>
-                <label className="block text-sm font-semibold text-gray-700 mb-2">
+                <label className="mb-2 block text-sm font-semibold text-gray-700">
                   🧪 Laboratory Test
                 </label>
                 <select
                   value={formData.laboratoryTestId}
-                  onChange={(e) => setFormData(prev => ({
-                    ...prev,
-                    laboratoryTestId: parseInt(e.target.value) || 0
-                  }))}
+                  onChange={(e) =>
+                    setFormData((prev) => ({
+                      ...prev,
+                      laboratoryTestId: parseInt(e.target.value) || 0,
+                    }))
+                  }
                   disabled={isEditMode || isLoadingLabTests}
-                  className="w-full px-4 py-3 border-2 border-gray-200 rounded-xl focus:ring-4 focus:ring-blue-200 focus:border-blue-400 transition-all disabled:bg-gray-100 disabled:cursor-not-allowed"
+                  className="w-full rounded-xl border-2 border-gray-200 px-4 py-3 transition-all focus:border-blue-400 focus:ring-4 focus:ring-blue-200 disabled:cursor-not-allowed disabled:bg-gray-100"
                   required
                 >
                   {isLoadingLabTests ? (
@@ -284,7 +346,7 @@ export default function LaboratoryTestReportEdit({
                       <option value="">Select laboratory test</option>
                       {laboratoryTests.map((test) => (
                         <option key={test.id} value={test.id}>
-                          {test.name} - {test.price || 'Not yet'}
+                          {test.name} - {test.price || "Not yet"}
                         </option>
                       ))}
                     </>
@@ -295,34 +357,38 @@ export default function LaboratoryTestReportEdit({
 
             {/* Test Result */}
             <div>
-              <label className="block text-sm font-semibold text-gray-700 mb-2">
+              <label className="mb-2 block text-sm font-semibold text-gray-700">
                 📋 Test Result
               </label>
               <textarea
                 value={formData.result}
-                onChange={(e) => setFormData(prev => ({ ...prev, result: e.target.value }))}
-                className="w-full px-4 py-3 border-2 border-gray-200 rounded-xl focus:ring-4 focus:ring-blue-200 focus:border-blue-400 transition-all resize-none"
+                onChange={(e) =>
+                  setFormData((prev) => ({ ...prev, result: e.target.value }))
+                }
+                className="w-full resize-none rounded-xl border-2 border-gray-200 px-4 py-3 transition-all focus:border-blue-400 focus:ring-4 focus:ring-blue-200"
                 placeholder="Enter test result details..."
                 rows={4}
                 required
               />
-              <p className="text-xs text-gray-500 mt-1">
+              <p className="mt-1 text-xs text-gray-500">
                 Enter detailed test results, measurements, or observations
               </p>
             </div>
 
             {/* Technician (Doctor) Select */}
             <div>
-              <label className="block text-sm font-semibold text-gray-700 mb-2">
+              <label className="mb-2 block text-sm font-semibold text-gray-700">
                 👨‍⚕️ Technician (Doctor)
               </label>
               <select
                 value={formData.technicianId}
-                onChange={(e) => setFormData(prev => ({
-                  ...prev,
-                  technicianId: parseInt(e.target.value) || 1
-                }))}
-                className="w-full px-4 py-3 border-2 border-gray-200 rounded-xl focus:ring-4 focus:ring-blue-200 focus:border-blue-400 transition-all"
+                onChange={(e) =>
+                  setFormData((prev) => ({
+                    ...prev,
+                    technicianId: parseInt(e.target.value) || 1,
+                  }))
+                }
+                className="w-full rounded-xl border-2 border-gray-200 px-4 py-3 transition-all focus:border-blue-400 focus:ring-4 focus:ring-blue-200"
                 required
                 disabled={isLoadingDoctors}
               >
@@ -335,7 +401,8 @@ export default function LaboratoryTestReportEdit({
                     <option value="">Select technician</option>
                     {doctors.map((doctor) => (
                       <option key={doctor.id} value={doctor.id}>
-                        Dr. {doctor.username} - {doctor.roles.toString() || 'General'}
+                        Dr. {doctor.username} -{" "}
+                        {doctor.roles.toString() || "General"}
                       </option>
                     ))}
                   </>
@@ -345,13 +412,18 @@ export default function LaboratoryTestReportEdit({
 
             {/* Active Status (Edit mode only) */}
             {isEditMode && (
-              <div className="bg-blue-50 p-4 rounded-xl">
-                <label className="flex items-center gap-3 cursor-pointer">
+              <div className="rounded-xl bg-blue-50 p-4">
+                <label className="flex cursor-pointer items-center gap-3">
                   <input
                     type="checkbox"
                     checked={formData.active}
-                    onChange={(e) => setFormData(prev => ({ ...prev, active: e.target.checked }))}
-                    className="w-5 h-5 text-blue-600 border-2 border-gray-300 rounded focus:ring-blue-500"
+                    onChange={(e) =>
+                      setFormData((prev) => ({
+                        ...prev,
+                        active: e.target.checked,
+                      }))
+                    }
+                    className="size-5 rounded border-2 border-gray-300 text-blue-600 focus:ring-blue-500"
                   />
                   <span className="text-sm font-semibold text-gray-700">
                     ✅ Report is active
@@ -361,24 +433,34 @@ export default function LaboratoryTestReportEdit({
             )}
 
             {/* Action Buttons */}
-            <div className="flex gap-3 pt-4 border-t border-gray-200">
+            <div className="flex gap-3 border-t border-gray-200 pt-4">
               {/* Save/Create Button */}
               <button
                 type="submit"
                 disabled={isLoading || isLoadingDoctors || isLoadingLabTests}
-                className="flex-1 bg-gradient-to-r from-blue-500 to-purple-600 text-white px-6 py-3 rounded-xl font-bold hover:from-blue-600 hover:to-purple-700 transition-all shadow-lg hover:shadow-xl transform hover:scale-[1.02] disabled:opacity-50 disabled:cursor-not-allowed disabled:transform-none"
+                className="flex-1 rounded-xl bg-gradient-to-r from-blue-500 to-purple-600 px-6 py-3 font-bold text-white shadow-lg transition-all hover:scale-[1.02] hover:from-blue-600 hover:to-purple-700 hover:shadow-xl disabled:transform-none disabled:cursor-not-allowed disabled:opacity-50"
               >
                 {isLoading ? (
                   <div className="flex items-center justify-center gap-2">
-                    <div className="animate-spin rounded-full h-4 w-4 border-2 border-white border-t-transparent"></div>
-                    {isEditMode ? 'Updating...' : 'Creating...'}
+                    <div className="size-4 animate-spin rounded-full border-2 border-white border-t-transparent"></div>
+                    {isEditMode ? "Updating..." : "Creating..."}
                   </div>
                 ) : (
                   <div className="flex items-center justify-center gap-2">
-                    <svg className="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
+                    <svg
+                      className="size-5"
+                      fill="none"
+                      stroke="currentColor"
+                      viewBox="0 0 24 24"
+                    >
+                      <path
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        strokeWidth={2}
+                        d="M5 13l4 4L19 7"
+                      />
                     </svg>
-                    {isEditMode ? '💾 Update Report' : '➕ Create Report'}
+                    {isEditMode ? "💾 Update Report" : "➕ Create Report"}
                   </div>
                 )}
               </button>
@@ -389,7 +471,7 @@ export default function LaboratoryTestReportEdit({
                   type="button"
                   onClick={() => setShowDeleteConfirm(true)}
                   disabled={isLoading}
-                  className="px-6 py-3 border-2 border-red-300 text-red-700 rounded-xl font-bold hover:bg-red-50 transition-all disabled:opacity-50 disabled:cursor-not-allowed"
+                  className="rounded-xl border-2 border-red-300 px-6 py-3 font-bold text-red-700 transition-all hover:bg-red-50 disabled:cursor-not-allowed disabled:opacity-50"
                 >
                   🗑️ Delete
                 </button>
@@ -400,7 +482,7 @@ export default function LaboratoryTestReportEdit({
                 type="button"
                 onClick={onClose}
                 disabled={isLoading}
-                className="px-6 py-3 border-2 border-gray-300 text-gray-700 rounded-xl font-bold hover:bg-gray-50 transition-all disabled:opacity-50 disabled:cursor-not-allowed"
+                className="rounded-xl border-2 border-gray-300 px-6 py-3 font-bold text-gray-700 transition-all hover:bg-gray-50 disabled:cursor-not-allowed disabled:opacity-50"
               >
                 ❌ Cancel
               </button>
@@ -411,41 +493,61 @@ export default function LaboratoryTestReportEdit({
 
       {/* Delete Confirmation Modal */}
       {showDeleteConfirm && (
-        <div className="fixed inset-0 z-60 overflow-y-auto">
-          <div className="flex items-center justify-center min-h-screen px-4 pt-4 pb-20 text-center sm:block sm:p-0">
-            <div className="fixed inset-0 transition-opacity bg-gray-500 bg-opacity-75" />
-            <div className="inline-block w-full max-w-md my-8 overflow-hidden text-left align-middle transition-all transform bg-white shadow-xl rounded-2xl">
+        <div className="z-60 fixed inset-0 overflow-y-auto">
+          <div className="flex min-h-screen items-center justify-center px-4 pb-20 pt-4 text-center sm:block sm:p-0">
+            <div className="fixed inset-0 bg-gray-500 bg-opacity-75 transition-opacity" />
+            <div className="my-8 inline-block w-full max-w-md overflow-hidden rounded-2xl bg-white text-left align-middle shadow-xl transition-all">
               <div className="p-6">
-                <div className="flex items-center gap-4 mb-4">
-                  <div className="p-3 bg-red-100 rounded-full">
-                    <svg className="h-6 w-6 text-red-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                <div className="mb-4 flex items-center gap-4">
+                  <div className="rounded-full bg-red-100 p-3">
+                    <svg
+                      className="size-6 text-red-600"
+                      fill="none"
+                      stroke="currentColor"
+                      viewBox="0 0 24 24"
+                    >
+                      <path
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        strokeWidth={2}
+                        d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"
+                      />
                     </svg>
                   </div>
                   <div>
-                    <h3 className="text-lg font-bold text-gray-900">🗑️ Delete Report</h3>
-                    <p className="text-sm text-gray-600">This action cannot be undone</p>
+                    <h3 className="text-lg font-bold text-gray-900">
+                      🗑️ Delete Report
+                    </h3>
+                    <p className="text-sm text-gray-600">
+                      This action cannot be undone
+                    </p>
                   </div>
                 </div>
-                
-                <p className="text-gray-700 mb-6">
-                  Are you sure you want to delete this laboratory test report?<br/>
-                  <span className="font-semibold">Medical History ID: {medicalHistoryId}</span><br/>
-                  <span className="font-semibold">Laboratory Test ID: {laboratoryTestId}</span>
+
+                <p className="mb-6 text-gray-700">
+                  Are you sure you want to delete this laboratory test report?
+                  <br />
+                  <span className="font-semibold">
+                    Medical History ID: {medicalHistoryId}
+                  </span>
+                  <br />
+                  <span className="font-semibold">
+                    Laboratory Test ID: {laboratoryTestId}
+                  </span>
                 </p>
-                
+
                 <div className="flex gap-3">
                   <button
                     onClick={handleDelete}
                     disabled={deleteMutation.isPending}
-                    className="flex-1 bg-gradient-to-r from-red-500 to-pink-600 text-white px-4 py-2 rounded-xl font-bold hover:from-red-600 hover:to-pink-700 transition-all disabled:opacity-50"
+                    className="flex-1 rounded-xl bg-gradient-to-r from-red-500 to-pink-600 px-4 py-2 font-bold text-white transition-all hover:from-red-600 hover:to-pink-700 disabled:opacity-50"
                   >
-                    {deleteMutation.isPending ? 'Deleting...' : '🗑️ Delete'}
+                    {deleteMutation.isPending ? "Deleting..." : "🗑️ Delete"}
                   </button>
                   <button
                     onClick={() => setShowDeleteConfirm(false)}
                     disabled={deleteMutation.isPending}
-                    className="flex-1 border-2 border-gray-300 text-gray-700 px-4 py-2 rounded-xl font-bold hover:bg-gray-50 transition-all disabled:opacity-50"
+                    className="flex-1 rounded-xl border-2 border-gray-300 px-4 py-2 font-bold text-gray-700 transition-all hover:bg-gray-50 disabled:opacity-50"
                   >
                     Cancel
                   </button>

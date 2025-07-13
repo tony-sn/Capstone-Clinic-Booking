@@ -8,7 +8,6 @@ import { Card, CardContent } from "@/components/ui/card";
 import { useInView } from "@/hooks/use-in-view";
 import { cn } from "@/lib/utils";
 
-
 const testimonials = [
   {
     quote:
@@ -45,7 +44,7 @@ const testimonials = [
     title: "Entrepreneur",
     rating: 5,
   },
-]
+];
 
 const Testimonials = () => {
   const ref = useRef<HTMLDivElement>(null);
@@ -76,7 +75,7 @@ const Testimonials = () => {
           <div
             className={cn(
               "transition-all duration-700",
-              isInView ? "opacity-100" : "opacity-0",
+              isInView ? "opacity-100" : "opacity-0"
             )}
           >
             <div className="mb-8 hidden gap-6 lg:flex">
@@ -145,7 +144,7 @@ const TestimonialCard = ({
     <Card
       className={cn(
         "transition-all duration-700 transform",
-        isInView ? "opacity-100 translate-y-0" : "opacity-0 translate-y-12",
+        isInView ? "opacity-100 translate-y-0" : "opacity-0 translate-y-12"
       )}
       style={{
         transitionDelay: isInView ? `${delay}ms` : "0ms",
@@ -160,7 +159,7 @@ const TestimonialCard = ({
                 "h-4 w-4",
                 i < testimonial.rating
                   ? "text-yellow-500 fill-yellow-500"
-                  : "text-gray-300",
+                  : "text-gray-300"
               )}
             />
           ))}

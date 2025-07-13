@@ -41,6 +41,9 @@ interface CustomProps {
   children?: React.ReactNode;
   renderSkeleton?: (field: any) => React.ReactNode;
   fieldType: FormFieldType;
+  Icon?: React.ElementType;
+  type?: string;
+  onClick?: () => void;
 }
 
 const RenderInput = ({ field, props }: { field: any; props: CustomProps }) => {
@@ -82,11 +85,17 @@ const RenderInput = ({ field, props }: { field: any; props: CustomProps }) => {
           <FormControl>
             <Input
               placeholder={props.placeholder}
-              type="password"
+              type={props.type}
               {...field}
               className="shad-input border-0"
             />
           </FormControl>
+          {props.Icon && (
+            <props.Icon
+              className="mr-2 h-auto text-[#cde9df]"
+              onClick={props.onClick}
+            />
+          )}
         </div>
       );
     case FormFieldType.TEXTAREA:

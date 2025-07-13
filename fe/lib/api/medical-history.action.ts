@@ -1,9 +1,13 @@
 "use server";
 
-import { Endpoints } from "@/lib/app.config";
-import type { MedicalHistoriesResponse, MedicalHistoryParams, MedicalHistoryResponse } from "@/types/medicalHistory";
-import { promises } from "dns";
 import { revalidatePath } from "next/cache";
+
+import { Endpoints } from "@/lib/app.config";
+import type {
+  MedicalHistoriesResponse,
+  MedicalHistoryParams,
+  MedicalHistoryResponse,
+} from "@/types/medicalHistory";
 
 export const getAllMedicalHistory = async (
   params: MedicalHistoryParams = { pageSize: 0, pageNumber: 1 }
@@ -36,7 +40,10 @@ export const getAllMedicalHistory = async (
     };
   }
 };
-export const updateMedicalHistory = async (medicalHistoryId: number, formData: FormData) => {
+export const updateMedicalHistory = async (
+  medicalHistoryId: number,
+  formData: FormData
+) => {
   const res = await fetch(`${Endpoints.MEDICAL_HISTORY}/${medicalHistoryId}`, {
     method: "PUT",
     body: formData,
@@ -44,28 +51,32 @@ export const updateMedicalHistory = async (medicalHistoryId: number, formData: F
 
   if (!res.ok) {
     const errorText = await res.text();
-    console.error('Update failed:', errorText);
+    console.error("Update failed:", errorText);
     throw new Error(`Failed to update medical history: ${res.status}`);
   }
 
   revalidatePath("/medical-histories");
   return res.json();
 };
-export const deleteMedicalHistoryById = async (medicalHistoryId: number): Promise<MedicalHistoryResponse> => {
+export const deleteMedicalHistoryById = async (
+  medicalHistoryId: number
+): Promise<MedicalHistoryResponse> => {
   const url = `${Endpoints.MEDICAL_HISTORY}/DeleteById/${medicalHistoryId}`;
 
   const res = await fetch(url, {
     method: "PUT",
     headers: {
-      'Content-Type': 'application/json',
-      'Accept': 'application/json'
-    }
+      "Content-Type": "application/json",
+      Accept: "application/json",
+    },
   });
 
   if (!res.ok) {
     const errorText = await res.text();
-    console.error('Delete failed:', errorText);
-    throw new Error(`Failed to delete medical history: ${res.status} - ${errorText}`);
+    console.error("Delete failed:", errorText);
+    throw new Error(
+      `Failed to delete medical history: ${res.status} - ${errorText}`
+    );
   }
 
   const response: MedicalHistoryResponse = await res.json();
@@ -85,7 +96,7 @@ export const createMedicalHistory = async (formData: FormData) => {
 
   if (!res.ok) {
     const errorText = await res.text();
-    console.error('Create failed:', errorText);
+    console.error("Create failed:", errorText);
     throw new Error(`Failed to create medical history: ${res.status}`);
   }
 
@@ -93,7 +104,9 @@ export const createMedicalHistory = async (formData: FormData) => {
   return res.json();
 };
 
-export const getMedicalHistoryById = async (id: number): Promise<MedicalHistoryResponse> => {
+export const getMedicalHistoryById = async (
+  id: number
+): Promise<MedicalHistoryResponse> => {
   const res = await fetch(`${Endpoints.MEDICAL_HISTORY}/${id}`, {
     method: "GET",
     cache: "no-store",

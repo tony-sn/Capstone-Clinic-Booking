@@ -1,4 +1,4 @@
-export type PaymentType = 'Cash' | 'Card' | 'BankTransfer';
+export type PaymentType = "Cash" | "Card" | "BankTransfer";
 
 export interface Transaction {
   TransactionID: number;

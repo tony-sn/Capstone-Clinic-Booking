@@ -1,6 +1,14 @@
 import { withSentryConfig } from "@sentry/nextjs";
 /** @type {import('next').NextConfig} */
 const nextConfig = {
+  env: {
+    NEXT_PUBLIC_API_BASE_URL:
+      process.env.NEXT_PUBLIC_API_BASE_URL ||
+      "https://api.cyber-clinic.cloud/api",
+    NEXT_PUBLIC_ENDPOINT:
+      process.env.NEXT_PUBLIC_ENDPOINT || "https://api.cyber-clinic.cloud",
+    DATABASE_ID: "",
+  },
   eslint: {
     ignoreDuringBuilds: true,
   },
@@ -40,6 +48,28 @@ const nextConfig = {
             "X-CSRF-Token, X-Requested-With, Accept, Accept-Version, Content-Length, Content-MD5, Content-Type, Date, X-Api-Version",
         },
       ],
+    },
+  ],
+  rewrites: async () => [
+    {
+      source: "/",
+      destination: "/admin",
+    },
+    {
+      source: "/LabTests",
+      destination: "/laboratory-tests",
+    },
+    {
+      source: "/TestReports",
+      destination: "/laboratory-test-reports",
+    },
+    {
+      source: "/Prescriptions",
+      destination: "/prescriptions",
+    },
+    {
+      source: "/Medicines",
+      destination: "/medicines",
     },
   ],
 };

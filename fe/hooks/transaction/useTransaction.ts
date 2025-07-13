@@ -1,4 +1,5 @@
 import { useInfiniteQuery } from "@tanstack/react-query";
+
 import { getTransactions } from "@/lib/api/transaction.actions";
 import type { TransactionFilter } from "@/types/transaction";
 

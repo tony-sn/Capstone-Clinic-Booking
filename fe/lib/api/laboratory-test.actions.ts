@@ -1,10 +1,9 @@
-
 "use server";
 
 import { revalidatePath } from "next/cache";
 
 import { Endpoints } from "@/lib/app.config";
-import type { ApiResponse, LaboratoryTestReport } from "@/types/laboratoryTest"
+import type { ApiResponse, LaboratoryTestReport } from "@/types/laboratoryTest";
 
 export const getAllLaboratoryTest = async ({
   pageSize = 0,
@@ -13,7 +12,7 @@ export const getAllLaboratoryTest = async ({
   try {
     const res = await fetch(
       `${process.env.NEXT_PUBLIC_ENDPOINT}/api/LaboratoryTest?pageSize=${pageSize}&pageNumber=${pageNumber}`,
-      { cache: "no-store" },
+      { cache: "no-store" }
     );
 
     if (!res.ok) {
@@ -27,13 +26,15 @@ export const getAllLaboratoryTest = async ({
   } catch (error) {
     console.error(
       "An error occurred while retrieving laboratory tests:",
-      error,
+      error
     );
     throw error;
   }
 };
 
-export const getLaboratoryTestById = async (id: number): Promise<LaboratoryTestReport> => {
+export const getLaboratoryTestById = async (
+  id: number
+): Promise<LaboratoryTestReport> => {
   const res = await fetch(`${Endpoints.LABORATORY_TEST}/${id}`, {
     cache: "no-store",
   });
@@ -41,7 +42,7 @@ export const getLaboratoryTestById = async (id: number): Promise<LaboratoryTestR
   if (!res.ok) {
     throw new Error("Failed to fetch laboratory test by ID");
   }
-  var data = await res.json();
+  const data = await res.json();
 
   return data.data;
 };
