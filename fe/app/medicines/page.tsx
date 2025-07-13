@@ -22,7 +22,7 @@ import MedicineDeleteModal from '@/components/new/forms/medicines/MedicineDelete
 
 // Format currency helper
 const formatCurrency = (amount: number) =>
-  new Intl.NumberFormat('vi-VN', { style: 'currency', currency: 'VND' }).format(amount);
+  new Intl.NumberFormat('en-US', { style: 'currency', currency: 'USD' }).format(amount);
 
 export default function MedicinePage() {
   const [selectedId, setSelectedId] = useState<number | null>(null);

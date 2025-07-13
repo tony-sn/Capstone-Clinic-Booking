@@ -15,4 +15,6 @@ export const Endpoints = {
   USERS: `${ENDPOINT}/api/Admin/users-with-roles`,
   LABORATORY_TEST_REPORT: `${ENDPOINT}/api/LaboratoryTestReport`,
   REGISTER: `${ENDPOINT}/api/register`,
+  REVENUE_REPORT: `${ENDPOINT}/api/RevenueReport`,
+  TRANSACTION: `${ENDPOINT}/api/Transaction`,
 };
