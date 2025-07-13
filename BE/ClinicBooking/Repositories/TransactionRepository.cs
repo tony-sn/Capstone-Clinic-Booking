@@ -47,5 +47,31 @@ namespace ClinicBooking.Repositories
             await _context.SaveChangesAsync();
             return item;
         }
+
+        public async Task<IEnumerable<Transaction>> GetFilteredAsync(bool? paid, PaymentType? paymentType, DateTime? fromDate, DateTime? toDate)
+        {
+            var query = _context.Transactions.AsQueryable();
+            if (paid.HasValue)
+            {
+                query = query.Where(t => t.Paid == paid.Value);
+            }
+
+            if (paymentType.HasValue)
+            {
+                query = query.Where(t => t.PaymentType == paymentType.Value);
+            }
+
+            if (fromDate.HasValue)
+            {
+                query = query.Where(t => t.PaidDate >= fromDate.Value);
+            }
+
+            if (toDate.HasValue)
+            {
+                query = query.Where(t => t.PaidDate <= toDate.Value);
+            }
+
+            return await query.ToListAsync();
+        }
     }
 }
