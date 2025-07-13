@@ -119,6 +119,7 @@ const config = {
       },
     },
   },
+  safelist: ["border-border"],
   plugins: [tailwindAnimate],
 } satisfies Config;
 

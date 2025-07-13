@@ -1,6 +1,7 @@
 import { Endpoints } from "@/lib/app.config";
 
-const apiUrl = process.env.NEXT_PUBLIC_API_BASE_URL;
+const apiUrl =
+  process.env.NEXT_PUBLIC_API_BASE_URL || "https://api.cyber-clinic.cloud/api";
 export const createUser = async (formData: FormData | CreateUserParams) => {
   const registerEndpoint = `${apiUrl}/register`;
   console.log({
@@ -54,7 +55,12 @@ export const getUserInfo = async (options?: {
     },
     credentials: "include",
   });
+  console.log({
+    res,
+    apiUrl,
+  });
 
+  // eslint-disable-next-line
   let data: any | undefined;
   if (res.ok) {
     try {

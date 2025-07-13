@@ -36,11 +36,38 @@ export const createAppointment = async (
 //  GET RECENT APPOINTMENTS
 export const getRecentAppointmentList = async () => {
   try {
-    const appointments = await databases.listDocuments(
-      DATABASE_ID!,
-      APPOINTMENT_COLLECTION_ID!,
-      [Query.orderDesc("$createdAt")]
-    );
+    const appointments = {
+      documents: [
+        {
+          patient: {
+            userId: 1,
+            name: "Tony",
+            email: "tonychopper@gmail.com",
+            phone: "+84913342231",
+            birthDate: "12/11/1988",
+            gender: "male",
+            address: "16 Johnson St",
+            occupation: "Software Engineer",
+            emergencyContactName: "Nancy",
+            emergencyContactNumber: "123456789",
+            primaryPhysician: "Dr. John Doe",
+          },
+          schedule: "01/07/2025",
+          status: "pending",
+          primaryPhysician: "Dr. John Doe",
+          reason: "Checkup",
+          note: "No note",
+          userId: 1,
+          cancellationReason: null,
+        },
+      ],
+      total: 1,
+    };
+    // const appointments = await databases.listDocuments(
+    //   DATABASE_ID!,
+    //   APPOINTMENT_COLLECTION_ID!,
+    //   [Query.orderDesc("$createdAt")]
+    // );
 
     // const scheduledAppointments = (
     //   appointments.documents as Appointment[]

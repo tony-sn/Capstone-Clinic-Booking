@@ -14,7 +14,7 @@ import { SESSION_COOKIE_NAME } from "@/constants";
 import { getUserInfo } from "@/lib/api/patient.actions";
 
 const Home = async () => {
-  const cookieStore = cookies();
+  const cookieStore = await cookies();
 
   const headersList = await headers();
   const headersObj = Object.fromEntries(headersList.entries());

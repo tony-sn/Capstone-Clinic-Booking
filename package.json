@@ -4,6 +4,7 @@
   "private": true,
   "scripts": {
     "dev": "dotenv -- concurrently -k -c auto -n fe,be \"npm run dev:fe\" \"npm run dev:be\"",
+    "dev:wp": "next dev fe",
     "dev:fe": "next dev fe --turbopack",
     "dev:be": "dotnet watch run --project ./BE/ClinicBooking/ClinicBooking.csproj",
     "lint-fe": "eslint fe --ext .js,.jsx,.ts,.tsx",
