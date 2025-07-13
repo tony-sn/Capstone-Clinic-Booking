@@ -71,5 +71,21 @@ namespace ClinicBooking.Services
             var deleted = await _repository.DeleteById(id);
             return RevenueReportDTO.ConvertToDTO(deleted);
         }
+
+        public async Task<PageResultUlt<IEnumerable<RevenueReportDTO>>> FilterByType(RevenueType type, int pageSize, int pageNumber)
+        {
+            var list = await _repository.GetAllAsync();
+            list = list.Where(r => r.RevenueType == type).ToList();
+
+            var totalItems = list.Count();
+            list = list.Skip((pageNumber - 1) * pageSize).Take(pageSize).ToList();
+
+            return new PageResultUlt<IEnumerable<RevenueReportDTO>>
+            {
+                Items = list.Select(x => RevenueReportDTO.ConvertToDTO(x)),
+                TotalItems = totalItems
+            };
+        }
+
     }
 }

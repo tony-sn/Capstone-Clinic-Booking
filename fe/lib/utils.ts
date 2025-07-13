@@ -5,6 +5,7 @@ export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs));
 }
 
+// eslint-disable-next-line
 export const parseStringify = (value: any) => JSON.parse(JSON.stringify(value));
 
 export const convertFileToUrl = (file: File) => URL.createObjectURL(file);
@@ -110,4 +111,15 @@ export function generateStrongPassword(length = 12): string {
 
   // Shuffle to avoid predictable order
   return password.sort(() => 0.5 - Math.random()).join("");
+}
+
+export function formatPaymentType(value: number | string): string {
+  const map: Record<number, string> = {
+    0: "Cash",
+    1: "Card",
+    2: "Bank Transfer",
+  };
+
+  if (typeof value === "number") return map[value] ?? "Unknown";
+  return value;
 }

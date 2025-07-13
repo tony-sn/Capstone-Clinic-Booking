@@ -1,14 +1,14 @@
 import type { Config } from "tailwindcss";
-
-const { fontFamily } = require("tailwindcss/defaultTheme");
+import { fontFamily } from "tailwindcss/defaultTheme";
+import tailwindAnimate from "tailwindcss-animate";
 
 const config = {
   darkMode: ["class"],
   content: [
-    "./pages/**/*.{ts,tsx}",
-    "./components/**/*.{ts,tsx}",
-    "./app/**/*.{ts,tsx}",
-    "./src/**/*.{ts,tsx}",
+    "./fe/pages/**/*.{ts,tsx}",
+    "./fe/components/**/*.{ts,tsx}",
+    "./fe/app/**/*.{ts,tsx}",
+    "./fe/src/**/*.{ts,tsx}",
   ],
   prefix: "",
   theme: {
@@ -119,7 +119,7 @@ const config = {
       },
     },
   },
-  plugins: [require("tailwindcss-animate")],
+  plugins: [tailwindAnimate],
 } satisfies Config;
 
 export default config;

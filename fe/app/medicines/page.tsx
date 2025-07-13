@@ -23,7 +23,7 @@ import { Medicine } from "@/types/medicines";
 
 // Format currency helper
 const formatCurrency = (amount: number) =>
-  new Intl.NumberFormat("vi-VN", { style: "currency", currency: "VND" }).format(
+  new Intl.NumberFormat("en-US", { style: "currency", currency: "USD" }).format(
     amount
   );
 

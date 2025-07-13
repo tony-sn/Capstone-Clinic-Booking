@@ -4,8 +4,9 @@
   "private": true,
   "scripts": {
     "dev": "dotenv -- concurrently -k -c auto -n fe,be \"npm run dev:fe\" \"npm run dev:be\"",
-    "dev:fe": "next dev --turbopack fe",
+    "dev:fe": "next dev fe --turbopack",
     "dev:be": "dotnet watch run --project ./BE/ClinicBooking/ClinicBooking.csproj",
+    "lint-fe": "eslint fe --ext .js,.jsx,.ts,.tsx",
     "build": "next build fe",
     "start": "next start fe",
     "lint": "next lint fe",
@@ -30,6 +31,7 @@
     "class-variance-authority": "^0.7.0",
     "clsx": "^2.1.1",
     "cmdk": "^1.0.0",
+    "date-fns": "^4.1.0",
     "fs": "^0.0.1-security",
     "input-otp": "^1.2.4",
     "libphonenumber-js": "^1.12.8",
@@ -44,21 +46,24 @@
     "react-dropzone": "^14.2.3",
     "react-hook-form": "^7.51.4",
     "react-phone-number-input": "^3.4.1",
+    "recharts": "^3.1.0",
     "tailwind-merge": "^2.3.0",
     "tailwindcss-animate": "^1.0.7",
     "twilio": "^5.0.4",
     "zod": "^3.23.6"
   },
   "devDependencies": {
+    "@eslint/eslintrc": "3",
     "@tanstack/eslint-plugin-query": "^5.80.12",
     "@tanstack/react-query-devtools": "^5.80.10",
     "@types/node": "^20",
-    "@types/react": "^18",
+    "@types/react": "19",
     "@types/react-datepicker": "^6.2.0",
-    "@types/react-dom": "^18",
+    "@types/react-dom": "19",
+    "autoprefixer": "^10.4.21",
     "concurrently": "9.1.2",
     "dotenv": "16.4.7",
-    "eslint": "^9.30.1",
+    "eslint": "9",
     "eslint-config-next": "15.1.6",
     "eslint-config-prettier": "^10.0.1",
     "eslint-config-standard": "^17.1.0",
@@ -72,10 +77,15 @@
     "typescript": "^5"
   },
   "lint-staged": {
-    "web/**/*.{js,jsx,ts,tsx}": [
+    "fe/**/*.{js,jsx,ts,tsx}": [
       "eslint --fix",
       "prettier --write"
     ],
-    "web/**/*": "prettier --write --ignore-unknown"
-  }
+    "fe/**/*": "prettier --write --ignore-unknown"
+  },
+  "workspaces": [
+    "Be/*",
+    "fe/*"
+  ],
+  "packageManager": "pnpm@10.12.4"
 }

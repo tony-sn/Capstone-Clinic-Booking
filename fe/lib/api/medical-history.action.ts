@@ -1,7 +1,5 @@
 "use server";
 
-import { promises } from "dns";
-
 import { revalidatePath } from "next/cache";
 
 import { Endpoints } from "@/lib/app.config";
@@ -109,7 +107,8 @@ export const createMedicalHistory = async (formData: FormData) => {
 export const getMedicalHistoryById = async (
   id: number
 ): Promise<MedicalHistoryResponse> => {
-  const res = await fetch(`${Endpoints.MEDICAL_HISTORY}/DeleteById/${id}`, {
+  const res = await fetch(`${Endpoints.MEDICAL_HISTORY}/${id}`, {
+    method: "GET",
     cache: "no-store",
   });
 
@@ -118,5 +117,5 @@ export const getMedicalHistoryById = async (
   }
 
   const data: MedicalHistoryResponse = await res.json();
-  return data; // Return full response object, not data.data
+  return data;
 };
