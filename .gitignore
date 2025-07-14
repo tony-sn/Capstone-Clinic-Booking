@@ -492,3 +492,4 @@ ApplicationDbContextFactory.cs
 BE/ClinicBooking/obj/
 
 appsettings.json
+fe/.eslintcache

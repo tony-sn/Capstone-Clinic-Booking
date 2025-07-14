@@ -1,10 +1,12 @@
 "use client";
 
 import { zodResolver } from "@hookform/resolvers/zod";
-import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
+
+import CustomFormField, { FormFieldType } from "../../CustomFormField";
+import SubmitButton from "../../SubmitButton";
 
 import { AddUserModal } from "@/components/modal/AddUserModal";
 import { Form } from "@/components/ui/form";
@@ -13,11 +15,8 @@ import { generateStrongPassword } from "@/lib/utils";
 import { UserFormValidation } from "@/lib/validation";
 
 import "react-phone-number-input/style.css";
-import CustomFormField, { FormFieldType } from "../../CustomFormField";
-import SubmitButton from "../../SubmitButton";
 
 export function PatientForm() {
-  const router = useRouter();
   const [isLoading, setIsLoading] = useState(false);
   const [open, setOpen] = useState(false);
   const [user, setUser] = useState<CreateUserParams>();

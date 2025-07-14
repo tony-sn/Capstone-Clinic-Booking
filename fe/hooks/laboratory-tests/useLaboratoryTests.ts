@@ -2,9 +2,8 @@
 import { useInfiniteQuery, useQuery } from "@tanstack/react-query";
 
 import { getAllLaboratoryTest, getLaboratoryTestById } from "@/lib/api/laboratory-test.actions";
-
-import { MedicalHistoryResponse } from "@/types/medicalHistory";
 import { LaboratoryTestReport } from "@/types/laboratoryTest";
+import { MedicalHistoryResponse } from "@/types/medicalHistory";
 
 export const useLaboratoryTests = ({
   pageSize = 0,

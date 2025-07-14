@@ -1,7 +1,8 @@
 import { useInfiniteQuery, useQuery } from "@tanstack/react-query";
+import { number } from "zod";
+
 import { getAllMedicalHistory, getMedicalHistoryById } from "@/lib/api/medical-history.action";
 import type { MedicalHistoriesResponse, MedicalHistoryResponse } from "@/types/medicalHistory";
-import { number } from "zod";
 
 export const useMedicalHistories = ({
   pageSize = 5,
