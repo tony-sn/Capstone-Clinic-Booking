@@ -1,7 +1,6 @@
 {
   "version": 2,
-  "buildCommand": "pnpm --filter fe build",
-  "outputDirectory": "fe/.next",
+  "buildCommand": "next build",
   "framework": "nextjs",
   "rewrites": [
     {
