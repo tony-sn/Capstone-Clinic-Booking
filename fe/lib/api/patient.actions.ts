@@ -44,6 +44,25 @@ export const login = async (formData: FormData | LoginUserParams) => {
   }
 };
 
+export const postLogout = async (): Promise<ServerResponse> => {
+  const logoutEndpoint = `/api/logout`;
+  const res = await fetch(logoutEndpoint, {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+  });
+
+  if (!res.ok) {
+    let errMsg = `Lgout failed with status ${res.status}`;
+    try {
+      const errBody = (await res.json()) as { message?: string };
+      if (errBody.message) errMsg = errBody.message;
+    } catch {}
+    throw new Error(errMsg);
+  }
+
+  return (await res.json()) as ServerResponse;
+};
+
 export const getUserInfo = async (options?: {
   headers?: Record<string, string>;
 }) => {
@@ -54,10 +73,6 @@ export const getUserInfo = async (options?: {
       ...options?.headers,
     },
     credentials: "include",
-  });
-  console.log({
-    res,
-    apiUrl,
   });
 
   // eslint-disable-next-line

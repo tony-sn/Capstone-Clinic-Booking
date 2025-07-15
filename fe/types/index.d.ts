@@ -1,5 +1,3 @@
- 
-
 declare type SearchParamProps = {
   params: { [key: string]: string };
   searchParams: { [key: string]: string | string[] | undefined };
@@ -70,4 +68,9 @@ declare type PaginatedPage<T> = {
     totalItems: number;
     totalPages: number;
   };
+};
+
+declare type ServerResponse = {
+  success: boolean;
+  message: string;
 };

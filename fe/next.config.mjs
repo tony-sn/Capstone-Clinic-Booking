@@ -21,6 +21,7 @@ const nextConfig = {
       ],
     },
   },
+  serverExternalPackages: [`require-in-the-middle`],
   env: {
     NEXT_PUBLIC_API_BASE_URL:
       process.env.NEXT_PUBLIC_API_BASE_URL ||
