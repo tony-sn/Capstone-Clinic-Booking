@@ -7,18 +7,18 @@ import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 
-
+import CustomFormField, { FormFieldType } from "@/components/CustomFormField";
+import SubmitButton from "@/components/SubmitButton";
 import { Form } from "@/components/ui/form";
+import { useToast } from "@/hooks/use-toast";
 import { login } from "@/lib/api/patient.actions";
 import { UserLoginValidation } from "@/lib/validation";
-
-import CustomFormField, { FormFieldType } from "../../CustomFormField";
-import SubmitButton from "../../SubmitButton";
 
 import "react-phone-number-input/style.css";
 
 export function SignInForm() {
   const router = useRouter();
+  const { toast } = useToast();
   const [isLoading, setIsLoading] = useState(false);
   const [passwordShown, setPasswordShown] = useState(false);
   const togglePasswordVisibility = () => setPasswordShown(!passwordShown);
@@ -40,11 +40,7 @@ export function SignInForm() {
         password: values.password,
       };
 
-      // TODO: change this to login endpoint to get cookie
       const loginUser = await login(credentials);
-      console.log({
-        loginUser,
-      });
 
       if (loginUser) {
         router.replace("/admin");
@@ -52,7 +48,11 @@ export function SignInForm() {
       }
     } catch (error) {
       console.log(error);
-      // router.push("/register");
+      toast({
+        title: "Login failed",
+        description: "Please check your credentials",
+        variant: "destructive",
+      });
     }
 
     setIsLoading(false);

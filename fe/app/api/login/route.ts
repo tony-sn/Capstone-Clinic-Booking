@@ -27,7 +27,6 @@ export async function POST(request: NextRequest) {
     }
 
     const raw = response.headers.get("set-cookie");
-    console.log({ raw });
     if (!raw) {
       return NextResponse.json(
         { error: "No cookie returned" },
@@ -36,7 +35,6 @@ export async function POST(request: NextRequest) {
     }
 
     const cookie = raw.replace(/; *Domain=[^;]+/i, "");
-    console.log({ cookie });
 
     const res = NextResponse.json({ success: true });
     res.headers.set("Set-Cookie", cookie);
