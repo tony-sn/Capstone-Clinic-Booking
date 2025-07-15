@@ -1,8 +1,7 @@
-/* eslint-disable no-unused-vars */
 import { E164Number } from "libphonenumber-js/core";
 import Image from "next/image";
 import ReactDatePicker from "react-datepicker";
-import { Control } from "react-hook-form";
+import { Control, FieldValues } from "react-hook-form";
 import PhoneInput from "react-phone-number-input";
 
 import { Checkbox } from "./ui/checkbox";
@@ -28,8 +27,8 @@ export enum FormFieldType {
   PASSWORD = "password",
 }
 
-interface CustomProps {
-  control: Control<any>;
+interface CustomProps<T extends FieldValues = FieldValues> {
+  control: Control<T>;
   name: string;
   label?: string;
   placeholder?: string;
@@ -39,11 +38,20 @@ interface CustomProps {
   dateFormat?: string;
   showTimeSelect?: boolean;
   children?: React.ReactNode;
-  renderSkeleton?: (field: any) => React.ReactNode;
+  renderSkeleton?: (field: T) => React.ReactNode;
   fieldType: FormFieldType;
+  Icon?: React.ElementType;
+  type?: string;
+  onClick?: () => void;
 }
 
-const RenderInput = ({ field, props }: { field: any; props: CustomProps }) => {
+const RenderInput = <T extends FieldValues = FieldValues>({
+  field,
+  props,
+}: {
+  field: T;
+  props: CustomProps<T>;
+}) => {
   switch (props.fieldType) {
     case FormFieldType.INPUT:
       return (
@@ -82,11 +90,17 @@ const RenderInput = ({ field, props }: { field: any; props: CustomProps }) => {
           <FormControl>
             <Input
               placeholder={props.placeholder}
-              type="password"
+              type={props.type}
               {...field}
               className="shad-input border-0"
             />
           </FormControl>
+          {props.Icon && (
+            <props.Icon
+              className="mr-2 h-auto text-[#cde9df]"
+              onClick={props.onClick}
+            />
+          )}
         </div>
       );
     case FormFieldType.TEXTAREA:
@@ -143,7 +157,9 @@ const RenderInput = ({ field, props }: { field: any; props: CustomProps }) => {
             <ReactDatePicker
               showTimeSelect={props.showTimeSelect ?? false}
               selected={field.value}
-              onChange={(date: Date) => field.onChange(date)}
+              onChange={(date: Date | null) =>
+                field.onChange(date || new Date())
+              }
               timeInputLabel="Time:"
               dateFormat={props.dateFormat ?? "MM/dd/yyyy"}
               wrapperClassName="date-picker"

@@ -2,8 +2,6 @@
 
 import { useState } from "react";
 
-import { AppointmentForm } from "./forms/AppointmentForm";
-
 import { Button } from "@/components/ui/button";
 import {
   Dialog,
@@ -15,6 +13,8 @@ import {
 } from "@/components/ui/dialog";
 import { Appointment } from "@/types/appwrite.types";
 
+import { AppointmentForm } from "./forms/AppointmentForm";
+
 import "react-datepicker/dist/react-datepicker.css";
 
 export const AppointmentModal = ({
@@ -23,7 +23,7 @@ export const AppointmentModal = ({
   appointment,
   type,
 }: {
-  patientId: string;
+  patientId?: string;
   userId: string;
   appointment?: Appointment;
   type: "schedule" | "cancel";

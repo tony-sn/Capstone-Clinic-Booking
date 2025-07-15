@@ -1,4 +1,4 @@
-/* eslint-disable no-unused-vars */
+ 
 enum AppointmentStatus {
   Booked = 0,
   Pending = 1,

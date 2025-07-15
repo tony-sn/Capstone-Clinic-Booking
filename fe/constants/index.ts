@@ -84,3 +84,22 @@ export const StatusIcon = {
   pending: "/assets/icons/pending.svg",
   cancelled: "/assets/icons/cancelled.svg",
 };
+export const publicNav = [
+  "Home",
+  "Benefits",
+  "Process",
+  "Testimonials",
+  "Services",
+  "FAQ",
+];
+
+export const privateNav = [
+  "Lab Tests",
+  "Test Reports",
+  "Med History",
+  "Prescriptions",
+  "Medicines",
+];
+
+export const SESSION_COOKIE_NAME = ".AspNetCore.Identity.Application";
+export const ROLE = "ROLE";

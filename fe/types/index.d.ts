@@ -1,5 +1,3 @@
-/* eslint-disable no-unused-vars */
-
 declare type SearchParamProps = {
   params: { [key: string]: string };
   searchParams: { [key: string]: string | string[] | undefined };
@@ -15,6 +13,8 @@ declare interface CreateUserParams {
   phone: string;
   password: string;
 }
+
+declare type LoginUserParams = Omit<CreateUserParams, "name" | "phone">;
 declare interface User extends CreateUserParams {
   $id: string;
 }
@@ -68,4 +68,9 @@ declare type PaginatedPage<T> = {
     totalItems: number;
     totalPages: number;
   };
+};
+
+declare type ServerResponse = {
+  success: boolean;
+  message: string;
 };

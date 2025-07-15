@@ -1,6 +1,35 @@
+import path, { dirname } from "path";
+import { fileURLToPath } from "url";
+
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = dirname(__filename);
+
 import { withSentryConfig } from "@sentry/nextjs";
 /** @type {import('next').NextConfig} */
 const nextConfig = {
+  experimental: {
+    turbo: {
+      root: path.join(__dirname, ".."),
+      resolveExtensions: [
+        ".mdx",
+        ".tsx",
+        ".ts",
+        ".jsx",
+        ".js",
+        ".mjs",
+        ".json",
+      ],
+    },
+  },
+  serverExternalPackages: [`require-in-the-middle`],
+  env: {
+    NEXT_PUBLIC_API_BASE_URL:
+      process.env.NEXT_PUBLIC_API_BASE_URL ||
+      "https://api.cyber-clinic.cloud/api",
+    NEXT_PUBLIC_ENDPOINT:
+      process.env.NEXT_PUBLIC_ENDPOINT || "https://api.cyber-clinic.cloud",
+    DATABASE_ID: "",
+  },
   eslint: {
     ignoreDuringBuilds: true,
   },
@@ -40,6 +69,28 @@ const nextConfig = {
             "X-CSRF-Token, X-Requested-With, Accept, Accept-Version, Content-Length, Content-MD5, Content-Type, Date, X-Api-Version",
         },
       ],
+    },
+  ],
+  rewrites: async () => [
+    {
+      source: "/Lab%20Tests",
+      destination: "/laboratory-tests",
+    },
+    {
+      source: "/Test%20Reports",
+      destination: "/laboratory-test-reports",
+    },
+    {
+      source: "/Med%20History",
+      destination: "/medical-histories",
+    },
+    {
+      source: "/Prescriptions",
+      destination: "/prescriptions",
+    },
+    {
+      source: "/Medicines",
+      destination: "/medicines",
     },
   ],
 };

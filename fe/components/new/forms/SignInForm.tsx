@@ -1,22 +1,27 @@
 "use client";
 
 import { zodResolver } from "@hookform/resolvers/zod";
+import { Eye, EyeOff } from "lucide-react";
+import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 
+import CustomFormField, { FormFieldType } from "@/components/CustomFormField";
+import SubmitButton from "@/components/SubmitButton";
 import { Form } from "@/components/ui/form";
-import { createUser } from "@/lib/api/patient.actions";
-import { generateStrongPassword } from "@/lib/utils";
+import { useToast } from "@/hooks/use-toast";
+import { login } from "@/lib/api/patient.actions";
 import { UserLoginValidation } from "@/lib/validation";
 
 import "react-phone-number-input/style.css";
-import CustomFormField, { FormFieldType } from "../../CustomFormField";
-import SubmitButton from "../../SubmitButton";
 
 export function SignInForm() {
-  // const router = useRouter();
+  const router = useRouter();
+  const { toast } = useToast();
   const [isLoading, setIsLoading] = useState(false);
+  const [passwordShown, setPasswordShown] = useState(false);
+  const togglePasswordVisibility = () => setPasswordShown(!passwordShown);
 
   const form = useForm<z.infer<typeof UserLoginValidation>>({
     resolver: zodResolver(UserLoginValidation),
@@ -30,24 +35,24 @@ export function SignInForm() {
     setIsLoading(true);
 
     try {
-      const password = generateStrongPassword();
-      const user = {
+      const credentials = {
         email: values.email,
-        password,
+        password: values.password,
       };
 
-      // TODO: change this to login endpoint to get cookie
-      const newUser = await createUser(user);
-      console.log({
-        user,
-        newUser,
-      });
+      const loginUser = await login(credentials);
 
-      if (newUser) {
-        // router.push(`/patients/${newUser?.id}/register`);
+      if (loginUser) {
+        router.replace("/admin");
+        return true;
       }
     } catch (error) {
       console.log(error);
+      toast({
+        title: "Login failed",
+        description: "Please check your credentials",
+        variant: "destructive",
+      });
     }
 
     setIsLoading(false);
@@ -79,6 +84,9 @@ export function SignInForm() {
           placeholder="password"
           iconSrc="/assets/icons/user.svg"
           iconAlt="user"
+          Icon={passwordShown ? Eye : EyeOff}
+          type={passwordShown ? "text" : "password"}
+          onClick={togglePasswordVisibility}
         />
 
         <SubmitButton isLoading={isLoading}>Login</SubmitButton>

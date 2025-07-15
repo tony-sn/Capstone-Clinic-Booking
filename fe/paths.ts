@@ -1,4 +1,10 @@
+export const adminPath = () => "/admin";
+export const doctorsPath = () => "/doctors";
+export const emailVerificationPath = () => "/email-verification";
+export const homePath = () => "/";
+export const laboratoryTestsPath = () => "/laboratory-tests";
+export const medicinesPath = () => "/medicines";
+export const patientsPath = () => "/patients";
+export const prescriptionsPath = () => "/prescriptions";
 export const signInPath = () => "/sign-in";
 export const signUpPath = () => "/sign-up";
-export const homePath = () => "/";
-export const emailVerificationPath = () => "/email-verification";
