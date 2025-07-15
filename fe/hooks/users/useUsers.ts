@@ -1,4 +1,5 @@
 import { useInfiniteQuery, useQuery } from "@tanstack/react-query";
+
 import { getAllDoctor, getAllUsers, getUsersByRole } from "@/lib/api/user.action"; // Import client functions
 import type {User} from "@/types/user";
 // Hook to get all doctors only

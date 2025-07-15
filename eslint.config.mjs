@@ -19,19 +19,19 @@ const eslintConfig = [
       "./fe/lib/actions/*",
       "./fe/.next/**/*",
       "node_modules/**/*",
+      "./fe/node_modules/**/*",
     ],
   },
   ...compat.extends(
     "next/core-web-vitals",
     "next/typescript",
-    "standard",
     "plugin:tailwindcss/recommended",
-    "prettier"
+    "prettier",
   ),
   {
     settings: {
       next: {
-        rootDir: "fe/",
+        rootDir: "./fe/",
       },
     },
     plugins: {
@@ -59,6 +59,7 @@ const eslintConfig = [
         },
       ],
       "@tanstack/query/exhaustive-deps": "error",
+      "@next/next/no-html-link-for-pages": "off",
     },
   },
 ];

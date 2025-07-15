@@ -1,4 +1,10 @@
 ignoredBuiltDependencies:
-  - '@sentry/cli'
+  - "@sentry/cli"
   - sharp
   - unrs-resolver
+packages:
+  - "fe"
+  - "BE"
+publicHoistPattern:
+  - "@next/eslint-plugin-next"
+  - "eslint-plugin-react-hooks"

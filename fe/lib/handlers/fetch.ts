@@ -1,10 +1,12 @@
 "use server";
+
 import { getAuth } from "@/features/auth/queries/get-auth";
 
 import { RequestError } from "../http-errors";
 import logger from "../logger";
 
 import handleError from "./error";
+
 
 interface FetchOptions extends RequestInit {
   timeout?: number;
