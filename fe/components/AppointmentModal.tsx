@@ -2,7 +2,6 @@
 
 import { useState } from "react";
 
-
 import { Button } from "@/components/ui/button";
 import {
   Dialog,
@@ -24,7 +23,7 @@ export const AppointmentModal = ({
   appointment,
   type,
 }: {
-  patientId: string;
+  patientId?: string;
   userId: string;
   appointment?: Appointment;
   type: "schedule" | "cancel";
