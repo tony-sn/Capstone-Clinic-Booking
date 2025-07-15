@@ -34,17 +34,18 @@ const Navbar = ({ isAuthed }: { isAuthed?: boolean }) => {
         "fixed top-0 w-full z-50 transition-all duration-300",
         isScrolled
           ? "bg-white/90 backdrop-blur-md shadow-sm py-3"
-          : "bg-transparent py-5"
+          : "bg-transparent py-5",
+        "admin-header"
       )}
     >
-      <div className="container mx-auto flex items-center justify-between px-4">
+      <div className="container mx-auto flex items-center justify-between">
         <Link href="/" className="flex items-center gap-2">
           <Image
             src="/assets/icons/logo-full.svg"
-            height={1000}
-            width={1000}
-            alt="patient"
-            className="ml-10 h-10 w-fit"
+            height={32}
+            width={162}
+            alt="logo"
+            className="h-8 w-fit"
           />
         </Link>
 
@@ -61,21 +62,24 @@ const Navbar = ({ isAuthed }: { isAuthed?: boolean }) => {
               {item}
             </Link>
           ))}
+          <p className="text-16-semibold">Admin Dashboard</p>
         </nav>
 
-        <div className="hidden md:block">
-          <Button
-            variant={isScrolled ? "default" : "outline"}
-            className={cn(
-              "font-medium",
-              !isScrolled &&
-                "text-theme border-theme-500 hover:bg-theme-600/20 hover:text-white"
-            )}
-            asChild
-          >
-            <Link href="/sign-in">Login</Link>
-          </Button>
-        </div>
+        {!isAuthed && (
+          <div className="hidden md:block">
+            <Button
+              variant={isScrolled ? "default" : "outline"}
+              className={cn(
+                "font-medium",
+                !isScrolled &&
+                  "text-theme border-theme-500 hover:bg-theme-600/20 hover:text-white"
+              )}
+              asChild
+            >
+              <Link href="/sign-in">Login</Link>
+            </Button>
+          </div>
+        )}
 
         <MobileMenu isScrolled={isScrolled} />
       </div>

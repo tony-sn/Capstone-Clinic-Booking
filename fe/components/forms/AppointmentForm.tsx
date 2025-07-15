@@ -7,7 +7,6 @@ import { Dispatch, SetStateAction, useState } from "react";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 
-
 import { SelectItem } from "@/components/ui/select";
 import { Doctors } from "@/constants";
 import {
@@ -31,7 +30,7 @@ export const AppointmentForm = ({
   setOpen = (open) => !open,
 }: {
   userId: string;
-  patientId: string;
+  patientId?: string;
   type: "create" | "schedule" | "cancel";
   appointment?: Appointment;
   setOpen?: Dispatch<SetStateAction<boolean>>;

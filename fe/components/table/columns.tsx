@@ -3,14 +3,12 @@
 import { ColumnDef } from "@tanstack/react-table";
 import Image from "next/image";
 
-
 import { Doctors } from "@/constants";
 import { formatDateTime } from "@/lib/utils";
 import { Appointment } from "@/types/appwrite.types";
 
 import { AppointmentModal } from "../AppointmentModal";
 import { StatusBadge } from "../StatusBadge";
-
 
 export const columns: ColumnDef<Appointment>[] = [
   {
@@ -64,13 +62,13 @@ export const columns: ColumnDef<Appointment>[] = [
       return (
         <div className="flex items-center gap-3">
           <Image
-            src={doctor?.image!}
+            src={doctor?.image || "/assets/images/dr-lee.png"}
             alt="doctor"
             width={100}
             height={100}
             className="size-8"
           />
-          <p className="whitespace-nowrap">Dr. {doctor?.name}</p>
+          <p className="whitespace-nowrap">Dr. {doctor?.name || "Tony"}</p>
         </div>
       );
     },
@@ -84,7 +82,7 @@ export const columns: ColumnDef<Appointment>[] = [
       return (
         <div className="flex gap-1">
           <AppointmentModal
-            patientId={appointment.patient.$id}
+            patientId={appointment.patient?.userId}
             userId={appointment.userId}
             appointment={appointment}
             type="schedule"
@@ -92,7 +90,7 @@ export const columns: ColumnDef<Appointment>[] = [
             description="Please confirm the following details to schedule."
           />
           <AppointmentModal
-            patientId={appointment.patient.$id}
+            patientId={appointment.patient?.userId}
             userId={appointment.userId}
             appointment={appointment}
             type="cancel"

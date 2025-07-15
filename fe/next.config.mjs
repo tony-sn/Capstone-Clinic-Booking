@@ -7,9 +7,19 @@ const __dirname = dirname(__filename);
 import { withSentryConfig } from "@sentry/nextjs";
 /** @type {import('next').NextConfig} */
 const nextConfig = {
-  turbopack: {
-    root: path.join(__dirname, ".."),
-    resolveExtensions: [".mdx", ".tsx", ".ts", ".jsx", ".js", ".mjs", ".json"],
+  experimental: {
+    turbo: {
+      root: path.join(__dirname, ".."),
+      resolveExtensions: [
+        ".mdx",
+        ".tsx",
+        ".ts",
+        ".jsx",
+        ".js",
+        ".mjs",
+        ".json",
+      ],
+    },
   },
   env: {
     NEXT_PUBLIC_API_BASE_URL:
@@ -62,16 +72,16 @@ const nextConfig = {
   ],
   rewrites: async () => [
     {
-      source: "/",
-      destination: "/admin",
-    },
-    {
-      source: "/LabTests",
+      source: "/Lab%20Tests",
       destination: "/laboratory-tests",
     },
     {
-      source: "/TestReports",
+      source: "/Test%20Reports",
       destination: "/laboratory-test-reports",
+    },
+    {
+      source: "/Med%20History",
+      destination: "/medical-histories",
     },
     {
       source: "/Prescriptions",
