@@ -104,11 +104,10 @@ const Navbar = ({
                 !isScrolled &&
                   "text-theme border-theme-500 hover:bg-theme-600/20 hover:text-white"
               )}
+              onClick={handleLogout}
             >
               <LogOut />
-              <Link href="#" onClick={handleLogout}>
-                Logout
-              </Link>
+              Logout
             </Button>
           </div>
           <MobileMenu isScrolled={isScrolled} />

@@ -28,6 +28,7 @@ export const login = async (formData: FormData | LoginUserParams) => {
     const res = await fetch(loginEndpoint, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
+      credentials: "include",
       body: JSON.stringify(formData),
     });
 
@@ -52,7 +53,7 @@ export const postLogout = async (): Promise<ServerResponse> => {
   });
 
   if (!res.ok) {
-    let errMsg = `Lgout failed with status ${res.status}`;
+    let errMsg = `Logout failed with status ${res.status}`;
     try {
       const errBody = (await res.json()) as { message?: string };
       if (errBody.message) errMsg = errBody.message;
@@ -64,7 +65,7 @@ export const postLogout = async (): Promise<ServerResponse> => {
 };
 
 export const getUserInfo = async (options?: {
-  headers?: Record<string, string>;
+  headers?: Record<string, string> & HeadersInit;
 }) => {
   const res = await fetch(`${apiUrl}/manage/info`, {
     method: "GET",

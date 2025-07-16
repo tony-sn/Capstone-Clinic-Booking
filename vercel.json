@@ -1,11 +1,5 @@
 {
   "version": 2,
   "buildCommand": "next build",
-  "framework": "nextjs",
-  "rewrites": [
-    {
-      "source": "/api/(.*)",
-      "destination": "@DOTNET_API_URL/api/$1"
-    }
-  ]
+  "framework": "nextjs"
 }

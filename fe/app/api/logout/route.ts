@@ -1,34 +1,29 @@
-import { cookies } from "next/headers";
-import { NextResponse } from "next/server";
+import { NextResponse, NextRequest } from "next/server";
 
 import { SESSION_COOKIE_NAME } from "@/constants";
 
-const API_URL = (() => {
-  const apiUrl = process.env.NEXT_PUBLIC_API_BASE_URL;
-  console.log({ apiUrl });
-  if (!apiUrl) throw new Error("Missing API URL");
-  return apiUrl;
-})();
-
-export async function POST() {
-  const cookieStore = await cookies();
+export async function POST(request: NextRequest) {
+  const API_URL = process.env.NEXT_PUBLIC_API_BASE_URL;
+  if (!API_URL) throw new Error("Missing API URL");
   try {
-    const storageKey = SESSION_COOKIE_NAME;
+    const cookieHeader = request.headers.get("cookie") ?? "";
     const logoutEndpoint = `${API_URL}/logout`;
-    console.log("logoutEndpoint", logoutEndpoint);
     const response = await fetch(logoutEndpoint, {
       method: "POST",
       credentials: "include",
-      headers: { "Content-Type": "application/json" },
+      headers: {
+        "Content-Type": "application/json",
+        ...(cookieHeader ? { Cookie: cookieHeader } : {}),
+      },
     });
 
-    if (response.status === 204) {
-      cookieStore.delete(storageKey);
-    }
-    return NextResponse.json({
-      success: true,
-      message: "Logout successfully.",
-    });
+    const res = NextResponse.json(
+      { success: true, message: "Logout Successfully." },
+      { status: response.status === 204 ? 200 : response.status }
+    );
+    res.cookies.delete(SESSION_COOKIE_NAME);
+
+    return res;
   } catch (error) {
     console.error("Cannot logout", error);
     return NextResponse.json(
