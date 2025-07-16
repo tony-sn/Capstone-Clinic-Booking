@@ -4,7 +4,7 @@ import Link from "next/link";
 import { SignInForm } from "@/components/new/forms/SignInForm";
 import config from "@/config.json";
 
-const SignInPage = ({ searchParams }: SearchParamProps) => {
+const SignInPage = () => {
   // const isAdmin = searchParams?.admin === "true";
 
   let coverURL: string | undefined;

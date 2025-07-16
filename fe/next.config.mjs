@@ -73,6 +73,10 @@ const nextConfig = {
   ],
   rewrites: async () => [
     {
+      source: "/api/:path*",
+      destination: `${process.env.NEXT_PUBLIC_API_BASE_URL}/:path*`,
+    },
+    {
       source: "/Lab%20Tests",
       destination: "/laboratory-tests",
     },

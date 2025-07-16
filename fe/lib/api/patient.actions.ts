@@ -65,7 +65,7 @@ export const postLogout = async (): Promise<ServerResponse> => {
 };
 
 export const getUserInfo = async (options?: {
-  headers?: Record<string, string>;
+  headers?: Record<string, string> & HeadersInit;
 }) => {
   const res = await fetch(`${apiUrl}/manage/info`, {
     method: "GET",
