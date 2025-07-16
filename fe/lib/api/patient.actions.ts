@@ -53,7 +53,7 @@ export const postLogout = async (): Promise<ServerResponse> => {
   });
 
   if (!res.ok) {
-    let errMsg = `Lgout failed with status ${res.status}`;
+    let errMsg = `Logout failed with status ${res.status}`;
     try {
       const errBody = (await res.json()) as { message?: string };
       if (errBody.message) errMsg = errBody.message;

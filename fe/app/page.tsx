@@ -15,20 +15,21 @@ import { getUserInfo } from "@/lib/api/patient.actions";
 
 const Home = async () => {
   const cookieStore = await cookies();
-
-  const headersList = await headers();
-  const headersObj = Object.fromEntries(headersList.entries());
-  const { data: userInfo } = await getUserInfo({
-    headers: headersObj,
-  });
   const session = cookieStore.get(SESSION_COOKIE_NAME);
-  const role = userInfo?.roles?.[0];
+  const headersList = await headers();
 
   if (session) {
-    if (role === "User") {
-      redirect(`/patients/${userInfo?.id}/new-appointment`);
-    } else {
-      redirect("/admin");
+    const headersObj = Object.fromEntries(headersList.entries());
+    const { response, data: userInfo } = await getUserInfo({
+      headers: headersObj,
+    });
+    if (response.status === 200 && userInfo) {
+      const role = userInfo?.roles?.[0];
+      if (role === "User") {
+        redirect(`/patients/${userInfo?.id}/new-appointment`);
+      } else {
+        redirect("/admin");
+      }
     }
   }
 
