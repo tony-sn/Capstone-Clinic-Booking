@@ -28,6 +28,7 @@ export const login = async (formData: FormData | LoginUserParams) => {
     const res = await fetch(loginEndpoint, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
+      credentials: "include",
       body: JSON.stringify(formData),
     });
 

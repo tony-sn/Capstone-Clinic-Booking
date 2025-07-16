@@ -1,6 +1,8 @@
 import { NextResponse, NextRequest } from "next/server";
 import * as z from "zod";
 
+import { SESSION_COOKIE_NAME } from "@/constants";
+
 export async function POST(request: NextRequest) {
   const payload = await request.json();
 
@@ -38,6 +40,14 @@ export async function POST(request: NextRequest) {
 
     const res = NextResponse.json({ success: true });
     res.headers.set("Set-Cookie", cookie);
+    res.cookies.set({
+      name: SESSION_COOKIE_NAME,
+      value: cookie.split("=")[1],
+      path: "/",
+      httpOnly: true,
+      secure: process.env.NODE_ENV === "production",
+      sameSite: "lax" as const,
+    });
     return res;
   } catch (error) {
     if (error instanceof z.ZodError) {
