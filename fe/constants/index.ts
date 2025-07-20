@@ -101,5 +101,73 @@ export const privateNav = [
   "Medicines",
 ];
 
+export const navigationItems = [
+  {
+    parent: "Reports",
+    children: [
+      {
+        label: "Lab Tests",
+        href: "/laboratory-tests",
+        desc: "Show all laboratory tests",
+      },
+      {
+        label: "Lab Test Reports",
+        href: "/laboratory-test-reports",
+        desc: "Show all laboratory test reports",
+      },
+      {
+        label: "Revenue",
+        href: "/revenue-report",
+        desc: "View clinic revenue",
+      },
+    ],
+  },
+  {
+    parent: "Medicines",
+    children: [
+      {
+        label: "Medicines",
+        href: "/medicines",
+        desc: "List of medicines",
+      },
+      {
+        label: "Prescriptions",
+        href: "/prescriptions",
+        desc: "List of prescriptions at the clinic",
+      },
+      {
+        label: "Medicine Inventory",
+        href: "/medicine-inventory-entries",
+        desc: "List of medicine inventory entries",
+      },
+    ],
+  },
+  {
+    parent: "Patients",
+    children: [
+      {
+        label: "Patients",
+        href: "/patients",
+        desc: "List of patients",
+      },
+      {
+        label: "Appointments",
+        href: "/appointments",
+        desc: "List of appointments",
+      },
+    ],
+  },
+  {
+    parent: "Staff",
+    children: [
+      {
+        label: "Doctors",
+        href: "/doctors",
+        desc: "List of doctors",
+      },
+    ],
+  },
+];
+
 export const SESSION_COOKIE_NAME = ".AspNetCore.Identity.Application";
 export const ROLE = "ROLE";
