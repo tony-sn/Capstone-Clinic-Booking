@@ -65,7 +65,6 @@ export default function PrescriptionEditModal({
 
     try {
       if (isEditMode && prescriptionId) {
-        console.log("is updating");
         await update.mutateAsync({ id: prescriptionId, formData: form });
       } else {
         await create.mutateAsync(form);
