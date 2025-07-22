@@ -8,7 +8,15 @@ import { useEffect, useState } from "react";
 
 import MobileMenu from "@/components/layout/MobileMenu";
 import { Button } from "@/components/ui/button";
-import { privateNav, publicNav } from "@/constants";
+import {
+  NavigationMenu,
+  NavigationMenuContent,
+  NavigationMenuItem,
+  NavigationMenuLink,
+  NavigationMenuList,
+  NavigationMenuTrigger,
+} from "@/components/ui/navigation-menu";
+import { publicNav, navigationItems } from "@/constants";
 import { postLogout } from "@/lib/api/patient.actions";
 import { cn } from "@/lib/utils";
 import {
@@ -67,7 +75,7 @@ const Navbar = ({
           "admin-header"
         )}
       >
-        <div className="container mx-auto flex items-center justify-between !px-0">
+        <div className="relative mx-auto flex flex-1 items-center justify-between !px-0">
           <Link href="/" className="flex items-center gap-2">
             <Image
               src="/assets/icons/logo-full.svg"
@@ -78,23 +86,52 @@ const Navbar = ({
             />
           </Link>
 
-          <nav className="hidden items-center gap-8 md:flex">
-            {privateNav.map((item) => (
-              <Link
-                key={item}
-                href={getHref(item)}
-                className={cn(
-                  "text-sm font-medium transition-colors hover:text-theme-600",
-                  isScrolled ? "text-gray-700" : "text-white/90"
-                )}
-              >
-                {item}
-              </Link>
-            ))}
-          </nav>
+          <NavigationMenu className="hidden md:flex">
+            <NavigationMenuList className="flex items-center gap-2">
+              {navigationItems.map((item, index) => (
+                <NavigationMenuItem key={`${item.parent}-${index}`}>
+                  <NavigationMenuTrigger
+                    className={cn(
+                      "text-sm font-medium transition-colors hover:text-theme-600",
+                      isScrolled ? "text-gray-700" : "text-white/90"
+                    )}
+                  >
+                    {item.parent}
+                  </NavigationMenuTrigger>
+                  <NavigationMenuContent>
+                    <div className="w-[300px] p-4">
+                      <div className="grid gap-3">
+                        {item.children.map(({ label, href, desc }) => (
+                          <NavigationMenuLink key={label} asChild>
+                            <Link
+                              href={href}
+                              className="block select-none space-y-1 rounded-md p-3 leading-none no-underline outline-none transition-colors hover:bg-accent hover:text-accent-foreground focus:bg-accent focus:text-accent-foreground"
+                            >
+                              <div className="text-sm font-medium leading-none">
+                                {label}
+                              </div>
+                              <p className="line-clamp-2 text-sm leading-snug text-muted-foreground">
+                                {desc}
+                              </p>
+                            </Link>
+                          </NavigationMenuLink>
+                        ))}
+                      </div>
+                    </div>
+                  </NavigationMenuContent>
+                </NavigationMenuItem>
+              ))}
+            </NavigationMenuList>
+          </NavigationMenu>
 
           <div className="hidden items-center justify-between gap-4 md:flex">
-            <Link href={adminPath} className="text-16-semibold truncate">
+            <Link
+              href={adminPath}
+              className={cn(
+                "text-16-semibold truncate font-medium transition-colors hover:text-theme-600",
+                isScrolled ? "text-gray-700" : "text-white/90"
+              )}
+            >
               {fullname}
             </Link>
             <Button
@@ -110,7 +147,7 @@ const Navbar = ({
               Logout
             </Button>
           </div>
-          <MobileMenu isScrolled={isScrolled} />
+          <MobileMenu isScrolled={isScrolled} isAuthed fullname={fullname} />
         </div>
       </header>
     );
