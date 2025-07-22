@@ -108,7 +108,8 @@ namespace ClinicBooking.Controllers
             [FromForm] PrescriptionRequest request
         )
         {
-            var updated = await _prescriptionService.UpdateAsync(id, request);
+            var updated = await _prescriptionService.UpdateTotalAmountAsync(id, request);
+
             return Ok(
                 new ApiResponse<PrescriptionDTO>
                 {
