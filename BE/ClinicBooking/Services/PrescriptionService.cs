@@ -116,6 +116,7 @@ namespace ClinicBooking.Services.IServices
 
           var updatedEntity = await _prescriptionRepository.Update(prescriptionId, entity);
 
+
           return PrescriptionDTO.ConvertToDTO(updatedEntity);
         }
     }
