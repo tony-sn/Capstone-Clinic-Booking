@@ -1,6 +1,11 @@
 import { useInfiniteQuery, useQuery } from "@tanstack/react-query";
 
-import { getAllPrescriptions } from "@/lib/api/prescription.actions";
+import {
+  getAllPrescriptions,
+  getPrescriptionDetail,
+  getPrescriptionDetailById,
+} from "@/lib/api/prescription.actions";
+import { PrescriptionDetailResponse } from "@/types/prescription";
 
 export const usePrescriptions = ({
   pageSize = 5,
@@ -26,4 +31,22 @@ export const useInfinitePrescriptions = (pageSize = 5) =>
       return hasNextPage ? pagination.pageNumber + 1 : undefined;
     },
     initialPageParam: 1,
+  });
+
+export const useGetPrescriptionDetail = () =>
+  useQuery<PrescriptionDetailResponse>({
+    queryKey: ["prescriptionDetail"],
+    queryFn: () => getPrescriptionDetail(),
+  });
+
+export const useGetPrescriptionDetailById = ({
+  prescriptionId,
+  medicineId,
+}: {
+  prescriptionId: number;
+  medicineId: number;
+}) =>
+  useQuery<PrescriptionDetailResponse>({
+    queryKey: ["prescriptionDetail", prescriptionId, medicineId],
+    queryFn: () => getPrescriptionDetailById(prescriptionId, medicineId),
   });

@@ -3,6 +3,7 @@
 import { revalidatePath } from "next/cache";
 
 import { Endpoints } from "@/lib/app.config";
+import { PrescriptionDetailResponse } from "@/types/prescription";
 
 export const getAllPrescriptions = async ({ pageSize = 5, pageNumber = 1 }) => {
   try {
@@ -72,4 +73,39 @@ export const deletePrescriptionById = async (id: number) => {
 
   revalidatePath("/prescriptions");
   return res.json();
+};
+
+export const getPrescriptionDetail =
+  async (): Promise<PrescriptionDetailResponse> => {
+    const res = await fetch(`${Endpoints.PRESCRIPTION_DETAIL}`, {
+      method: "GET",
+      cache: "no-store",
+    });
+
+    if (!res.ok) {
+      throw new Error("Failed to fetch prescription detail");
+    }
+
+    const data: PrescriptionDetailResponse = await res.json();
+    return data;
+  };
+
+export const getPrescriptionDetailById = async (
+  prescriptionId: number,
+  medicineId: number
+): Promise<PrescriptionDetailResponse> => {
+  const res = await fetch(
+    `${Endpoints.PRESCRIPTION_DETAIL}/${prescriptionId}/${medicineId}`,
+    {
+      method: "GET",
+      cache: "no-store",
+    }
+  );
+
+  if (!res.ok) {
+    throw new Error("Failed to fetch prescription detail by ID");
+  }
+
+  const data: PrescriptionDetailResponse = await res.json();
+  return data;
 };
