@@ -31,8 +31,8 @@ const SignInPage = () => {
             <p className="justify-items-end text-dark-600 xl:text-left">
               © {new Date().getFullYear()} {config.title}
             </p>
-            <Link href="?admin=true" className="text-green-500">
-              Admin
+            <Link href="/register" className="text-green-500">
+              Signup
             </Link>
           </div>
         </div>
