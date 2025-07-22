@@ -102,19 +102,19 @@ namespace ClinicBooking.Services.IServices
             return PrescriptionDTO.ConvertToDTO(item);
         }
 
-        public Task<PrescriptionDTO> UpdateAsync(
+        public async Task<PrescriptionDTO> UpdateTotalAmountAsync(
             int prescriptionId,
             PrescriptionRequest request
         )
         {
-          var entity = new Prescription
-          {
-            PrescriptionID = prescriptionId,
-            MedicalHistoryID = request.MedicalHistoryID,
-            TotalAmount = request.TotalAmount
-          }
+            var entity = new Prescription
+            {
+                PrescriptionID = prescriptionId,
+                MedicalHistoryID = request.MedicalHistoryID,
+                TotalAmount = request.TotalAmount
+            };
 
-          var updatedEntity = await _prescriptionRepository.UpdateAsync(prescriptionId, entity);
+          var updatedEntity = await _prescriptionRepository.Update(prescriptionId, entity);
 
           return PrescriptionDTO.ConvertToDTO(updatedEntity);
         }

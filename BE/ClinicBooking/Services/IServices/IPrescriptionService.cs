@@ -9,7 +9,7 @@ namespace ClinicBooking.Services.IServices
         Task<PageResultUlt<IEnumerable<PrescriptionDTO>>> GetAllByMedicalHistoryId(int id, int pageSize = 0, int pageNumber = 1);
         Task<PrescriptionDTO> GetById(int id);
         Task<PrescriptionDTO> Create(PrescriptionRequest prescriptionRequest);
-        Task UpdateTotalAmountAsync(int prescriptionId);
+        Task<PrescriptionDTO> UpdateTotalAmountAsync(int prescriptionId, PrescriptionRequest request);
         Task<PrescriptionDTO> DeleteById(int id);
     }
 }
