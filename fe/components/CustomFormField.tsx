@@ -1,7 +1,7 @@
 import { E164Number } from "libphonenumber-js/core";
 import Image from "next/image";
 import ReactDatePicker from "react-datepicker";
-import { Control, FieldValues } from "react-hook-form";
+import { Control, FieldValues, Path } from "react-hook-form";
 import PhoneInput from "react-phone-number-input";
 
 import { Checkbox } from "./ui/checkbox";
@@ -29,7 +29,7 @@ export enum FormFieldType {
 
 interface CustomProps<T extends FieldValues = FieldValues> {
   control: Control<T>;
-  name: string;
+  name: Path<T>;
   label?: string;
   placeholder?: string;
   iconSrc?: string;

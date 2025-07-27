@@ -2,10 +2,13 @@ import Image from "next/image";
 
 import { AppointmentForm } from "@/components/forms/AppointmentForm";
 import config from "@/config.json";
-import { getPatient } from "@/lib/actions/patient.actions";
+import { getUserInfoWithHeaders } from "@/lib/server-utils";
 
 const Appointment = async ({ params: { userId } }: SearchParamProps) => {
-  const patient = await getPatient(userId);
+  // const patient = await getPatient(userId);
+  const { response, data: userInfo } = await getUserInfoWithHeaders();
+  const patientId = userInfo?.roles?.includes("User") && userInfo?.id;
+  console.log("user info: ", response, userInfo);
 
   return (
     <div className="flex h-screen max-h-screen">
@@ -20,7 +23,7 @@ const Appointment = async ({ params: { userId } }: SearchParamProps) => {
           />
 
           <AppointmentForm
-            patientId={patient?.$id}
+            patientId={patientId}
             userId={userId}
             type="create"
           />
