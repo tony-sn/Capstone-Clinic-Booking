@@ -6,7 +6,7 @@ export const {
 
 export const Endpoints = {
   APPOINTMENT: `${ENDPOINT}/api/Appointment`,
-  DOCTORS: `${ENDPOINT}/api/Doctors`,
+  DOCTOR: `${ENDPOINT}/api/Doctor`,
   LABORATORY_TEST: `${ENDPOINT}/api/LaboratoryTest`,
   MEDICAL_HISTORY: `${ENDPOINT}/api/MedicalHistory`,
   MEDICINE: `${ENDPOINT}/api/Medicine`,
