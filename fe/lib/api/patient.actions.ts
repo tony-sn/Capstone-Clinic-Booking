@@ -2,7 +2,7 @@ import { Endpoints } from "@/lib/app.config";
 
 const apiUrl =
   process.env.NEXT_PUBLIC_API_BASE_URL || "https://api.cyber-clinic.cloud/api";
-export const createUser = async (formData: FormData | CreateUserParams) => {
+export const register = async (formData: FormData | CreateUserParams) => {
   const registerEndpoint = `${apiUrl}/register`;
   console.log({
     endpoint: Endpoints.REGISTER,
@@ -15,11 +15,14 @@ export const createUser = async (formData: FormData | CreateUserParams) => {
   });
 
   if (!res.ok) {
+    let errMsg = `Register failed with status ${res.status}`;
     const error = await res.json();
+    const errBody = (await res.json()) as { message?: string };
+    if (errBody.message) errMsg = errBody.message;
     console.error("Registration failed", error);
-    throw new Error("Failed to register user");
+    throw new Error(errMsg);
   }
-  return res.json();
+  return await res.json();
 };
 
 export const login = async (formData: FormData | LoginUserParams) => {

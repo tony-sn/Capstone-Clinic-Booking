@@ -7,8 +7,11 @@ import { Dispatch, SetStateAction, useState } from "react";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 
+import CustomFormField, { FormFieldType } from "@/components/CustomFormField";
+import SubmitButton from "@/components/SubmitButton";
+import { Form } from "@/components/ui/form";
 import { SelectItem } from "@/components/ui/select";
-import { Doctors } from "@/constants";
+// import { Doctors } from "@/constants";
 import {
   createAppointment,
   updateAppointment,
@@ -16,11 +19,8 @@ import {
 import { getAppointmentSchema } from "@/lib/validation";
 import { Appointment } from "@/types/appwrite.types";
 
-import CustomFormField, { FormFieldType } from "../CustomFormField";
-import SubmitButton from "../SubmitButton";
-import { Form } from "../ui/form";
-
 import "react-datepicker/dist/react-datepicker.css";
+import { useDoctors } from "@/hooks/users/useUsers";
 
 export const AppointmentForm = ({
   userId,
@@ -38,6 +38,9 @@ export const AppointmentForm = ({
   const router = useRouter();
   const [isLoading, setIsLoading] = useState(false);
 
+  // TODO: get doctor list
+  const { data: Doctors, isLoading: isDoctorsLoading } = useDoctors();
+  console.log("doctors: ", Doctors);
   const AppointmentFormValidation = getAppointmentSchema(type);
 
   const form = useForm<z.infer<typeof AppointmentFormValidation>>({
@@ -158,7 +161,7 @@ export const AppointmentForm = ({
                       width={32}
                       height={32}
                       alt="doctor"
-                      className="rounded-full border border-dark-500"
+                      className="border-dark-500 rounded-full border"
                     />
                     <p>{doctor.name}</p>
                   </div>
