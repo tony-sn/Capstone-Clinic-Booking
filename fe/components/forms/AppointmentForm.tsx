@@ -1,6 +1,7 @@
 "use client";
 
 import { zodResolver } from "@hookform/resolvers/zod";
+import { Loader2 } from "lucide-react";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
 import { Dispatch, SetStateAction, useState } from "react";
@@ -11,16 +12,16 @@ import CustomFormField, { FormFieldType } from "@/components/CustomFormField";
 import SubmitButton from "@/components/SubmitButton";
 import { Form } from "@/components/ui/form";
 import { SelectItem } from "@/components/ui/select";
-// import { Doctors } from "@/constants";
+import { useDoctors } from "@/hooks/users/useUsers";
 import {
   createAppointment,
   updateAppointment,
 } from "@/lib/actions/appointment.actions";
+import { getRandomDoctorImage } from "@/lib/utils";
 import { getAppointmentSchema } from "@/lib/validation";
 import { Appointment } from "@/types/appwrite.types";
 
 import "react-datepicker/dist/react-datepicker.css";
-import { useDoctors } from "@/hooks/users/useUsers";
 
 export const AppointmentForm = ({
   userId,
@@ -38,9 +39,14 @@ export const AppointmentForm = ({
   const router = useRouter();
   const [isLoading, setIsLoading] = useState(false);
 
-  // TODO: get doctor list
-  const { data: Doctors, isLoading: isDoctorsLoading } = useDoctors();
-  console.log("doctors: ", Doctors);
+  const { data: doctorData, isLoading: isDoctorsLoading } = useDoctors();
+
+  const Doctors = doctorData?.map((d) => ({
+    ...d,
+    image: getRandomDoctorImage(String(d?.id)),
+    displayName: `${d?.firstName} ${d?.lastName}`,
+  }));
+
   const AppointmentFormValidation = getAppointmentSchema(type);
 
   const form = useForm<z.infer<typeof AppointmentFormValidation>>({
@@ -132,6 +138,19 @@ export const AppointmentForm = ({
       buttonLabel = "Submit Apppointment";
   }
 
+  if (isDoctorsLoading) {
+    return (
+      <div className="min-h-screen p-6">
+        <div className="mx-auto flex min-h-[400px] max-w-6xl items-center justify-center">
+          <Loader2 className="mx-auto size-12 animate-spin text-green-600" />
+          <p className="ml-4 text-lg font-medium text-green-600">
+            Loading doctors...
+          </p>
+        </div>
+      </div>
+    );
+  }
+
   return (
     <Form {...form}>
       <form onSubmit={form.handleSubmit(onSubmit)} className="flex-1 space-y-6">
@@ -153,8 +172,11 @@ export const AppointmentForm = ({
               label="Doctor"
               placeholder="Select a doctor"
             >
-              {Doctors.map((doctor, i) => (
-                <SelectItem key={doctor.name + i} value={doctor.name}>
+              {Doctors?.map((doctor, i) => (
+                <SelectItem
+                  key={doctor.id + i + doctor?.displayName}
+                  value={doctor?.displayName}
+                >
                   <div className="flex cursor-pointer items-center gap-2">
                     <Image
                       src={doctor.image}
@@ -163,7 +185,7 @@ export const AppointmentForm = ({
                       alt="doctor"
                       className="border-dark-500 rounded-full border"
                     />
-                    <p>{doctor.name}</p>
+                    <p>{doctor.displayName}</p>
                   </div>
                 </SelectItem>
               ))}
