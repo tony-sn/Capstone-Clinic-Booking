@@ -1,6 +1,7 @@
 import Image from "next/image";
 
 import { AppointmentForm } from "@/components/forms/AppointmentForm";
+import { LogoutLink } from "@/components/LogoutLink";
 import config from "@/config.json";
 import { getUserInfoWithHeaders } from "@/lib/server-utils";
 
@@ -28,9 +29,12 @@ const Appointment = async ({ params: { userId } }: SearchParamProps) => {
             type="create"
           />
 
-          <p className="copyright mt-10 py-12">
-            © {new Date().getFullYear()} {config.title}
-          </p>
+          <div className="text-14-regular mt-20 flex justify-between">
+            <p className="copyright text-dark-600 justify-items-end xl:text-left">
+              © {new Date().getFullYear()} {config.title}
+            </p>
+            <LogoutLink />
+          </div>
         </div>
       </section>
 
