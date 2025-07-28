@@ -15,7 +15,7 @@ namespace ClinicBooking.Models.DTOs
         {
             return new TransactionDTO
             {
-                Id = transaction.TransactionID,
+                Id = transaction.Id,
                 MedicalHistoryId = transaction.MedicalHistoryId,
                 PaymentType = transaction.PaymentType,
                 Paid = transaction.Paid,
