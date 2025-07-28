@@ -1,6 +1,8 @@
 import { type ClassValue, clsx } from "clsx";
 import { twMerge } from "tailwind-merge";
 
+import { Doctors as DoctorList } from "@/constants";
+
 export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs));
 }
@@ -123,3 +125,13 @@ export function formatPaymentType(value: number | string): string {
   if (typeof value === "number") return map[value] ?? "Unknown";
   return value;
 }
+
+export const getRandomDoctorImage = (userId: string) => {
+  const hash = userId.split("").reduce((a, b) => {
+    a = (a << 5) - a + b.charCodeAt(0);
+    return a & a;
+  }, 0);
+
+  const index = Math.abs(hash) % DoctorList.length;
+  return DoctorList[index].image;
+};
