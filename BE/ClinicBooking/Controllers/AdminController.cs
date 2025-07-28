@@ -101,7 +101,7 @@ public class AdminController(UserManager<User> userManager, IEmailSender<User> e
             {
                 u.Id,
                 Username = u.UserName,
-                Firstname = u.FirstName,
+                FirstName = u.FirstName,
                 LastName = u.LastName,
                 Roles = u.UserRoles.Select(r => r.Role.Name).ToList()
             })
