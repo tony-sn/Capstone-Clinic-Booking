@@ -1,5 +1,5 @@
 function PatientPage() {
-  return <div>Patient</div>;
+  return <div>Patient Page</div>;
 }
 
 export default PatientPage;

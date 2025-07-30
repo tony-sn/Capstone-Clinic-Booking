@@ -20,7 +20,7 @@ export default async function AuthLayout({
   const role = userInfo?.roles?.[0];
 
   if (role === "User") {
-    redirect(`${patientsPath}/${userInfo?.id}/new-appointment`);
+    redirect(`${patientsPath}/${userInfo?.id}`);
   }
 
   return <>{children}</>;
