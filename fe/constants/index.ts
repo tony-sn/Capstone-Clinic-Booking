@@ -101,6 +101,19 @@ export const privateNav = [
   "Medicines",
 ];
 
+export const userItems = [
+  {
+    parent: "Appointments",
+    children: [
+      {
+        label: "Appointments",
+        href: "/appointments",
+        desc: "List of appointments",
+      },
+    ],
+  },
+];
+
 export const navigationItems = [
   {
     parent: "Reports",
@@ -119,6 +132,11 @@ export const navigationItems = [
         label: "Revenue",
         href: "/revenue-report",
         desc: "View clinic revenue",
+      },
+      {
+        label: "Medical History",
+        href: "/medical-histories",
+        desc: "View medical histories",
       },
     ],
   },

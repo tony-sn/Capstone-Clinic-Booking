@@ -16,7 +16,7 @@ import {
   NavigationMenuList,
   NavigationMenuTrigger,
 } from "@/components/ui/navigation-menu";
-import { publicNav, navigationItems } from "@/constants";
+import { publicNav, navigationItems as navItems, userItems } from "@/constants";
 import { postLogout } from "@/lib/api/patient.actions";
 import { cn } from "@/lib/utils";
 import {
@@ -35,6 +35,9 @@ const Navbar = ({
 }) => {
   const router = useRouter();
   const [isScrolled, setIsScrolled] = useState(false);
+  const isUser = userInfo?.roles.includes("User");
+  const userEmail = userInfo?.email;
+  const navigationItems = isUser ? userItems : navItems;
 
   const fullname =
     userInfo?.firstName + " " + userInfo?.lastName || "Admin Dashboard";
@@ -132,7 +135,7 @@ const Navbar = ({
                 isScrolled ? "text-gray-700" : "text-white/90"
               )}
             >
-              {fullname}
+              {isUser ? userEmail : fullname}
             </Link>
             <Button
               variant={isScrolled ? "default" : "outline"}
