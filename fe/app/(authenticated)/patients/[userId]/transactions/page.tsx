@@ -18,13 +18,13 @@ export default async function PatientTransactionsPage({
           </p>
         </div>
 
-        <div className="rounded-lg border bg-card shadow-sm text-card-foreground">
+        <div className="rounded-lg border bg-card text-card-foreground shadow-sm">
           <div className="p-6">
             <div className="flex items-center justify-between">
               <h2 className="text-xl font-semibold">Payment History</h2>
             </div>
             <div className="mt-6">
-              <p className="text-center text-muted-foreground py-8">
+              <p className="py-8 text-center text-muted-foreground">
                 Your transaction history will be displayed here.
                 <br />
                 This section will show your payments, invoices, and billing

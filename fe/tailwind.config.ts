@@ -89,6 +89,7 @@ const config = {
           foreground: "hsl(var(--destructive-foreground))",
         },
         border: "hsl(var(--border))",
+        "muted-foreground": "hsl(var(--muted-foreground))",
       },
       fontFamily: {
         sans: ["var(--font-sans)", ...fontFamily.sans],

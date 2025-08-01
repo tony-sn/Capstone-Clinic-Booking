@@ -30,7 +30,7 @@ const Appointment = async ({ params: { userId } }: SearchParamProps) => {
           />
 
           <div className="text-14-regular mt-20 flex justify-between">
-            <p className="copyright text-dark-600 justify-items-end xl:text-left">
+            <p className="copyright justify-items-end text-dark-600 xl:text-left">
               © {new Date().getFullYear()} {config.title}
             </p>
             <LogoutLink />

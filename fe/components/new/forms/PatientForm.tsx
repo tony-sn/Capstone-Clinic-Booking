@@ -5,14 +5,14 @@ import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 
-import CustomFormField, { FormFieldType } from "../../CustomFormField";
-import SubmitButton from "../../SubmitButton";
-
 import { AddUserModal } from "@/components/modal/AddUserModal";
 import { Form } from "@/components/ui/form";
 import { createUser } from "@/lib/api/patient.actions";
 import { generateStrongPassword } from "@/lib/utils";
 import { UserFormValidation } from "@/lib/validation";
+
+import CustomFormField, { FormFieldType } from "../../CustomFormField";
+import SubmitButton from "../../SubmitButton";
 
 import "react-phone-number-input/style.css";
 

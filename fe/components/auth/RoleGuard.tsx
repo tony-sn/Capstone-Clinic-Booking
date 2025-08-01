@@ -58,8 +58,8 @@ export default function RoleGuard({
   // Show loading state while checking
   if (isAuthorized === null) {
     return (
-      <div className="flex items-center justify-center min-h-screen">
-        <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-600"></div>
+      <div className="flex min-h-screen items-center justify-center">
+        <div className="size-8 animate-spin rounded-full border-b-2 border-blue-600"></div>
       </div>
     );
   }
@@ -67,7 +67,7 @@ export default function RoleGuard({
   // Don't render children if not authorized (redirect is in progress)
   if (!isAuthorized) {
     return (
-      <div className="flex items-center justify-center min-h-screen">
+      <div className="flex min-h-screen items-center justify-center">
         <div className="text-center">
           <p className="text-muted-foreground">Redirecting...</p>
         </div>

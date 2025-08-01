@@ -80,7 +80,7 @@ const PatientMobileMenu = ({
           </Button>
         </SheetTrigger>
         <SheetContent side="right" showClose={false} className="pr-0">
-          <div className="flex flex-col gap-4 px-4 h-full">
+          <div className="flex h-full flex-col gap-4 px-4">
             <div className="flex items-center justify-between">
               <SheetHeader className="font-sans text-xl font-medium">
                 Cyber Clinic

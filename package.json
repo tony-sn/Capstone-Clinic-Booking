@@ -8,6 +8,7 @@
   "scripts": {
     "dev": "dotenv -- concurrently -k -c auto -n fe,be \"pnpm dev:fe\" \"pnpm dev:be\"",
     "dev:fe": "pnpm --filter fe dev",
+    "dev:fe-turbo": "pnpm --filter fe dev:turbo",
     "dev:be": "dotnet watch run --project ./BE/ClinicBooking/ClinicBooking.csproj",
     "lint-fe": "pnpm --filter fe run lint-fe",
     "lint": "pnpm --filter fe lint",

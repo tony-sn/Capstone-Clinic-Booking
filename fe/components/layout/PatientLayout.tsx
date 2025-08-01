@@ -130,7 +130,7 @@ const PatientLayout = ({
         </div>
       </header>
 
-      <main className="pt-20 px-4">{children}</main>
+      <main className="px-4 pt-20">{children}</main>
     </div>
   );
 };
