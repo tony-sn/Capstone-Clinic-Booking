@@ -22,16 +22,16 @@ export default async function AuthenticatedLayout({
   if (response.status !== 200 || !userInfo) {
     redirect(signInPath);
   }
-  // const role = userInfo?.roles?.[0];
+  const role = userInfo?.roles?.[0];
 
   // TODO: keep for debugging, remove later
 
   console.log({ userInfo });
 
   // if user login, go to new appointment
-  // if (role === "User") {
-  //   redirect(`${patientsPath}/${userInfo?.id}`);
-  // }
+  if (role === "User") {
+    // redirect(`${patientsPath}/${userInfo?.id}`);
+  }
 
   // if staff login, go to admin layout
   // if (["Staff", "Admin", "Doctor"].includes(role)) {
