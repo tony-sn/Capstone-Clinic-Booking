@@ -23,7 +23,6 @@ const PatientLayout = ({
   const router = useRouter();
   const [isScrolled, setIsScrolled] = useState(false);
   const userEmail = userInfo?.email;
-  const fullname = `${userInfo?.firstName} ${userInfo?.lastName}`;
   const homePath = home();
 
   const handleLogout = async (e: React.MouseEvent) => {
@@ -67,16 +66,17 @@ const PatientLayout = ({
   ];
 
   return (
-    <>
+    <div className="mx-auto flex max-w-7xl flex-col space-y-14">
       <header
         className={cn(
           "fixed top-0 w-full z-50 transition-all duration-300",
           isScrolled
             ? "bg-white/90 backdrop-blur-md shadow-sm py-3"
-            : "bg-transparent py-5"
+            : "bg-transparent py-5",
+          "admin-header"
         )}
       >
-        <div className="container mx-auto flex items-center justify-between px-4">
+        <div className="container flex items-center justify-between !px-0">
           <Link href="/" className="flex items-center gap-2">
             <Image
               src="/assets/icons/logo-full.svg"
@@ -110,7 +110,7 @@ const PatientLayout = ({
                 isScrolled ? "text-gray-700" : "text-white/90"
               )}
             >
-              {userEmail || fullname}
+              {userEmail}
             </span>
             <Button
               variant={isScrolled ? "default" : "outline"}
@@ -130,10 +130,8 @@ const PatientLayout = ({
         </div>
       </header>
 
-      <div className="mx-auto flex max-w-7xl flex-col space-y-14">
-        <main className="pt-20 px-4">{children}</main>
-      </div>
-    </>
+      <main className="pt-20 px-4">{children}</main>
+    </div>
   );
 };
 
