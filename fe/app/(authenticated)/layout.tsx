@@ -1,7 +1,8 @@
 import { headers } from "next/headers";
 import { redirect } from "next/navigation";
 
-import Navbar from "@/components/layout/Navbar";
+import PatientLayout from "@/components/layout/PatientLayout";
+import StaffLayout from "@/components/layout/StaffLayout";
 import { getUserInfo } from "@/lib/api/patient.actions";
 import { signInPath as siPath } from "@/paths";
 
@@ -17,34 +18,23 @@ export default async function AuthenticatedLayout({
   });
 
   const signInPath = siPath();
-  // const patientsPath = ptPath();
 
   if (response.status !== 200 || !userInfo) {
     redirect(signInPath);
   }
+
   const role = userInfo?.roles?.[0];
 
-  // TODO: keep for debugging, remove later
-
-  console.log({ userInfo });
-
-  // if user login, go to new appointment
+  // Patient layout for User role
   if (role === "User") {
-    // redirect(`${patientsPath}/${userInfo?.id}`);
+    return <PatientLayout userInfo={userInfo}>{children}</PatientLayout>;
   }
 
-  // if staff login, go to admin layout
-  // if (["Staff", "Admin", "Doctor"].includes(role)) {
-  return (
-    <>
-      <div className="mx-auto flex max-w-7xl flex-col space-y-14">
-        <Navbar isAuthed userInfo={userInfo} />
-        <main className="admin-main">{children}</main>
-      </div>
-    </>
-  );
-  // }
+  // Staff layout for Admin, Doctor, Staff roles
+  if (["Staff", "Admin", "Doctor"].includes(role)) {
+    return <StaffLayout userInfo={userInfo}>{children}</StaffLayout>;
+  }
 
-  // all other cases, or new role - go back to sign-in
-  // redirect(signInPath);
+  // All other cases, or new role - go back to sign-in
+  redirect(signInPath);
 }
