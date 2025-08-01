@@ -3,6 +3,7 @@
 import { Loader2, Stethoscope, Plus, Edit, Trash2 } from "lucide-react";
 import { useState } from "react";
 
+import RoleGuard from "@/components/auth/RoleGuard";
 import InfiniteScroll from "@/components/InfiniteScroll";
 import PrescriptionDeleteModal from "@/components/new/forms/prescriptions/PrescriptionDeleteModal";
 import PrescriptionDetailModal from "@/components/new/forms/prescriptions/PrescriptionDetailModal";
@@ -13,7 +14,7 @@ import { useInfinitePrescriptions } from "@/hooks/prescriptions/usePrescriptions
 import { useToast } from "@/hooks/use-toast";
 import { flattenPages } from "@/lib/utils";
 
-export default function PrescriptionPage() {
+function PrescriptionPageContent() {
   const { toast } = useToast();
   const [selectedId, setSelectedId] = useState<number | null>(null);
   const [medicalHistoryId, setMedicalHistoryId] = useState<number | null>(null);
@@ -188,5 +189,13 @@ export default function PrescriptionPage() {
         onSuccess={onDeleteSuccess}
       />
     </div>
+  );
+}
+
+export default function PrescriptionPage() {
+  return (
+    <RoleGuard allowedRoles={["Admin", "Doctor", "Staff"]}>
+      <PrescriptionPageContent />
+    </RoleGuard>
   );
 }

@@ -17,6 +17,7 @@ import {
   Legend,
 } from "recharts";
 
+import RoleGuard from "@/components/auth/RoleGuard";
 import { useRevenueReports } from "@/hooks/reports/useRevenueReport";
 import { RevenueType } from "@/types/revenue";
 
@@ -28,7 +29,7 @@ const revenueTypes: RevenueType[] = [
 ];
 const COLORS = ["#8884d8", "#82ca9d", "#ffc658", "#ff7f50", "#00c49f"];
 
-export default function RevenueReportPage() {
+function RevenueReportContent() {
   const [selectedType, setSelectedType] = useState<RevenueType>("Monthly");
   const { data, isLoading, isError } = useRevenueReports(selectedType);
   const reports = data?.data || [];
@@ -196,5 +197,13 @@ export default function RevenueReportPage() {
         </>
       )}
     </div>
+  );
+}
+
+export default function RevenueReportPage() {
+  return (
+    <RoleGuard allowedRoles={["Admin", "Doctor", "Staff"]}>
+      <RevenueReportContent />
+    </RoleGuard>
   );
 }

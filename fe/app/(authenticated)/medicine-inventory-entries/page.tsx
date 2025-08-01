@@ -1,10 +1,11 @@
 "use client";
 
+import RoleGuard from "@/components/auth/RoleGuard";
 import InfiniteScroll from "@/components/InfiniteScroll";
 import { useInfiniteMedicineInventoryEntries } from "@/hooks/medicine-inventory-entries/useMedicineInventoryEntries";
 import { flattenPages } from "@/lib/utils";
 
-export default function MedicineInventoryEntryPage() {
+function MedicineInventoryEntryPageContent() {
   const {
     data,
     isLoading,
@@ -41,5 +42,13 @@ export default function MedicineInventoryEntryPage() {
         </InfiniteScroll>
       )}
     </div>
+  );
+}
+
+export default function MedicineInventoryEntryPage() {
+  return (
+    <RoleGuard allowedRoles={["Admin", "Doctor", "Staff"]}>
+      <MedicineInventoryEntryPageContent />
+    </RoleGuard>
   );
 }

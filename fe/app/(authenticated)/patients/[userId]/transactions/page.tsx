@@ -1,28 +1,12 @@
-import { headers } from "next/headers";
-import { redirect } from "next/navigation";
-
-import { getUserInfo } from "@/lib/api/patient.actions";
-import { signInPath } from "@/paths";
+import { requireSpecificPatient } from "@/lib/auth-guard";
 
 export default async function PatientTransactionsPage({
   params,
 }: {
   params: { userId: string };
 }) {
-  const headersList = await headers();
-  const headersObj = Object.fromEntries(headersList.entries());
-  const { response, data: userInfo } = await getUserInfo({
-    headers: headersObj,
-  });
-
-  if (response.status !== 200 || !userInfo) {
-    redirect(signInPath());
-  }
-
-  // Ensure the user can only access their own transactions
-  if (userInfo.id.toString() !== params.userId) {
-    redirect(signInPath());
-  }
+  // Ensure only the specific patient can access their own transactions
+  await requireSpecificPatient(params.userId);
 
   return (
     <div className="mx-auto w-full max-w-7xl">
@@ -34,13 +18,13 @@ export default async function PatientTransactionsPage({
           </p>
         </div>
 
-        <div className="rounded-lg border bg-card shadow-sm text-card-foreground">
+        <div className="rounded-lg border bg-card text-card-foreground shadow-sm">
           <div className="p-6">
             <div className="flex items-center justify-between">
               <h2 className="text-xl font-semibold">Payment History</h2>
             </div>
             <div className="mt-6">
-              <p className="text-center text-muted-foreground py-8">
+              <p className="py-8 text-center text-muted-foreground">
                 Your transaction history will be displayed here.
                 <br />
                 This section will show your payments, invoices, and billing

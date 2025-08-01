@@ -3,6 +3,7 @@
 // import Link from "next/link";
 import { useState } from "react";
 
+import RoleGuard from "@/components/auth/RoleGuard";
 import InfiniteScroll from "@/components/InfiniteScroll";
 import MedicalHistoryDeleteModal from "@/components/new/forms/medical-history/medicalHistoryDeleteForm"; // Import delete modal
 import MedicalHistoryDetailModal from "@/components/new/forms/medical-history/medicalhistoryDetailForm";
@@ -10,7 +11,7 @@ import MedicalHistoryFormModal from "@/components/new/forms/medical-history/medi
 import { useInfiniteMedicalHistories } from "@/hooks/medicalhistories/useMedicalhistories";
 import { MedicalHistory } from "@/types/medicalHistory";
 
-const MedicalHistoriesPage = () => {
+const MedicalHistoriesPageContent = () => {
   const {
     data,
     isLoading,
@@ -517,6 +518,14 @@ const MedicalHistoriesPage = () => {
         />
       )}
     </div>
+  );
+};
+
+const MedicalHistoriesPage = () => {
+  return (
+    <RoleGuard allowedRoles={["Admin", "Doctor", "Staff"]}>
+      <MedicalHistoriesPageContent />
+    </RoleGuard>
   );
 };
 

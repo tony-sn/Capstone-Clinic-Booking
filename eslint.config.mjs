@@ -58,6 +58,7 @@ const eslintConfig = [
           },
         },
       ],
+      "tailwindcss/no-custom-classname": "off",
       "@tanstack/query/exhaustive-deps": "error",
       "@next/next/no-html-link-for-pages": "off",
     },

@@ -2,8 +2,11 @@ import { StatCard } from "@/components/StatCard";
 import { columns } from "@/components/table/columns";
 import { DataTable } from "@/components/table/DataTable";
 import { getRecentAppointmentList } from "@/lib/actions/appointment.actions";
+import { requireStaffRole } from "@/lib/auth-guard";
 
 const AdminPage = async () => {
+  // Protect this page - only allow staff roles
+  await requireStaffRole();
   const appointments = (await getRecentAppointmentList()) || {
     documents: [
       {

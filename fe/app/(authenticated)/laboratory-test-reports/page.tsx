@@ -2,6 +2,7 @@
 
 import { useState, useCallback, useMemo } from "react";
 
+import RoleGuard from "@/components/auth/RoleGuard";
 import MedicalHistoryReportDetail from "@/components/new/forms/laboratory-test-reports/laboratoryTestReportDetail";
 import LaboratoryTestReportEdit from "@/components/new/forms/laboratory-test-reports/laboratoryTestReportEdit";
 import { useMedicalHistoryReports } from "@/hooks/laboratory-test-report/useLaboratoryTestReport";
@@ -11,7 +12,7 @@ interface MedicalHistoryLayoutProps {
   showFilters?: boolean;
 }
 
-export default function MedicalHistoryLayout({
+function MedicalHistoryLayoutContent({
   showFilters = true,
 }: MedicalHistoryLayoutProps) {
   const [searchQuery, setSearchQuery] = useState("");
@@ -519,6 +520,16 @@ export default function MedicalHistoryLayout({
         />
       )}
     </div>
+  );
+}
+
+export default function MedicalHistoryLayout({
+  showFilters = true,
+}: MedicalHistoryLayoutProps) {
+  return (
+    <RoleGuard allowedRoles={["Admin", "Doctor", "Staff"]}>
+      <MedicalHistoryLayoutContent showFilters={showFilters} />
+    </RoleGuard>
   );
 }
 

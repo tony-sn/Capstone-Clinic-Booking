@@ -125,12 +125,12 @@ const BaseHeader = ({
                           <NavigationMenuLink key={label} asChild>
                             <Link
                               href={href}
-                              className="hover:bg-accent hover:text-accent-foreground focus:bg-accent focus:text-accent-foreground block select-none space-y-1 rounded-md p-3 leading-none no-underline outline-none transition-colors"
+                              className="block select-none space-y-1 rounded-md p-3 leading-none no-underline outline-none transition-colors hover:bg-accent hover:text-accent-foreground focus:bg-accent focus:text-accent-foreground"
                             >
                               <div className="text-sm font-medium leading-none">
                                 {label}
                               </div>
-                              <p className="text-muted-foreground line-clamp-2 text-sm leading-snug">
+                              <p className="line-clamp-2 text-sm leading-snug text-muted-foreground">
                                 {desc}
                               </p>
                             </Link>

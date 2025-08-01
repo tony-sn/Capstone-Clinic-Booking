@@ -14,6 +14,7 @@ import {
 } from "lucide-react";
 import React, { useState } from "react";
 
+import RoleGuard from "@/components/auth/RoleGuard";
 import InfiniteScroll from "@/components/InfiniteScroll";
 import LaboratoryTestDeleteModal from "@/components/new/forms/laboratory-tests/laboratoryTestDetailDelete";
 import LaboratoryTestModal from "@/components/new/forms/laboratory-tests/laboratoryTestDetailForm";
@@ -30,7 +31,7 @@ const formatCurrency = (amount: number) => {
   }).format(amount);
 };
 
-export default function LaboratoryTestPage() {
+function LaboratoryTestPageContent() {
   const [selectedTestId, setSelectedTestId] = useState<number | null>(null);
   const [isDetailModalOpen, setIsDetailModalOpen] = useState(false);
   const [isEditModalOpen, setIsEditModalOpen] = useState(false);
@@ -392,5 +393,13 @@ export default function LaboratoryTestPage() {
         />
       )}
     </>
+  );
+}
+
+export default function LaboratoryTestPage() {
+  return (
+    <RoleGuard allowedRoles={["Admin", "Doctor", "Staff"]}>
+      <LaboratoryTestPageContent />
+    </RoleGuard>
   );
 }

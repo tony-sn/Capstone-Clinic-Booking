@@ -13,6 +13,7 @@ import {
 } from "lucide-react";
 import React, { useState } from "react";
 
+import RoleGuard from "@/components/auth/RoleGuard";
 import InfiniteScroll from "@/components/InfiniteScroll";
 import MedicineDeleteModal from "@/components/new/forms/medicines/MedicineDeleteModal";
 import MedicineDetailModal from "@/components/new/forms/medicines/MedicineDetailModal";
@@ -27,7 +28,7 @@ const formatCurrency = (amount: number) =>
     amount
   );
 
-export default function MedicinePage() {
+function MedicinePageContent() {
   const [selectedId, setSelectedId] = useState<number | null>(null);
   const [isDetailOpen, setIsDetailOpen] = useState(false);
   const [isEditOpen, setIsEditOpen] = useState(false);
@@ -281,5 +282,13 @@ export default function MedicinePage() {
         onSuccess={onDeleteSuccess}
       />
     </>
+  );
+}
+
+export default function MedicinePage() {
+  return (
+    <RoleGuard allowedRoles={["Admin", "Doctor", "Staff"]}>
+      <MedicinePageContent />
+    </RoleGuard>
   );
 }
