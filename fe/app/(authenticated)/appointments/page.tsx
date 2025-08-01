@@ -1,12 +1,13 @@
 "use client";
 
+import RoleGuard from "@/components/auth/RoleGuard";
 import InfiniteScroll from "@/components/InfiniteScroll";
 import AppointmentForm from "@/components/new/forms/AppointmentForm";
 import { useInfiniteAppointments } from "@/hooks/appointments/useAppointments";
 import { flattenPages } from "@/lib/utils";
 import { Appointment } from "@/types/appointment";
 
-export default function AppointmentPage() {
+function AppointmentPageContent() {
   const {
     data,
     isLoading,
@@ -49,5 +50,13 @@ export default function AppointmentPage() {
         </InfiniteScroll>
       )}
     </div>
+  );
+}
+
+export default function AppointmentPage() {
+  return (
+    <RoleGuard allowedRoles={["Admin", "Doctor", "Staff"]}>
+      <AppointmentPageContent />
+    </RoleGuard>
   );
 }

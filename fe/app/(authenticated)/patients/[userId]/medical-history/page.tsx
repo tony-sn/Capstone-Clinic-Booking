@@ -1,28 +1,12 @@
-import { headers } from "next/headers";
-import { redirect } from "next/navigation";
-
-import { getUserInfo } from "@/lib/api/patient.actions";
-import { signInPath } from "@/paths";
+import { requireSpecificPatient } from "@/lib/auth-guard";
 
 export default async function PatientMedicalHistoryPage({
   params,
 }: {
   params: { userId: string };
 }) {
-  const headersList = await headers();
-  const headersObj = Object.fromEntries(headersList.entries());
-  const { response, data: userInfo } = await getUserInfo({
-    headers: headersObj,
-  });
-
-  if (response.status !== 200 || !userInfo) {
-    redirect(signInPath());
-  }
-
-  // Ensure the user can only access their own medical history
-  if (userInfo.id.toString() !== params.userId) {
-    redirect(signInPath());
-  }
+  // Ensure only the specific patient can access their own medical history
+  await requireSpecificPatient(params.userId);
 
   return (
     <div className="mx-auto w-full max-w-7xl">

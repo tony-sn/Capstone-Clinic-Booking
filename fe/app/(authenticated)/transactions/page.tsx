@@ -11,13 +11,14 @@ import {
 } from "lucide-react";
 import { useState } from "react";
 
+import RoleGuard from "@/components/auth/RoleGuard";
 import InfiniteScroll from "@/components/InfiniteScroll";
 import MedicalHistoryDetailModal from "@/components/new/forms/medical-history/medicalhistoryDetailForm";
 import { useInfiniteTransactions } from "@/hooks/transaction/useTransaction";
 import { formatPaymentType } from "@/lib/utils";
 import { PaymentType } from "@/types/transaction";
 
-export default function TransactionPage() {
+function TransactionPageContent() {
   const [fromDate, setFromDate] = useState<string>("");
   const [toDate, setToDate] = useState<string>("");
   const [paymentType, setPaymentType] = useState<PaymentType | "">("");
@@ -201,5 +202,13 @@ export default function TransactionPage() {
         />
       )}
     </div>
+  );
+}
+
+export default function TransactionPage() {
+  return (
+    <RoleGuard allowedRoles={["Admin", "Doctor", "Staff"]}>
+      <TransactionPageContent />
+    </RoleGuard>
   );
 }
