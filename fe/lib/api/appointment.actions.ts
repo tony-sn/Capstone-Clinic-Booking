@@ -26,6 +26,37 @@ export const getAllAppointment = async ({ pageSize = 5, pageNumber = 1 }) => {
   }
 };
 
+export const getAppointmentsByMedicalHistoryId = async (medicalHistoryId: number) => {
+  try {
+    const res = await fetch(
+      `${Endpoints.APPOINTMENT}?pageSize=0&pageNumber=1`,
+      { cache: "no-store" }
+    );
+
+    if (!res.ok) {
+      throw new Error("Failed to fetch appointments");
+    }
+
+    const data = await res.json();
+    
+    // Filter appointments by medicalHistoryId on the client side
+    const filteredAppointments = data.data ? 
+      data.data.filter((appointment: any) => appointment.medicalHistoryId === medicalHistoryId) :
+      [];
+
+    return {
+      ...data,
+      data: filteredAppointments
+    };
+  } catch (error) {
+    console.error(
+      "An error occurred while retrieving appointments by medical history ID:",
+      error
+    );
+    throw error;
+  }
+};
+
 export const getAppointmentById = async (id: number) => {
   const res = await fetch(`${Endpoints.APPOINTMENT}/${id}`, {
     cache: "no-store",
