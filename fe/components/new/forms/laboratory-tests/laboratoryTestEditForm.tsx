@@ -1,20 +1,11 @@
 "use client";
 
 import { useQuery } from "@tanstack/react-query";
-import {
-  X,
-  TestTubes,
-  Save,
-  Loader2,
-  AlertCircle,
-  Plus,
-  Edit,
-} from "lucide-react";
+import { X, Save, Loader2, AlertCircle, Plus, Edit } from "lucide-react";
 import React, { useState, useEffect } from "react";
 
 import { useEditLaboratoryTest } from "@/hooks/laboratory-tests/useEditLaboratoryTests";
 import { getLaboratoryTestById } from "@/lib/api/laboratory-test.actions";
-import { LaboratoryTestReport } from "@/types/laboratoryTest";
 
 interface LaboratoryTestEditModalProps {
   testId?: number; // undefined = create mode, number = edit mode
@@ -45,9 +36,6 @@ export default function LaboratoryTestEditModal({
     queryFn: () => getLaboratoryTestById(testId!),
     enabled: isEditMode && testId !== undefined, // Only run query in edit mode
   });
-
-  // Skip hook execution if not in edit mode
-  const shouldSkipQuery = !isEditMode || testId === undefined;
 
   const [formData, setFormData] = useState<FormData>({
     name: "",
@@ -189,7 +177,7 @@ export default function LaboratoryTestEditModal({
 
   return (
     <div
-      className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50 p-4"
+      className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 p-4"
       onClick={handleBackdropClick}
     >
       <div className="max-h-[90vh] w-full max-w-2xl overflow-hidden rounded-2xl bg-white shadow-2xl">

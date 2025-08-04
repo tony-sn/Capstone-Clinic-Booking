@@ -32,7 +32,7 @@ const LaboratoryTestDeleteModal = ({
   if (!isOpen) return null;
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50">
+    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50">
       <div className="mx-4 w-full max-w-md rounded-lg bg-white p-6">
         {/* Header */}
         <div className="mb-4 flex items-center gap-3">

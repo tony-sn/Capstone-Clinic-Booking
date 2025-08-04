@@ -1,6 +1,6 @@
 "use client";
 
-import { X, Pill, Save, Loader2, AlertCircle, Plus, Edit } from "lucide-react";
+import { X, Save, Loader2, AlertCircle, Plus, Edit } from "lucide-react";
 import React, { useState, useEffect } from "react";
 
 import { useEditMedicine } from "@/hooks/medicines/useEditMedicine";
@@ -115,7 +115,7 @@ export default function MedicineEditModal({
 
   return (
     <div
-      className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50 p-4"
+      className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 p-4"
       onClick={(e) => e.target === e.currentTarget && onClose()}
     >
       <div className="max-h-[90vh] w-full max-w-2xl overflow-hidden rounded-2xl bg-white shadow-2xl">
@@ -170,7 +170,7 @@ export default function MedicineEditModal({
                   </label>
                   <input
                     type={type || "text"}
-                    value={(formData as any)[field]}
+                    value={formData[field as keyof typeof formData]}
                     onChange={(e) => handleChange(field, e.target.value)}
                     className={`w-full rounded-lg border px-4 py-3 ${
                       errors[field]

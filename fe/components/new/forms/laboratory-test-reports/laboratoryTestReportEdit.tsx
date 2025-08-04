@@ -180,7 +180,7 @@ export default function LaboratoryTestReportEdit({
     return (
       <div className="fixed inset-0 z-50 overflow-y-auto">
         <div className="flex min-h-screen items-center justify-center px-4 pb-20 pt-4 text-center sm:block sm:p-0">
-          <div className="fixed inset-0 bg-gray-500 bg-opacity-75 transition-opacity" />
+          <div className="fixed inset-0 bg-gray-500/75 transition-opacity" />
           <div className="my-8 inline-block w-full max-w-md overflow-hidden rounded-2xl bg-white text-left align-middle shadow-xl transition-all">
             <div className="p-8 text-center">
               <div className="relative mb-6">
@@ -214,7 +214,7 @@ export default function LaboratoryTestReportEdit({
       <div className="flex min-h-screen items-center justify-center px-4 pb-20 pt-4 text-center sm:block sm:p-0">
         {/* Backdrop */}
         <div
-          className="fixed inset-0 bg-gray-500 bg-opacity-75 transition-opacity"
+          className="fixed inset-0 bg-gray-500/75 transition-opacity"
           onClick={onClose}
         />
 
@@ -495,7 +495,7 @@ export default function LaboratoryTestReportEdit({
       {showDeleteConfirm && (
         <div className="z-60 fixed inset-0 overflow-y-auto">
           <div className="flex min-h-screen items-center justify-center px-4 pb-20 pt-4 text-center sm:block sm:p-0">
-            <div className="fixed inset-0 bg-gray-500 bg-opacity-75 transition-opacity" />
+            <div className="fixed inset-0 bg-gray-500/75 transition-opacity" />
             <div className="my-8 inline-block w-full max-w-md overflow-hidden rounded-2xl bg-white text-left align-middle shadow-xl transition-all">
               <div className="p-6">
                 <div className="mb-4 flex items-center gap-4">

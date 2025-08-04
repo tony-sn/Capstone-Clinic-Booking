@@ -1,8 +1,14 @@
 import { useInfiniteQuery, useQuery } from "@tanstack/react-query";
-import { number } from "zod";
 
-import { getAllMedicalHistory, getMedicalHistoryById } from "@/lib/api/medical-history.action";
-import type { MedicalHistoriesResponse, MedicalHistoryResponse } from "@/types/medicalHistory";
+import {
+  getAllMedicalHistory,
+  getMedicalHistoryById,
+  getMedicalHistoryByPatientId,
+} from "@/lib/api/medical-history.action";
+import type {
+  MedicalHistoriesResponse,
+  MedicalHistoryResponse,
+} from "@/types/medicalHistory";
 
 export const useMedicalHistories = ({
   pageSize = 5,
@@ -22,7 +28,7 @@ export const useInfiniteMedicalHistories = (pageSize = 5) =>
     queryFn: async ({ pageParam = 1 }) =>
       await getAllMedicalHistory({
         pageNumber: pageParam as number,
-        pageSize
+        pageSize,
       }),
     getNextPageParam: (lastPage) => {
       const pagination = lastPage?.pagination;
@@ -35,7 +41,27 @@ export const useInfiniteMedicalHistories = (pageSize = 5) =>
     initialPageParam: 1,
   });
 
-export const medicalDetail = ({ medicalHistoryId }: { medicalHistoryId: number }) => useQuery<MedicalHistoryResponse>({
-  queryKey: ["medicalHistory", medicalHistoryId],
-  queryFn: () => getMedicalHistoryById(medicalHistoryId)
-});
+export const useMedicalDetail = ({
+  medicalHistoryId,
+}: {
+  medicalHistoryId: number;
+}) =>
+  useQuery<MedicalHistoryResponse>({
+    queryKey: ["medicalHistory", medicalHistoryId],
+    queryFn: () => getMedicalHistoryById(medicalHistoryId),
+  });
+
+export const usePatientMedicalHistories = ({
+  patientId,
+  pageSize = 5,
+  pageNumber = 1,
+}: {
+  patientId: number;
+  pageSize?: number;
+  pageNumber?: number;
+}) =>
+  useQuery<MedicalHistoriesResponse | undefined>({
+    queryKey: ["patientMedicalHistories", patientId, pageSize, pageNumber],
+    queryFn: () => getMedicalHistoryByPatientId(patientId, { pageSize, pageNumber }),
+    enabled: !!patientId,
+  });

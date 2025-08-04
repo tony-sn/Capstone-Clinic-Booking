@@ -3,7 +3,6 @@
 import {
   X,
   TestTubes,
-  DollarSign,
   CheckCircle,
   AlertCircle,
   Loader2,
@@ -12,7 +11,7 @@ import {
 } from "lucide-react";
 import React from "react";
 
-import { laboratoryTestDetail } from "@/hooks/laboratory-tests/useLaboratoryTests";
+import { useLaboratoryTestDetail } from "@/hooks/laboratory-tests/useLaboratoryTests";
 import { LaboratoryTestReport } from "@/types/laboratoryTest";
 
 interface LaboratoryTestModalProps {
@@ -34,21 +33,12 @@ export default function LaboratoryTestModal({
   isOpen,
   onClose,
 }: LaboratoryTestModalProps) {
-  const { data, isLoading, isError } = laboratoryTestDetail({
+  const { data, isLoading, isError } = useLaboratoryTestDetail({
     laboratoryTestId,
   });
 
   // Extract test data from response
   const test: LaboratoryTestReport | undefined = data;
-
-  if (!isOpen) return null;
-
-  // Handle backdrop click
-  const handleBackdropClick = (e: React.MouseEvent) => {
-    if (e.target === e.currentTarget) {
-      onClose();
-    }
-  };
 
   // Handle escape key
   React.useEffect(() => {
@@ -69,9 +59,18 @@ export default function LaboratoryTestModal({
     };
   }, [isOpen, onClose]);
 
+  if (!isOpen) return null;
+
+  // Handle backdrop click
+  const handleBackdropClick = (e: React.MouseEvent) => {
+    if (e.target === e.currentTarget) {
+      onClose();
+    }
+  };
+
   return (
     <div
-      className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50 p-4"
+      className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 p-4"
       onClick={handleBackdropClick}
     >
       <div className="max-h-[90vh] w-full max-w-4xl overflow-hidden rounded-2xl bg-white shadow-2xl">

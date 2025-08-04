@@ -1,3 +1,5 @@
+import MedicalHistoryList from "@/components/patient/MedicalHistoryList";
+import { getAllMedicalHistory } from "@/lib/api/medical-history.action";
 import { requireSpecificPatient } from "@/lib/auth-guard";
 
 export default async function PatientMedicalHistoryPage({
@@ -7,6 +9,12 @@ export default async function PatientMedicalHistoryPage({
 }) {
   // Ensure only the specific patient can access their own medical history
   await requireSpecificPatient(params.userId);
+
+  // Fetch medical history data
+  const medicalHistoryData = await getAllMedicalHistory({
+    pageSize: 10,
+    pageNumber: 1,
+  });
 
   return (
     <div className="mx-auto w-full max-w-7xl">
@@ -20,21 +28,10 @@ export default async function PatientMedicalHistoryPage({
           </p>
         </div>
 
-        <div className="rounded-lg border bg-card text-card-foreground shadow-sm">
-          <div className="p-6">
-            <div className="flex items-center justify-between">
-              <h2 className="text-xl font-semibold">Medical Records</h2>
-            </div>
-            <div className="mt-6">
-              <p className="py-8 text-center text-muted-foreground">
-                Your medical history will be displayed here.
-                <br />
-                This section will show your medical records, diagnoses,
-                treatments, and other health information.
-              </p>
-            </div>
-          </div>
-        </div>
+        <MedicalHistoryList
+          medicalHistoryData={medicalHistoryData}
+          patientId={parseInt(params.userId)}
+        />
       </div>
     </div>
   );

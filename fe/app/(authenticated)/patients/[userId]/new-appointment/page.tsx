@@ -3,13 +3,13 @@ import Image from "next/image";
 import { AppointmentForm } from "@/components/forms/AppointmentForm";
 import { LogoutLink } from "@/components/LogoutLink";
 import config from "@/config.json";
-import { getUserInfoWithHeaders } from "@/lib/server-utils";
+import { requireSpecificPatient } from "@/lib/auth-guard";
 
 const Appointment = async ({ params: { userId } }: SearchParamProps) => {
-  // const patient = await getPatient(userId);
-  const { response, data: userInfo } = await getUserInfoWithHeaders();
-  const patientId = userInfo?.roles?.includes("User") && userInfo?.id;
-  console.log("user info: ", response, userInfo);
+  // Ensure only the specific patient can access their own data
+  const { userInfo } = await requireSpecificPatient(userId);
+  const patientId = userInfo?.id;
+  console.log("user info: ", userInfo);
 
   return (
     <div className="flex h-screen max-h-screen">
