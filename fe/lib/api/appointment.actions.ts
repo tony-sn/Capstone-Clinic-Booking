@@ -3,11 +3,18 @@
 import { revalidatePath } from "next/cache";
 
 import { Endpoints } from "@/lib/app.config";
+import type {
+  AppointmentsResponse,
+  AppointmentResponse,
+  AppointmentParams,
+} from "@/types/appointment";
 
-export const getAllAppointment = async ({ pageSize = 5, pageNumber = 1 }) => {
+export const getAllAppointment = async (
+  params: AppointmentParams = { pageSize: 5, pageNumber: 1 }
+): Promise<AppointmentsResponse> => {
   try {
     const res = await fetch(
-      `${Endpoints.APPOINTMENT}?pageSize=${pageSize}&pageNumber=${pageNumber}`,
+      `${Endpoints.APPOINTMENT}?pageSize=${params.pageSize}&pageNumber=${params.pageNumber}`,
       { cache: "no-store" }
     );
 
@@ -15,14 +22,24 @@ export const getAllAppointment = async ({ pageSize = 5, pageNumber = 1 }) => {
       throw new Error("Failed to fetch appointments");
     }
 
-    const data = await res.json();
-    console.log("get all appointment: ", { data });
+    const data: AppointmentsResponse = await res.json();
     return data;
   } catch (error) {
     console.error(
       "An error occurred while retrieving all appointments:",
       error
     );
+    return {
+      status: 500,
+      message: "Error fetching appointments",
+      data: [],
+      pagination: {
+        pageNumber: params.pageNumber ?? 1,
+        pageSize: params.pageSize ?? 5,
+        totalItems: 0,
+        totalPages: 0,
+      },
+    };
   }
 };
 
@@ -62,7 +79,7 @@ export const getAppointmentsByMedicalHistoryId = async (
   }
 };
 
-export const getAppointmentById = async (id: number) => {
+export const getAppointmentById = async (id: number): Promise<AppointmentResponse> => {
   const res = await fetch(`${Endpoints.APPOINTMENT}/${id}`, {
     cache: "no-store",
   });
@@ -71,7 +88,44 @@ export const getAppointmentById = async (id: number) => {
     throw new Error("Failed to fetch appointment by ID");
   }
 
-  return res.json();
+  const data: AppointmentResponse = await res.json();
+  return data;
+};
+
+export const getAppointmentsByPatientId = async (
+  patientId: number,
+  params: AppointmentParams = { pageSize: 0, pageNumber: 1 }
+): Promise<AppointmentsResponse> => {
+  try {
+    const allAppointments = await getAllAppointment(params);
+    
+    const filteredData = allAppointments.data.filter(
+      (appointment) => appointment.bookByUserId === patientId
+    );
+
+    return {
+      ...allAppointments,
+      data: filteredData,
+      pagination: {
+        ...allAppointments.pagination,
+        totalItems: filteredData.length,
+        totalPages: Math.ceil(filteredData.length / (params.pageSize || 10)),
+      },
+    };
+  } catch (error) {
+    console.error("An error occurred while retrieving patient appointments:", error);
+    return {
+      status: 500,
+      message: "Error fetching patient appointments",
+      data: [],
+      pagination: {
+        pageNumber: params.pageNumber ?? 1,
+        pageSize: params.pageSize ?? 5,
+        totalItems: 0,
+        totalPages: 0,
+      },
+    };
+  }
 };
 
 export const createAppointment = async (formData: FormData) => {

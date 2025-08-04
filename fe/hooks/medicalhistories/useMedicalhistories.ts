@@ -3,6 +3,7 @@ import { useInfiniteQuery, useQuery } from "@tanstack/react-query";
 import {
   getAllMedicalHistory,
   getMedicalHistoryById,
+  getMedicalHistoryByPatientId,
 } from "@/lib/api/medical-history.action";
 import type {
   MedicalHistoriesResponse,
@@ -48,4 +49,19 @@ export const useMedicalDetail = ({
   useQuery<MedicalHistoryResponse>({
     queryKey: ["medicalHistory", medicalHistoryId],
     queryFn: () => getMedicalHistoryById(medicalHistoryId),
+  });
+
+export const usePatientMedicalHistories = ({
+  patientId,
+  pageSize = 5,
+  pageNumber = 1,
+}: {
+  patientId: number;
+  pageSize?: number;
+  pageNumber?: number;
+}) =>
+  useQuery<MedicalHistoriesResponse | undefined>({
+    queryKey: ["patientMedicalHistories", patientId, pageSize, pageNumber],
+    queryFn: () => getMedicalHistoryByPatientId(patientId, { pageSize, pageNumber }),
+    enabled: !!patientId,
   });

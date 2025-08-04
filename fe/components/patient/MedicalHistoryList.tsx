@@ -2,12 +2,15 @@
 
 import { useState } from "react";
 
+import AppointmentDetail from "./AppointmentDetail";
+import MedicalHistoryDetail from "./MedicalHistoryDetail";
+
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { usePatientAppointments } from "@/hooks/appointments/useAppointments";
+import type { Appointment } from "@/types/appointment";
 import type { MedicalHistoriesResponse } from "@/types/medicalHistory";
-
-import MedicalHistoryDetail from "./MedicalHistoryDetail";
 
 interface MedicalHistoryListProps {
   medicalHistoryData: MedicalHistoriesResponse;
@@ -21,10 +24,27 @@ export default function MedicalHistoryList({
   const [selectedHistoryId, setSelectedHistoryId] = useState<number | null>(
     null
   );
+  const [selectedAppointmentHistoryId, setSelectedAppointmentHistoryId] =
+    useState<number | null>(null);
+
+  const { data: appointmentsData } = usePatientAppointments({
+    patientId,
+    pageSize: 0,
+    pageNumber: 1,
+  });
 
   const filteredData = medicalHistoryData.data.filter(
     (history) => history.patientId === patientId && history.active
   );
+
+  // Helper function to find appointment by medical history ID
+  const findAppointmentByMedicalHistoryId = (
+    medicalHistoryId: number
+  ): Appointment | undefined => {
+    return appointmentsData?.data.find(
+      (appointment) => appointment.medicalHistoryId === medicalHistoryId
+    );
+  };
 
   if (selectedHistoryId) {
     return (
@@ -35,12 +55,21 @@ export default function MedicalHistoryList({
     );
   }
 
+  if (selectedAppointmentHistoryId) {
+    return (
+      <AppointmentDetail
+        medicalHistoryId={selectedAppointmentHistoryId}
+        onBack={() => setSelectedAppointmentHistoryId(null)}
+      />
+    );
+  }
+
   return (
     <div className="space-y-4">
       {filteredData.length === 0 ? (
         <Card>
           <CardContent className="p-6">
-            <p className="py-8 text-center text-muted-foreground">
+            <p className="text-muted-foreground py-8 text-center">
               No medical history records found.
               <br />
               Your medical records will appear here once you have appointments.
@@ -89,7 +118,7 @@ export default function MedicalHistoryList({
                     </span>
                   </div>
                 )}
-                <div className="pt-4">
+                <div className="flex gap-2 pt-4">
                   <Button
                     onClick={() =>
                       setSelectedHistoryId(history.medicalHistoryId)
@@ -98,6 +127,20 @@ export default function MedicalHistoryList({
                   >
                     View Details
                   </Button>
+                  {findAppointmentByMedicalHistoryId(
+                    history.medicalHistoryId
+                  ) && (
+                    <Button
+                      onClick={() =>
+                        setSelectedAppointmentHistoryId(
+                          history.medicalHistoryId
+                        )
+                      }
+                      variant="secondary"
+                    >
+                      View Appointment
+                    </Button>
+                  )}
                 </div>
               </div>
             </CardContent>
