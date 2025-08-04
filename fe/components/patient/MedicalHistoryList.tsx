@@ -2,15 +2,15 @@
 
 import { useState } from "react";
 
-import AppointmentDetail from "./AppointmentDetail";
-import MedicalHistoryDetail from "./MedicalHistoryDetail";
-
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { usePatientAppointments } from "@/hooks/appointments/useAppointments";
 import type { Appointment } from "@/types/appointment";
 import type { MedicalHistoriesResponse } from "@/types/medicalHistory";
+
+import AppointmentDetail from "./AppointmentDetail";
+import MedicalHistoryDetail from "./MedicalHistoryDetail";
 
 interface MedicalHistoryListProps {
   medicalHistoryData: MedicalHistoriesResponse;
@@ -69,7 +69,7 @@ export default function MedicalHistoryList({
       {filteredData.length === 0 ? (
         <Card>
           <CardContent className="p-6">
-            <p className="text-muted-foreground py-8 text-center">
+            <p className="py-8 text-center text-muted-foreground">
               No medical history records found.
               <br />
               Your medical records will appear here once you have appointments.

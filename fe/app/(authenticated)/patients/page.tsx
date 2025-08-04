@@ -1,10 +1,10 @@
 import { requireStaffRole } from "@/lib/auth-guard";
 
-import MedicinePageClient from "./page.client";
+import PatientsContent from "./PatientsContent";
 
-export default async function MedicinePage() {
+export default async function PatientsPage() {
   // Protect this page - only allow staff roles
   await requireStaffRole();
 
-  return <MedicinePageClient />;
+  return <PatientsContent />;
 }

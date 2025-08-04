@@ -1,6 +1,6 @@
-import PatientPageContent from "./PatientPageContent";
-
 import { requireSpecificPatient } from "@/lib/auth-guard";
+
+import PatientPageContent from "./PatientPageContent";
 
 export default async function PatientPage({
   params,

@@ -8,9 +8,9 @@ interface PatientPageContentProps {
 
 // Loading state component
 const LoadingState = () => (
-  <div className="bg-card text-card-foreground rounded-lg border shadow-sm">
+  <div className="rounded-lg border bg-card text-card-foreground shadow-sm">
     <div className="p-6">
-      <p className="text-muted-foreground py-8 text-center">
+      <p className="py-8 text-center text-muted-foreground">
         Loading medical history...
       </p>
     </div>
@@ -19,7 +19,7 @@ const LoadingState = () => (
 
 // Error state component
 const ErrorState = () => (
-  <div className="bg-card text-card-foreground rounded-lg border shadow-sm">
+  <div className="rounded-lg border bg-card text-card-foreground shadow-sm">
     <div className="p-6">
       <p className="py-8 text-center text-red-500">
         Error loading medical history. Please try again.
@@ -30,9 +30,9 @@ const ErrorState = () => (
 
 // Empty state component
 const EmptyState = () => (
-  <div className="bg-card text-card-foreground rounded-lg border shadow-sm">
+  <div className="rounded-lg border bg-card text-card-foreground shadow-sm">
     <div className="p-6">
-      <p className="text-muted-foreground py-8 text-center">
+      <p className="py-8 text-center text-muted-foreground">
         No medical history data available.
         <br />
         Your medical records will appear here once you have appointments.

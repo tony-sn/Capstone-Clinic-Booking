@@ -51,17 +51,21 @@ export const useMedicalDetail = ({
     queryFn: () => getMedicalHistoryById(medicalHistoryId),
   });
 
-export const usePatientMedicalHistories = ({
-  patientId,
-  pageSize = 5,
-  pageNumber = 1,
-}: {
-  patientId: number;
-  pageSize?: number;
-  pageNumber?: number;
-}) =>
+export const usePatientMedicalHistories = (
+  {
+    patientId,
+    pageSize = 5,
+    pageNumber = 1,
+  }: {
+    patientId: number;
+    pageSize?: number;
+    pageNumber?: number;
+  },
+  options?: { enabled?: boolean }
+) =>
   useQuery<MedicalHistoriesResponse | undefined>({
     queryKey: ["patientMedicalHistories", patientId, pageSize, pageNumber],
-    queryFn: () => getMedicalHistoryByPatientId(patientId, { pageSize, pageNumber }),
-    enabled: !!patientId,
+    queryFn: () =>
+      getMedicalHistoryByPatientId(patientId, { pageSize, pageNumber }),
+    enabled: !!patientId && options?.enabled !== false,
   });
