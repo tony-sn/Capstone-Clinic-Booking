@@ -1,4 +1,17 @@
-function PatientPage() {
+import { requireSpecificPatient } from "@/lib/auth-guard";
+
+export default async function PatientPage({
+  params,
+}: {
+  params: { userId: string };
+}) {
+  // Ensure only the specific patient can access their own data
+  await requireSpecificPatient(params.userId);
+
+  return <PatientPageContent />;
+}
+
+function PatientPageContent() {
   return (
     <div className="mx-auto w-full max-w-7xl">
       <div className="space-y-6">
@@ -25,5 +38,3 @@ function PatientPage() {
     </div>
   );
 }
-
-export default PatientPage;

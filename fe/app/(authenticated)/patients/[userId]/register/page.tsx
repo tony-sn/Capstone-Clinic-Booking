@@ -7,8 +7,12 @@ import {
   getPatient,
   // getUser
 } from "@/lib/actions/patient.actions";
+import { requireSpecificPatient } from "@/lib/auth-guard";
 
 const Register = async ({ params: { userId } }: SearchParamProps) => {
+  // Ensure only the specific patient can access their own data
+  await requireSpecificPatient(userId);
+
   // const user = await getUser(userId);
   const patient = await getPatient(userId);
 
