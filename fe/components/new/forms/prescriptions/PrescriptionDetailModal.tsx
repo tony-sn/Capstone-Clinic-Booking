@@ -9,7 +9,7 @@ import {
   DialogTitle,
   DialogFooter,
 } from "@/components/ui/dialog";
-import { medicalDetail } from "@/hooks/medicalhistories/useMedicalhistories";
+import { useMedicalDetail } from "@/hooks/medicalhistories/useMedicalhistories";
 import { useGetPrescriptionDetail } from "@/hooks/prescriptions/usePrescriptions";
 import { getPrescriptionById } from "@/lib/api/prescription.actions";
 
@@ -29,9 +29,10 @@ export default function PrescriptionDetailModal({
   // eslint-disable-next-line
   const [data, setData] = useState<any | null>(null);
 
-  const { data: medicalHistory, isLoading: isMedicalLoading } = medicalDetail({
-    medicalHistoryId,
-  });
+  const { data: medicalHistory, isLoading: isMedicalLoading } =
+    useMedicalDetail({
+      medicalHistoryId,
+    });
   const {
     data: prescriptionDetailData,
     isLoading: isPrescriptionDetailLoading,
