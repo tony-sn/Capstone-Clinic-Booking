@@ -1,9 +1,9 @@
 import { useInfiniteQuery, useQuery } from "@tanstack/react-query";
 
-import { 
-  getAllAppointment, 
+import {
+  getAllAppointment,
   getAppointmentById,
-  getAppointmentsByPatientId 
+  getAppointmentsByPatientId,
 } from "@/lib/api/appointment.actions";
 import type {
   AppointmentsResponse,
@@ -38,19 +38,23 @@ export const useInfiniteAppointments = (pageSize = 5) =>
     initialPageParam: 1,
   });
 
-export const usePatientAppointments = ({
-  patientId,
-  pageSize = 5,
-  pageNumber = 1,
-}: {
-  patientId: number;
-  pageSize?: number;
-  pageNumber?: number;
-}) =>
+export const usePatientAppointments = (
+  {
+    patientId,
+    pageSize = 5,
+    pageNumber = 1,
+  }: {
+    patientId: number;
+    pageSize?: number;
+    pageNumber?: number;
+  },
+  options?: { enabled?: boolean }
+) =>
   useQuery<AppointmentsResponse | undefined>({
     queryKey: ["patientAppointments", patientId, pageSize, pageNumber],
-    queryFn: () => getAppointmentsByPatientId(patientId, { pageSize, pageNumber }),
-    enabled: !!patientId,
+    queryFn: () =>
+      getAppointmentsByPatientId(patientId, { pageSize, pageNumber }),
+    enabled: !!patientId && options?.enabled !== false,
   });
 
 export const useAppointmentDetail = ({
