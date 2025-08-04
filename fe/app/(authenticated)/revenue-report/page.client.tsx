@@ -71,7 +71,7 @@ function RevenueReportContent() {
   }));
 
   return (
-    <div className="mx-auto max-w-6xl p-8">
+    <div className="mx-auto max-w-screen-xl p-8">
       <div className="mb-6 flex items-center justify-between">
         <h1 className="text-2xl font-bold">Revenue Report</h1>
         <select
@@ -103,9 +103,9 @@ function RevenueReportContent() {
             })}
           </div>
 
-          <div className="grid grid-cols-1 gap-8 md:grid-cols-2">
+          <div className="grid grid-cols-1 gap-8">
             {/* Bar Chart */}
-            <div className="rounded-xl bg-white p-4 shadow-md">
+            <div className="w-full min-w-0 rounded-xl bg-white p-4 shadow-md">
               <h2 className="mb-4 font-semibold">Revenue Bar Chart</h2>
               <ResponsiveContainer width="100%" height={300}>
                 <BarChart data={chartData}>
@@ -125,7 +125,7 @@ function RevenueReportContent() {
             </div>
 
             {/* Line Chart */}
-            <div className="rounded-xl bg-white p-4 shadow-md">
+            <div className="w-full min-w-0 rounded-xl bg-white p-4 shadow-md">
               <h2 className="mb-4 font-semibold">Revenue Line Chart</h2>
               <ResponsiveContainer width="100%" height={300}>
                 <LineChart data={chartData}>
@@ -152,7 +152,7 @@ function RevenueReportContent() {
           </div>
 
           {/* Pie Chart */}
-          <div className="mt-8 rounded-xl bg-white p-4 shadow-md">
+          <div className="mt-8 w-full min-w-0 rounded-xl bg-white p-4 shadow-md">
             <h2 className="mb-4 font-semibold">Revenue Distribution</h2>
             <ResponsiveContainer width="100%" height={300}>
               <PieChart>
