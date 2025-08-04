@@ -34,8 +34,8 @@
   },
   "lint-staged": {
     "fe/**/*.{js,jsx,ts,tsx}": [
-      "cd fe && pnpm lint-fe",
-      "cd fe && pnpm exec prettier --write"
+      "pnpm --filter fe lint-fe",
+      "pnpm --filter fe exec prettier --write"
     ],
     "fe/**/*": "pnpm --filter fe exec prettier --write --ignore-unknown"
   },

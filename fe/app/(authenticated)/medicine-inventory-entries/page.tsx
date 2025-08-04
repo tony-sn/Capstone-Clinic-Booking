@@ -15,7 +15,7 @@ function MedicineInventoryEntryPageContent() {
     isFetchingNextPage,
   } = useInfiniteMedicineInventoryEntries();
 
-  const entries = flattenPages<any>(data?.pages || []);
+  const entries = flattenPages(data?.pages || []);
 
   return (
     <div className="p-6">

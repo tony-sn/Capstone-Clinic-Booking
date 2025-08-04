@@ -2,8 +2,8 @@ import { ReactNode } from "react";
 
 interface MotionProps {
   children: ReactNode;
-  initial?: Record<string, any>;
-  animate?: Record<string, any>;
+  initial?: Record<string, string | number>;
+  animate?: Record<string, string | number>;
   transition?: {
     duration?: number;
     delay?: number;
@@ -12,7 +12,7 @@ interface MotionProps {
 }
 
 export const motion = {
-  div: ({ children, initial, animate, transition, className }: MotionProps) => {
+  div: ({ children, transition, className }: MotionProps) => {
     return (
       <div
         className={className}

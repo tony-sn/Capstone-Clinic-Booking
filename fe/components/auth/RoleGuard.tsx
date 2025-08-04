@@ -20,7 +20,7 @@ export default function RoleGuard({
 }: RoleGuardProps) {
   const router = useRouter();
   const [isAuthorized, setIsAuthorized] = useState<boolean | null>(null);
-  const [userRole, setUserRole] = useState<UserRole | null>(null);
+  const [, setUserRole] = useState<UserRole | null>(null);
 
   useEffect(() => {
     const checkRole = async () => {

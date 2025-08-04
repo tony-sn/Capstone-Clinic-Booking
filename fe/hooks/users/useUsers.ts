@@ -1,7 +1,11 @@
-import { useInfiniteQuery, useQuery } from "@tanstack/react-query";
+import { useQuery } from "@tanstack/react-query";
 
-import { getAllDoctor, getAllUsers, getUsersByRole } from "@/lib/api/user.action"; // Import client functions
-import type {User} from "@/types/user";
+import {
+  getAllDoctor,
+  getAllUsers,
+  getUsersByRole,
+} from "@/lib/api/user.action"; // Import client functions
+import type { User } from "@/types/user";
 // Hook to get all doctors only
 export const useDoctors = () => {
   return useQuery({
@@ -43,11 +47,11 @@ export const useUsersWithRoles = (roles: string[]) => {
     queryFn: async () => {
       const users = await getAllUsers();
       const result: Record<string, User[]> = {};
-      
-      roles.forEach(role => {
+
+      roles.forEach((role) => {
         result[role] = getUsersByRole(users, role);
       });
-      
+
       return result;
     },
     enabled: roles.length > 0,
@@ -65,21 +69,22 @@ export const useFilteredUsers = (filters?: {
     queryKey: ["users", "filtered", filters],
     queryFn: async () => {
       let users = await getAllUsers();
-      
+
       // Filter by role if provided
       if (filters?.role) {
         users = getUsersByRole(users, filters.role);
       }
-      
+
       // Filter by search term if provided
       if (filters?.searchTerm) {
         const searchLower = filters.searchTerm.toLowerCase();
-        users = users.filter(user => 
-          user.username.toLowerCase().includes(searchLower) ||
-          user.id.toString().includes(searchLower)
+        users = users.filter(
+          (user) =>
+            user.username.toLowerCase().includes(searchLower) ||
+            user.id.toString().includes(searchLower)
         );
       }
-      
+
       return users;
     },
     staleTime: 5 * 60 * 1000,
@@ -94,7 +99,7 @@ export const usePatients = () => useUsersByRole("User"); // Hook for patients (a
 // Hook with refetch function for after mutations
 export const useDoctorsWithRefetch = () => {
   const query = useDoctors();
-  
+
   return {
     ...query,
     refetchDoctors: query.refetch,

@@ -1,6 +1,6 @@
-import { requireSpecificPatient } from "@/lib/auth-guard";
-import { getAllMedicalHistory } from "@/lib/api/medical-history.action";
 import MedicalHistoryList from "@/components/patient/MedicalHistoryList";
+import { getAllMedicalHistory } from "@/lib/api/medical-history.action";
+import { requireSpecificPatient } from "@/lib/auth-guard";
 
 export default async function PatientMedicalHistoryPage({
   params,
@@ -8,8 +8,8 @@ export default async function PatientMedicalHistoryPage({
   params: { userId: string };
 }) {
   // Ensure only the specific patient can access their own medical history
-  const { userInfo } = await requireSpecificPatient(params.userId);
-  
+  await requireSpecificPatient(params.userId);
+
   // Fetch medical history data
   const medicalHistoryData = await getAllMedicalHistory({
     pageSize: 10,
@@ -28,7 +28,7 @@ export default async function PatientMedicalHistoryPage({
           </p>
         </div>
 
-        <MedicalHistoryList 
+        <MedicalHistoryList
           medicalHistoryData={medicalHistoryData}
           patientId={parseInt(params.userId)}
         />

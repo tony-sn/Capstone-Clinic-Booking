@@ -492,7 +492,7 @@ function MedicalHistoryLayoutContent({
           <div className="flex min-h-screen items-center justify-center px-4 pb-20 pt-4 text-center sm:block sm:p-0">
             {/* Backdrop */}
             <div
-              className="fixed inset-0 bg-gray-500 bg-opacity-75 transition-opacity"
+              className="fixed inset-0 bg-gray-500/75 transition-opacity"
               onClick={handleCloseDetailModal}
             />
 

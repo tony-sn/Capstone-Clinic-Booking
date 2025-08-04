@@ -26,7 +26,9 @@ export const getAllAppointment = async ({ pageSize = 5, pageNumber = 1 }) => {
   }
 };
 
-export const getAppointmentsByMedicalHistoryId = async (medicalHistoryId: number) => {
+export const getAppointmentsByMedicalHistoryId = async (
+  medicalHistoryId: number
+) => {
   try {
     const res = await fetch(
       `${Endpoints.APPOINTMENT}?pageSize=0&pageNumber=1`,
@@ -38,15 +40,18 @@ export const getAppointmentsByMedicalHistoryId = async (medicalHistoryId: number
     }
 
     const data = await res.json();
-    
+
     // Filter appointments by medicalHistoryId on the client side
-    const filteredAppointments = data.data ? 
-      data.data.filter((appointment: any) => appointment.medicalHistoryId === medicalHistoryId) :
-      [];
+    const filteredAppointments = data.data
+      ? data.data.filter(
+          (appointment: { medicalHistoryId: number }) =>
+            appointment.medicalHistoryId === medicalHistoryId
+        )
+      : [];
 
     return {
       ...data,
-      data: filteredAppointments
+      data: filteredAppointments,
     };
   } catch (error) {
     console.error(

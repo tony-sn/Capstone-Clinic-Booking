@@ -1,11 +1,15 @@
 "use client";
 
-import { useState, useEffect } from "react";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { Button } from "@/components/ui/button";
-import { Badge } from "@/components/ui/badge";
 import { ArrowLeft, Calendar, Clock, DollarSign } from "lucide-react";
-import { getAppointmentsByMedicalHistoryId, getAppointmentById } from "@/lib/api/appointment.actions";
+import { useState, useEffect } from "react";
+
+import { Badge } from "@/components/ui/badge";
+import { Button } from "@/components/ui/button";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import {
+  getAppointmentsByMedicalHistoryId,
+  getAppointmentById,
+} from "@/lib/api/appointment.actions";
 import type { Appointment } from "@/types/appointment";
 
 interface AppointmentDetailProps {
@@ -18,7 +22,8 @@ export default function AppointmentDetail({
   onBack,
 }: AppointmentDetailProps) {
   const [appointments, setAppointments] = useState<Appointment[]>([]);
-  const [selectedAppointment, setSelectedAppointment] = useState<Appointment | null>(null);
+  const [selectedAppointment, setSelectedAppointment] =
+    useState<Appointment | null>(null);
   const [loading, setLoading] = useState(true);
   const [loadingDetail, setLoadingDetail] = useState(false);
   const [error, setError] = useState<string | null>(null);
@@ -27,7 +32,8 @@ export default function AppointmentDetail({
     const fetchAppointments = async () => {
       try {
         setLoading(true);
-        const response = await getAppointmentsByMedicalHistoryId(medicalHistoryId);
+        const response =
+          await getAppointmentsByMedicalHistoryId(medicalHistoryId);
         setAppointments(response.data || []);
       } catch (err) {
         setError("Failed to load appointments");
@@ -70,7 +76,7 @@ export default function AppointmentDetail({
     const date = new Date(dateTime);
     return {
       date: date.toLocaleDateString(),
-      time: date.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })
+      time: date.toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" }),
     };
   };
 
@@ -78,9 +84,13 @@ export default function AppointmentDetail({
     return (
       <Card>
         <CardContent className="p-6">
-          <div className="flex items-center justify-between mb-4">
-            <Button variant="ghost" onClick={onBack} className="flex items-center gap-2">
-              <ArrowLeft className="h-4 w-4" />
+          <div className="mb-4 flex items-center justify-between">
+            <Button
+              variant="ghost"
+              onClick={onBack}
+              className="flex items-center gap-2"
+            >
+              <ArrowLeft className="size-4" />
               Back to Medical History
             </Button>
           </div>
@@ -96,13 +106,17 @@ export default function AppointmentDetail({
     return (
       <Card>
         <CardContent className="p-6">
-          <div className="flex items-center justify-between mb-4">
-            <Button variant="ghost" onClick={onBack} className="flex items-center gap-2">
-              <ArrowLeft className="h-4 w-4" />
+          <div className="mb-4 flex items-center justify-between">
+            <Button
+              variant="ghost"
+              onClick={onBack}
+              className="flex items-center gap-2"
+            >
+              <ArrowLeft className="size-4" />
               Back to Medical History
             </Button>
           </div>
-          <div className="text-center py-8 text-red-500">{error}</div>
+          <div className="py-8 text-center text-red-500">{error}</div>
         </CardContent>
       </Card>
     );
@@ -116,12 +130,12 @@ export default function AppointmentDetail({
       <Card>
         <CardHeader>
           <div className="flex items-center justify-between">
-            <Button 
-              variant="ghost" 
-              onClick={() => setSelectedAppointment(null)} 
+            <Button
+              variant="ghost"
+              onClick={() => setSelectedAppointment(null)}
               className="flex items-center gap-2"
             >
-              <ArrowLeft className="h-4 w-4" />
+              <ArrowLeft className="size-4" />
               Back to Appointments
             </Button>
             <CardTitle>Appointment #{selectedAppointment.id}</CardTitle>
@@ -130,52 +144,80 @@ export default function AppointmentDetail({
         <CardContent className="space-y-6">
           {loadingDetail ? (
             <div className="flex items-center justify-center py-8">
-              <div className="text-muted-foreground">Loading appointment details...</div>
+              <div className="text-muted-foreground">
+                Loading appointment details...
+              </div>
             </div>
           ) : (
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <div className="grid grid-cols-1 gap-6 md:grid-cols-2">
               <div>
-                <h3 className="text-lg font-semibold mb-3 flex items-center gap-2">
-                  <Calendar className="h-5 w-5" />
+                <h3 className="mb-3 flex items-center gap-2 text-lg font-semibold">
+                  <Calendar className="size-5" />
                   Schedule Information
                 </h3>
                 <div className="space-y-3">
                   <div>
-                    <label className="text-sm font-medium text-muted-foreground">Start Date & Time</label>
-                    <p className="mt-1">{startDateTime.date} at {startDateTime.time}</p>
+                    <label className="text-sm font-medium text-muted-foreground">
+                      Start Date & Time
+                    </label>
+                    <p className="mt-1">
+                      {startDateTime.date} at {startDateTime.time}
+                    </p>
                   </div>
                   <div>
-                    <label className="text-sm font-medium text-muted-foreground">End Date & Time</label>
-                    <p className="mt-1">{endDateTime.date} at {endDateTime.time}</p>
+                    <label className="text-sm font-medium text-muted-foreground">
+                      End Date & Time
+                    </label>
+                    <p className="mt-1">
+                      {endDateTime.date} at {endDateTime.time}
+                    </p>
                   </div>
                   <div>
-                    <label className="text-sm font-medium text-muted-foreground">Status</label>
-                    <div className="mt-1">{getStatusBadge(selectedAppointment.appointmentStatus)}</div>
+                    <label className="text-sm font-medium text-muted-foreground">
+                      Status
+                    </label>
+                    <div className="mt-1">
+                      {getStatusBadge(selectedAppointment.appointmentStatus)}
+                    </div>
                   </div>
                 </div>
               </div>
-              
+
               <div>
-                <h3 className="text-lg font-semibold mb-3 flex items-center gap-2">
-                  <DollarSign className="h-5 w-5" />
+                <h3 className="mb-3 flex items-center gap-2 text-lg font-semibold">
+                  <DollarSign className="size-5" />
                   Additional Details
                 </h3>
                 <div className="space-y-3">
                   <div>
-                    <label className="text-sm font-medium text-muted-foreground">Doctor ID</label>
+                    <label className="text-sm font-medium text-muted-foreground">
+                      Doctor ID
+                    </label>
                     <p className="mt-1">{selectedAppointment.doctorId}</p>
                   </div>
                   <div>
-                    <label className="text-sm font-medium text-muted-foreground">Booked By</label>
-                    <p className="mt-1">User #{selectedAppointment.bookByUserId}</p>
+                    <label className="text-sm font-medium text-muted-foreground">
+                      Booked By
+                    </label>
+                    <p className="mt-1">
+                      User #{selectedAppointment.bookByUserId}
+                    </p>
                   </div>
                   <div>
-                    <label className="text-sm font-medium text-muted-foreground">Price</label>
-                    <p className="mt-1">${selectedAppointment.price.toFixed(2)}</p>
+                    <label className="text-sm font-medium text-muted-foreground">
+                      Price
+                    </label>
+                    <p className="mt-1">
+                      ${selectedAppointment.price.toFixed(2)}
+                    </p>
                   </div>
                   <div>
-                    <label className="text-sm font-medium text-muted-foreground">Medical History ID</label>
-                    <p className="mt-1">{selectedAppointment.medicalHistoryId || 'Not assigned'}</p>
+                    <label className="text-sm font-medium text-muted-foreground">
+                      Medical History ID
+                    </label>
+                    <p className="mt-1">
+                      {selectedAppointment.medicalHistoryId || "Not assigned"}
+                    </p>
                   </div>
                 </div>
               </div>
@@ -190,8 +232,12 @@ export default function AppointmentDetail({
     <Card>
       <CardHeader>
         <div className="flex items-center justify-between">
-          <Button variant="ghost" onClick={onBack} className="flex items-center gap-2">
-            <ArrowLeft className="h-4 w-4" />
+          <Button
+            variant="ghost"
+            onClick={onBack}
+            className="flex items-center gap-2"
+          >
+            <ArrowLeft className="size-4" />
             Back to Medical History
           </Button>
           <CardTitle>Related Appointments</CardTitle>
@@ -199,42 +245,49 @@ export default function AppointmentDetail({
       </CardHeader>
       <CardContent>
         {appointments.length === 0 ? (
-          <div className="text-center py-8 text-muted-foreground">
+          <div className="py-8 text-center text-muted-foreground">
             No appointments found for this medical history record.
           </div>
         ) : (
           <div className="space-y-4">
             {appointments.map((appointment) => {
               const startDateTime = formatDateTime(appointment.startTime);
-              
+
               return (
-                <Card key={appointment.id} className="hover:shadow-md transition-shadow">
+                <Card
+                  key={appointment.id}
+                  className="transition-shadow hover:shadow-md"
+                >
                   <CardContent className="p-4">
                     <div className="flex items-center justify-between">
                       <div className="space-y-2">
                         <div className="flex items-center gap-2">
-                          <span className="font-medium">Appointment #{appointment.id}</span>
+                          <span className="font-medium">
+                            Appointment #{appointment.id}
+                          </span>
                           {getStatusBadge(appointment.appointmentStatus)}
                         </div>
                         <div className="flex items-center gap-4 text-sm text-muted-foreground">
                           <div className="flex items-center gap-1">
-                            <Calendar className="h-4 w-4" />
+                            <Calendar className="size-4" />
                             {startDateTime.date}
                           </div>
                           <div className="flex items-center gap-1">
-                            <Clock className="h-4 w-4" />
+                            <Clock className="size-4" />
                             {startDateTime.time}
                           </div>
                           <div className="flex items-center gap-1">
-                            <DollarSign className="h-4 w-4" />
-                            ${appointment.price.toFixed(2)}
+                            <DollarSign className="size-4" />$
+                            {appointment.price.toFixed(2)}
                           </div>
                         </div>
                       </div>
-                      <Button 
-                        variant="outline" 
+                      <Button
+                        variant="outline"
                         size="sm"
-                        onClick={() => handleViewAppointmentDetail(appointment.id)}
+                        onClick={() =>
+                          handleViewAppointmentDetail(appointment.id)
+                        }
                       >
                         View Details
                       </Button>

@@ -188,7 +188,7 @@ function TechnicianInfoCard({
   technician,
 }: {
   title: string;
-  technician: any;
+  technician: { name?: string; id?: number; email?: string };
 }) {
   return (
     <div className="rounded-lg border border-gray-200 bg-white p-6 shadow-sm">
