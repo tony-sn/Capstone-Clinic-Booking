@@ -1,6 +1,6 @@
-import { requireStaffRole } from "@/lib/auth-guard";
-
 import MedicalHistoryLayoutClient from "./page.client";
+
+import { requireStaffRole } from "@/lib/auth-guard";
 
 interface MedicalHistoryLayoutProps {
   showFilters?: boolean;
