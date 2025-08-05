@@ -9,7 +9,6 @@ import {
   Plus,
   Edit,
   Trash2,
-  DollarSign,
 } from "lucide-react";
 import React, { useState } from "react";
 
@@ -182,7 +181,6 @@ function MedicinePageContent() {
                   </p>
                   <div className="flex items-center justify-between border-t border-gray-100 pt-4">
                     <div className="flex items-center gap-2">
-                      <DollarSign className="size-4 text-green-600" />
                       <span className="text-lg font-bold text-green-600">
                         {formatCurrency(Number(med.unitPrice))}
                       </span>
