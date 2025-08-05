@@ -1,25 +1,19 @@
 "use client";
 
 import {
-  useState,
-  useCallback,
-  useMemo,
-} from "react";
-import {
-  FileText,
-  Search,
-  Plus,
-  Eye,
-  Edit,
-  RotateCcw,
-  CheckCircle,
   AlertCircle,
+  Edit,
+  Eye,
+  FileText,
+  RotateCcw,
+  Search,
   X,
 } from "lucide-react";
+import { useCallback, useMemo, useState } from "react";
 
-import { useDoctors } from "@/hooks/doctors/useDoctors";
 import DoctorDetailModal from "@/components/new/forms/doctors/DoctorDetailModal";
 import DoctorEditModal from "@/components/new/forms/doctors/DoctorEditModal";
+import { useDoctors } from "@/hooks/doctors/useDoctors";
 import { DoctorDTO } from "@/types/doctor";
 
 export default function DoctorPageContent() {
@@ -29,22 +23,28 @@ export default function DoctorPageContent() {
   const [showDetailModal, setShowDetailModal] = useState(false);
   const [showEditModal, setShowEditModal] = useState(false);
 
-  const { data: doctors = [], isLoading, refetch, error } = useDoctors({
+  const {
+    data: doctors = [],
+    isLoading,
+    refetch,
+    error,
+  } = useDoctors({
     pageSize: 100,
     pageNumber: 1,
   });
 
   const filteredDoctors = useMemo(() => {
-    const doctorList = Array.isArray(doctors) ? doctors : doctors?.data ?? [];
-  
+    const doctorList = Array.isArray(doctors) ? doctors : (doctors?.data ?? []);
+
     if (!searchQuery.trim()) return doctorList;
-  
+
     const query = searchQuery.toLowerCase().trim();
-    return doctorList.filter((doctor) =>
-      doctor.firstName.toLowerCase().includes(query) ||
-      doctor.lastName.toLowerCase().includes(query) ||
-      doctor.certificate.toLowerCase().includes(query) ||
-      doctor.department.name.toLowerCase().includes(query)
+    return doctorList.filter(
+      (doctor) =>
+        doctor.firstName.toLowerCase().includes(query) ||
+        doctor.lastName.toLowerCase().includes(query) ||
+        doctor.certificate.toLowerCase().includes(query) ||
+        doctor.department.name.toLowerCase().includes(query)
     );
   }, [doctors, searchQuery]);
 
@@ -80,9 +80,9 @@ export default function DoctorPageContent() {
 
   if (isLoading) {
     return (
-      <div className="min-h-screen flex items-center justify-center">
+      <div className="flex min-h-screen items-center justify-center">
         <div className="text-center">
-          <div className="animate-spin text-blue-500 mb-2">
+          <div className="mb-2 animate-spin text-blue-500">
             <FileText className="size-10" />
           </div>
           <p className="text-gray-600">Loading doctors...</p>
@@ -93,10 +93,10 @@ export default function DoctorPageContent() {
 
   if (error) {
     return (
-      <div className="min-h-screen flex items-center justify-center">
+      <div className="flex min-h-screen items-center justify-center">
         <div className="text-center">
           <AlertCircle className="mx-auto mb-4 size-12 text-red-500" />
-          <p className="text-gray-700 mb-4">Failed to load doctor list.</p>
+          <p className="mb-4 text-gray-700">Failed to load doctor list.</p>
           <button
             onClick={() => refetch()}
             className="flex items-center gap-2 rounded bg-blue-600 px-4 py-2 text-white"
@@ -113,7 +113,7 @@ export default function DoctorPageContent() {
     <div className="min-h-screen bg-gradient-to-br from-blue-50 to-white p-6">
       <div className="mx-auto max-w-6xl">
         <div className="mb-6">
-          <div className="flex items-center justify-between mb-4">
+          <div className="mb-4 flex items-center justify-between">
             <div className="flex items-center gap-4">
               <div className="rounded-xl bg-blue-600 p-3">
                 <FileText className="size-8 text-white" />
@@ -127,21 +127,21 @@ export default function DoctorPageContent() {
             </div>
           </div>
 
-          <div className="mb-4 relative">
-            <div className="absolute inset-y-0 left-0 flex items-center pl-4 pointer-events-none">
+          <div className="relative mb-4">
+            <div className="pointer-events-none absolute inset-y-0 left-0 flex items-center pl-4">
               <Search className="size-5 text-gray-400" />
             </div>
             <input
               type="text"
               placeholder="Search by name, certificate or department..."
-              className="w-full rounded-xl border border-gray-200 bg-gray-50 py-3 pl-12 pr-12 text-gray-700 focus:border-blue-400 focus:bg-white focus:outline-none focus:ring-2 focus:ring-blue-200"
+              className="w-full rounded-xl border border-gray-200 bg-gray-50 px-12 py-3 text-gray-700 focus:border-blue-400 focus:bg-white focus:outline-none focus:ring-2 focus:ring-blue-200"
               value={searchQuery}
               onChange={(e) => handleSearchChange(e.target.value)}
             />
             {searchQuery && (
               <button
                 onClick={handleClearSearch}
-                className="absolute inset-y-0 right-0 pr-4 flex items-center"
+                className="absolute inset-y-0 right-0 flex items-center pr-4"
               >
                 <X className="size-5 text-gray-400 hover:text-gray-600" />
               </button>
@@ -153,7 +153,7 @@ export default function DoctorPageContent() {
           {filteredDoctors.map((doctor: DoctorDTO) => (
             <div
               key={doctor.id}
-              className="rounded-xl bg-white p-6 shadow-md flex justify-between items-center hover:shadow-lg"
+              className="flex items-center justify-between rounded-xl bg-white p-6 shadow-md hover:shadow-lg"
             >
               <div>
                 <h2 className="text-lg font-semibold text-gray-800">
@@ -168,9 +168,9 @@ export default function DoctorPageContent() {
                 <p className="text-sm text-gray-600">
                   Status:{" "}
                   {doctor.active ? (
-                    <span className="text-green-600 font-medium">Active</span>
+                    <span className="font-medium text-green-600">Active</span>
                   ) : (
-                    <span className="text-red-500 font-medium">Inactive</span>
+                    <span className="font-medium text-red-500">Inactive</span>
                   )}
                 </p>
               </div>
@@ -194,7 +194,7 @@ export default function DoctorPageContent() {
           ))}
 
           {filteredDoctors.length === 0 && (
-            <div className="text-center text-gray-600 py-16">
+            <div className="py-16 text-center text-gray-600">
               <Search className="mx-auto mb-4 size-12 text-gray-400" />
               No doctors found.
             </div>
@@ -207,7 +207,11 @@ export default function DoctorPageContent() {
       )}
 
       {showEditModal && editingDoctor && (
-        <DoctorEditModal doctor={editingDoctor} onClose={handleCloseModal} onSuccess={handleSuccess} />
+        <DoctorEditModal
+          doctor={editingDoctor}
+          onClose={handleCloseModal}
+          onSuccess={handleSuccess}
+        />
       )}
     </div>
   );

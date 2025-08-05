@@ -5,7 +5,7 @@
   "scripts": {
     "dev": "next dev",
     "dev:turbo": "next dev --turbopack",
-    "lint-fe": "eslint . --cache --ext .js,.jsx,.ts,.tsx",
+    "lint-fe": "eslint --fix --cache --ext .js,.jsx,.ts,.tsx",
     "build": "next build",
     "start": "next start",
     "lint": "next lint"
