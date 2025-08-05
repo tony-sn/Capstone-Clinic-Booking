@@ -289,7 +289,7 @@ function MedicalHistoryLayoutContent({
               onClick={handleCloseDetailModal}
             />
             {/* Modal Content */}
-            <div className="my-8 inline-block w-full max-w-4xl overflow-hidden rounded-2xl bg-white text-left align-middle shadow-xl transition-all">
+            <div className="relative z-10 my-8 inline-block w-full max-w-4xl overflow-hidden rounded-2xl bg-white text-left align-middle shadow-xl transition-all">
               <MedicalHistoryReportDetail
                 medicalHistoryId={selectedReport.medicalHistoryId}
                 laboratoryTestId={selectedReport.laboratoryTestId}
@@ -413,12 +413,14 @@ function ReportCard({
         <div className="mb-4 flex gap-3">
           <div className="rounded-lg border border-blue-100 bg-blue-50 px-3 py-1">
             <span className="text-xs font-medium text-blue-600">
-              Test ID: {highlightText(report.laboratoryTestId.toString(), searchQuery)}
+              Test ID:{" "}
+              {highlightText(report.laboratoryTestId.toString(), searchQuery)}
             </span>
           </div>
           <div className="rounded-lg border border-blue-100 bg-blue-50 px-3 py-1">
             <span className="text-xs font-medium text-blue-600">
-              Medical History ID: {highlightText(report.medicalHistoryId.toString(), searchQuery)}
+              Medical History ID:{" "}
+              {highlightText(report.medicalHistoryId.toString(), searchQuery)}
             </span>
           </div>
         </div>
@@ -429,8 +431,8 @@ function ReportCard({
             report.result?.toLowerCase() === "positive"
               ? "text-red-600"
               : report.result?.toLowerCase() === "negative"
-              ? "text-green-600"
-              : "text-gray-800"
+                ? "text-green-600"
+                : "text-gray-800"
           }`}
         >
           Result:{" "}
