@@ -3,7 +3,8 @@
   "version": "1.0.0",
   "private": true,
   "scripts": {
-    "dev": "next dev --turbopack",
+    "dev": "next dev",
+    "dev:turbo": "next dev --turbopack",
     "lint-fe": "eslint . --cache --ext .js,.jsx,.ts,.tsx",
     "build": "next build",
     "start": "next start",
@@ -22,6 +23,7 @@
     "@radix-ui/react-select": "^2.0.0",
     "@radix-ui/react-separator": "^1.0.3",
     "@radix-ui/react-slot": "^1.0.2",
+    "@radix-ui/react-tabs": "^1.1.12",
     "@radix-ui/react-toast": "^1.2.14",
     "@radix-ui/react-visually-hidden": "^1.2.3",
     "@sentry/nextjs": "^9.1.0",

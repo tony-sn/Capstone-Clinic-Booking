@@ -2,7 +2,7 @@
 
 import { useEffect } from "react";
 
-import { medicalDetail } from "@/hooks/medicalhistories/useMedicalhistories";
+import { useMedicalDetail } from "@/hooks/medicalhistories/useMedicalhistories";
 import { useDoctors, usePatients } from "@/hooks/users/useUsers";
 import type { MedicalHistory } from "@/types/medicalHistory";
 
@@ -23,7 +23,7 @@ const MedicalHistoryDetailModal = ({
     data: apiResponse,
     isLoading: loading,
     error,
-  } = medicalDetail({ medicalHistoryId });
+  } = useMedicalDetail({ medicalHistoryId });
   const medicalHistory: MedicalHistory | undefined = apiResponse?.data;
 
   // Fetch doctors and patients for display names

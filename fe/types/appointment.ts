@@ -17,4 +17,30 @@ export type Appointment = {
     | AppointmentStatus.Pending
     | AppointmentStatus.Examined;
   medicalHistoryId: number | null;
+  active: boolean;
 };
+
+export interface Pagination {
+  pageNumber: number;
+  pageSize: number;
+  totalItems: number;
+  totalPages: number;
+}
+
+export interface AppointmentsResponse {
+  status: number;
+  message: string;
+  data: Appointment[];
+  pagination: Pagination;
+}
+
+export interface AppointmentResponse {
+  status: number;
+  message: string;
+  data: Appointment;
+}
+
+export interface AppointmentParams {
+  pageSize?: number;
+  pageNumber?: number;
+}

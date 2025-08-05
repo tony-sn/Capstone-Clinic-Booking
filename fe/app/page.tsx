@@ -26,7 +26,7 @@ const Home = async () => {
     if (response.status === 200 && userInfo) {
       const role = userInfo?.roles?.[0];
       if (role === "User") {
-        redirect(`/patients/${userInfo?.id}/new-appointment`);
+        redirect(`/patients/${userInfo?.id}`);
       } else {
         redirect("/admin");
       }

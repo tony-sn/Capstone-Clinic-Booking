@@ -1,12 +1,19 @@
 import Image from "next/image";
 import { redirect } from "next/navigation";
 
-import RegisterForm from "@/components/forms/RegisterForm";
+// import RegisterForm from "@/components/forms/RegisterForm";
 import config from "@/config.json";
-import { getPatient, getUser } from "@/lib/actions/patient.actions";
+import {
+  getPatient,
+  // getUser
+} from "@/lib/actions/patient.actions";
+import { requireSpecificPatient } from "@/lib/auth-guard";
 
 const Register = async ({ params: { userId } }: SearchParamProps) => {
-  const user = await getUser(userId);
+  // Ensure only the specific patient can access their own data
+  await requireSpecificPatient(userId);
+
+  // const user = await getUser(userId);
   const patient = await getPatient(userId);
 
   if (patient) redirect(`/patients/${userId}/new-appointment`);

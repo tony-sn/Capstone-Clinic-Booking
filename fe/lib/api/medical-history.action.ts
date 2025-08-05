@@ -119,3 +119,39 @@ export const getMedicalHistoryById = async (
   const data: MedicalHistoryResponse = await res.json();
   return data;
 };
+
+export const getMedicalHistoryByPatientId = async (
+  patientId: number,
+  params: MedicalHistoryParams = { pageSize: 0, pageNumber: 1 }
+): Promise<MedicalHistoriesResponse> => {
+  try {
+    const allMedicalHistory = await getAllMedicalHistory(params);
+    
+    const filteredData = allMedicalHistory.data.filter(
+      (history) => history.patientId === patientId
+    );
+
+    return {
+      ...allMedicalHistory,
+      data: filteredData,
+      pagination: {
+        ...allMedicalHistory.pagination,
+        totalItems: filteredData.length,
+        totalPages: Math.ceil(filteredData.length / (params.pageSize || 10)),
+      },
+    };
+  } catch (error) {
+    console.error("An error occurred while retrieving patient medical history:", error);
+    return {
+      status: 500,
+      message: "Error fetching patient medical history",
+      data: [],
+      pagination: {
+        pageNumber: params.pageNumber ?? 1,
+        pageSize: params.pageSize ?? 5,
+        totalItems: 0,
+        totalPages: 0,
+      },
+    };
+  }
+};

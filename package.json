@@ -8,6 +8,7 @@
   "scripts": {
     "dev": "dotenv -- concurrently -k -c auto -n fe,be \"pnpm dev:fe\" \"pnpm dev:be\"",
     "dev:fe": "pnpm --filter fe dev",
+    "dev:fe-turbo": "pnpm --filter fe dev:turbo",
     "dev:be": "dotnet watch run --project ./BE/ClinicBooking/ClinicBooking.csproj",
     "lint-fe": "pnpm --filter fe run lint-fe",
     "lint": "pnpm --filter fe lint",
@@ -33,8 +34,8 @@
   },
   "lint-staged": {
     "fe/**/*.{js,jsx,ts,tsx}": [
-      "cd fe && pnpm lint-fe",
-      "cd fe && pnpm exec prettier --write"
+      "pnpm --filter fe lint-fe",
+      "pnpm --filter fe exec prettier --write"
     ],
     "fe/**/*": "pnpm --filter fe exec prettier --write --ignore-unknown"
   },

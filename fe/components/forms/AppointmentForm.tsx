@@ -183,7 +183,7 @@ export const AppointmentForm = ({
                       width={32}
                       height={32}
                       alt="doctor"
-                      className="border-dark-500 rounded-full border"
+                      className="rounded-full border border-dark-500"
                     />
                     <p>{doctor.displayName}</p>
                   </div>
