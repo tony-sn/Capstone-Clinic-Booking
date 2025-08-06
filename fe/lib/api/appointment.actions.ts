@@ -13,6 +13,7 @@ export const getAllAppointment = async (
   params: AppointmentParams = { pageSize: 5, pageNumber: 1 }
 ): Promise<AppointmentsResponse> => {
   try {
+    console.log("Appointment endpoint:", Endpoints.APPOINTMENT);
     const res = await fetch(
       `${Endpoints.APPOINTMENT}?pageSize=${params.pageSize}&pageNumber=${params.pageNumber}`,
       { cache: "no-store" }
@@ -79,7 +80,9 @@ export const getAppointmentsByMedicalHistoryId = async (
   }
 };
 
-export const getAppointmentById = async (id: number): Promise<AppointmentResponse> => {
+export const getAppointmentById = async (
+  id: number
+): Promise<AppointmentResponse> => {
   const res = await fetch(`${Endpoints.APPOINTMENT}/${id}`, {
     cache: "no-store",
   });
@@ -98,7 +101,7 @@ export const getAppointmentsByPatientId = async (
 ): Promise<AppointmentsResponse> => {
   try {
     const allAppointments = await getAllAppointment(params);
-    
+
     const filteredData = allAppointments.data.filter(
       (appointment) => appointment.bookByUserId === patientId
     );
@@ -113,7 +116,10 @@ export const getAppointmentsByPatientId = async (
       },
     };
   } catch (error) {
-    console.error("An error occurred while retrieving patient appointments:", error);
+    console.error(
+      "An error occurred while retrieving patient appointments:",
+      error
+    );
     return {
       status: 500,
       message: "Error fetching patient appointments",

@@ -1,4 +1,7 @@
+"use server";
+
 import { revalidatePath } from "next/cache";
+
 import { Endpoints } from "@/lib/app.config";
 import type { DoctorsResponse, DoctorDTO } from "@/types/doctor";
 
@@ -92,7 +95,9 @@ export const getDoctorById = async (id: number): Promise<DoctorDTO | null> => {
   }
 };
 
-export const createDoctor = async (formData: FormData): Promise<{
+export const createDoctor = async (
+  formData: FormData
+): Promise<{
   success: boolean;
   data?: DoctorDTO;
   error?: string;
@@ -159,6 +164,7 @@ export const deleteDoctorById = async (
       method: "PUT",
     });
 
+    // eslint-disable-next-line
     const data = await handleApiResponse(res);
 
     revalidatePath("/doctor");

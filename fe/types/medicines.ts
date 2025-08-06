@@ -36,3 +36,16 @@ export type MedicineListResponse = ApiResponse<Medicine[]>;
 
 // Kiểu phản hồi 1 thuốc (dùng trong getById, create, update)
 export type MedicineResponse = ApiResponse<Medicine>;
+
+// Medicine Inventory Entry types
+export interface MedicineInventoryEntry {
+  id: number;
+  medicineID: number;
+  changeType: number; // 0 for inbound, 1 for outbound
+  quantity: number;
+  companyName: string;
+  note: string;
+  prescriptionID: number | null;
+}
+
+export type MedicineInventoryEntryListResponse = ApiResponse<MedicineInventoryEntry[]>;
