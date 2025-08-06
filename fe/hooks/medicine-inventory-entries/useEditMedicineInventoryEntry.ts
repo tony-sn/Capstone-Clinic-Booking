@@ -6,7 +6,7 @@ import {
   updateMedicineInventoryEntry,
 } from "@/lib/api/medicine-inventory-entry.actions";
 
-export const useEditLaboratoryTest = () => {
+export const useEditMedicineInventoryEntry = () => {
   const create = useMutation({
     mutationFn: (formData: FormData) => createMedicineInventoryEntry(formData),
   });
