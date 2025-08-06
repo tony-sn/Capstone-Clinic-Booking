@@ -3,7 +3,7 @@ import { useInfiniteQuery, useQuery } from "@tanstack/react-query";
 import { getAllMedicineInventoryEntries } from "@/lib/api/medicine-inventory-entry.actions";
 
 export const useMedicineInventoryEntries = ({
-  pageSize = 5,
+  pageSize = 100,
   pageNumber = 1,
 }: {
   pageSize?: number;
