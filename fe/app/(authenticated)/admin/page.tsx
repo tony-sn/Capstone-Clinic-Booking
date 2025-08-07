@@ -36,7 +36,9 @@ export default function AdminPage() {
         user.username.toLowerCase().includes(query) ||
         user.firstName.toLowerCase().includes(query) ||
         user.lastName.toLowerCase().includes(query) ||
-        user.roles.some((role) => role.toLowerCase().includes(query))
+        user.roles.some((role) =>
+          mappedRole(role).toLowerCase().includes(query)
+        )
     );
   }, [users, searchQuery]);
 

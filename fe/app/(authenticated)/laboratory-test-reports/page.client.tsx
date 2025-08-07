@@ -10,6 +10,8 @@ import {
   Edit,
   Activity,
   AlertTriangle,
+  X,
+  Search,
 } from "lucide-react";
 import { useState, useCallback, useMemo } from "react";
 
@@ -196,21 +198,21 @@ function MedicalHistoryLayoutContent({
           <div className="mb-6 flex items-center gap-4 rounded-xl border border-gray-100 bg-white p-4 shadow-sm">
             <div className="relative flex-1">
               <div className="pointer-events-none absolute inset-y-0 left-0 flex items-center pl-3">
-                <Loader2 className="size-5 text-gray-400" />
+                <Search className="size-5 text-gray-400" />
               </div>
               <input
                 type="text"
                 placeholder="Search by result, test ID, medical history ID, technician name or email..."
                 value={searchQuery}
                 onChange={(e) => handleSearchChange(e.target.value)}
-                className="w-full rounded-lg border border-gray-300 py-2 pl-10 pr-4 text-sm text-gray-700 placeholder:text-gray-400 focus:border-blue-500 focus:ring-blue-500"
+                className="w-full rounded-xl border border-gray-200 bg-gray-50 px-12 py-3 text-gray-700 focus:border-blue-400 focus:bg-white focus:outline-none focus:ring-2 focus:ring-blue-200"
               />
               {searchQuery && (
                 <button
                   onClick={clearSearch}
                   className="absolute inset-y-0 right-0 flex items-center pr-3"
                 >
-                  <AlertCircle className="size-4 text-gray-500" />
+                  <X className="size-4 text-gray-500" />
                 </button>
               )}
             </div>
