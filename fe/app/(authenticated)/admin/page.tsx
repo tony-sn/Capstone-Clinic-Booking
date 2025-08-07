@@ -15,6 +15,7 @@ import { useCallback, useMemo, useState } from "react";
 import CreateUserModal from "@/components/new/forms/admin/CreateUserModal";
 import EditUserRolesModal from "@/components/new/forms/admin/EditUserRolesModal";
 import { useUsers } from "@/hooks/users/useUsers";
+import { mappedRole } from "@/lib/utils";
 import { User } from "@/types/user";
 
 export default function AdminPage() {
@@ -71,9 +72,8 @@ export default function AdminPage() {
     const colors: Record<string, string> = {
       Admin: "bg-red-100 text-red-800",
       Doctor: "bg-blue-100 text-blue-800",
-      Receptionist: "bg-green-100 text-green-800",
       Patient: "bg-purple-100 text-purple-800",
-      Staff: "bg-orange-100 text-orange-800",
+      Staff: "bg-green-100 text-green-800",
     };
     return colors[role] || "bg-gray-100 text-gray-800";
   };
@@ -198,11 +198,11 @@ export default function AdminPage() {
                         {user.roles.map((role) => (
                           <span
                             key={role}
-                            className={`inline-flex rounded-full px-2 py-1 text-xs font-medium ${getRoleColor(
-                              role
+                            className={`inline-flex min-w-[70px] justify-center rounded-full px-2 py-1 text-xs font-medium ${getRoleColor(
+                              mappedRole(role)
                             )}`}
                           >
-                            {role}
+                            {mappedRole(role)}
                           </span>
                         ))}
                       </div>

@@ -4,9 +4,19 @@ import { X, Loader2, Shield } from "lucide-react";
 import { useEffect, useState } from "react";
 
 import { useAdminActions } from "@/hooks/admin/useAdminUsers";
+import { mappedRole } from "@/lib/utils";
 import { User } from "@/types/user";
 
-const AVAILABLE_ROLES = ["Admin", "Doctor", "User", "Staff"];
+// Backend roles that the API expects
+const BACKEND_ROLES = ["Admin", "Doctor", "User", "Staff"];
+
+// Frontend display roles (User -> Patient)
+const DISPLAY_ROLES = BACKEND_ROLES.map((role) => mappedRole(role));
+
+// Helper function to convert display role back to backend role
+const getBackendRole = (displayRole: string) => {
+  return displayRole === "Patient" ? "User" : displayRole;
+};
 
 export default function EditUserRolesModal({
   user,
@@ -17,12 +27,16 @@ export default function EditUserRolesModal({
   onClose: () => void;
   onSuccess?: () => void;
 }) {
-  const [selectedRoles, setSelectedRoles] = useState<string[]>([]);
+  const [selectedDisplayRoles, setSelectedDisplayRoles] = useState<string[]>(
+    []
+  );
   const { editRoles } = useAdminActions();
 
   useEffect(() => {
     if (user) {
-      setSelectedRoles(user.roles || []);
+      // Convert backend roles to display roles for the UI
+      const displayRoles = (user.roles || []).map((role) => mappedRole(role));
+      setSelectedDisplayRoles(displayRoles);
     }
   }, [user]);
 
@@ -34,19 +48,24 @@ export default function EditUserRolesModal({
     };
   }, []);
 
-  const handleRoleChange = (role: string, checked: boolean) => {
+  const handleRoleChange = (displayRole: string, checked: boolean) => {
     if (checked) {
-      setSelectedRoles((prev) => [...prev, role]);
+      setSelectedDisplayRoles((prev) => [...prev, displayRole]);
     } else {
-      setSelectedRoles((prev) => prev.filter((r) => r !== role));
+      setSelectedDisplayRoles((prev) => prev.filter((r) => r !== displayRole));
     }
   };
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
 
+    // Convert display roles back to backend roles before sending to API
+    const backendRoles = selectedDisplayRoles.map((displayRole) =>
+      getBackendRole(displayRole)
+    );
+
     editRoles.mutate(
-      { username: user.email, roles: selectedRoles },
+      { username: user.username, roles: backendRoles },
       {
         onSuccess: () => {
           onSuccess?.();
@@ -99,32 +118,34 @@ export default function EditUserRolesModal({
             </label>
 
             <div className="max-h-40 space-y-2 overflow-y-auto rounded-md border p-3">
-              {AVAILABLE_ROLES.map((role) => (
+              {DISPLAY_ROLES.map((displayRole) => (
                 <label
-                  key={role}
+                  key={displayRole}
                   className="flex cursor-pointer items-center gap-2"
                 >
                   <input
                     type="checkbox"
-                    checked={selectedRoles.includes(role)}
-                    onChange={(e) => handleRoleChange(role, e.target.checked)}
+                    checked={selectedDisplayRoles.includes(displayRole)}
+                    onChange={(e) =>
+                      handleRoleChange(displayRole, e.target.checked)
+                    }
                     className="rounded border-gray-300 text-blue-600 focus:ring-blue-500"
                   />
-                  <span className="text-sm text-gray-700">{role}</span>
+                  <span className="text-sm text-gray-700">{displayRole}</span>
                 </label>
               ))}
             </div>
 
-            {selectedRoles.length > 0 && (
+            {selectedDisplayRoles.length > 0 && (
               <div className="mt-2">
                 <p className="mb-1 text-sm text-gray-600">Selected roles:</p>
                 <div className="flex flex-wrap gap-1">
-                  {selectedRoles.map((role) => (
+                  {selectedDisplayRoles.map((displayRole) => (
                     <span
-                      key={role}
+                      key={displayRole}
                       className="inline-flex items-center gap-1 rounded-full bg-blue-100 px-2 py-1 text-xs text-blue-800"
                     >
-                      {role}
+                      {displayRole}
                     </span>
                   ))}
                 </div>
@@ -143,13 +164,15 @@ export default function EditUserRolesModal({
             </button>
             <button
               type="submit"
-              disabled={editRoles.isPending || selectedRoles.length === 0}
+              disabled={
+                editRoles.isPending || selectedDisplayRoles.length === 0
+              }
               className="inline-flex items-center gap-2 rounded-lg bg-blue-600 px-4 py-2 text-white hover:bg-blue-700 disabled:opacity-50"
             >
               {editRoles.isPending && (
                 <Loader2 className="size-4 animate-spin" />
               )}
-              Update Roles
+              Update
             </button>
           </div>
         </form>

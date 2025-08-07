@@ -4,8 +4,18 @@ import { X, Loader2, UserPlus } from "lucide-react";
 import { useEffect, useState } from "react";
 
 import { useAdminActions } from "@/hooks/admin/useAdminUsers";
+import { mappedRole } from "@/lib/utils";
 
-const AVAILABLE_ROLES = ["Admin", "Doctor", "Receptionist", "Patient", "Staff"];
+// Backend roles that the API expects
+const BACKEND_ROLES = ["Admin", "Doctor", "User", "Staff"];
+
+// Frontend display roles (User -> Patient)
+const DISPLAY_ROLES = BACKEND_ROLES.map((role) => mappedRole(role));
+
+// Helper function to convert display role back to backend role
+const getBackendRole = (displayRole: string) => {
+  return displayRole === "Patient" ? "User" : displayRole;
+};
 
 export default function CreateUserModal({
   onClose,
@@ -19,7 +29,7 @@ export default function CreateUserModal({
     password: "",
     firstName: "",
     lastName: "",
-    roles: [] as string[],
+    displayRoles: [] as string[],
   });
 
   const { createUser } = useAdminActions();
@@ -40,16 +50,16 @@ export default function CreateUserModal({
     }));
   };
 
-  const handleRoleChange = (role: string, checked: boolean) => {
+  const handleRoleChange = (displayRole: string, checked: boolean) => {
     if (checked) {
       setFormState((prev) => ({
         ...prev,
-        roles: [...prev.roles, role],
+        displayRoles: [...prev.displayRoles, displayRole],
       }));
     } else {
       setFormState((prev) => ({
         ...prev,
-        roles: prev.roles.filter((r) => r !== role),
+        displayRoles: prev.displayRoles.filter((r) => r !== displayRole),
       }));
     }
   };
@@ -57,7 +67,20 @@ export default function CreateUserModal({
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
 
-    createUser.mutate(formState, {
+    // Convert display roles back to backend roles before sending to API
+    const backendRoles = formState.displayRoles.map((displayRole) =>
+      getBackendRole(displayRole)
+    );
+
+    const userData = {
+      email: formState.email,
+      password: formState.password,
+      firstName: formState.firstName,
+      lastName: formState.lastName,
+      roles: backendRoles,
+    };
+
+    createUser.mutate(userData, {
       onSuccess: () => {
         onSuccess?.();
       },
@@ -69,7 +92,7 @@ export default function CreateUserModal({
     formState.password &&
     formState.firstName &&
     formState.lastName &&
-    formState.roles.length > 0;
+    formState.displayRoles.length > 0;
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center overflow-y-auto bg-black/40 px-4">
@@ -166,32 +189,34 @@ export default function CreateUserModal({
             </label>
 
             <div className="max-h-32 space-y-2 overflow-y-auto rounded-md border bg-gray-50 p-3">
-              {AVAILABLE_ROLES.map((role) => (
+              {DISPLAY_ROLES.map((displayRole) => (
                 <label
-                  key={role}
+                  key={displayRole}
                   className="flex cursor-pointer items-center gap-2"
                 >
                   <input
                     type="checkbox"
-                    checked={formState.roles.includes(role)}
-                    onChange={(e) => handleRoleChange(role, e.target.checked)}
+                    checked={formState.displayRoles.includes(displayRole)}
+                    onChange={(e) =>
+                      handleRoleChange(displayRole, e.target.checked)
+                    }
                     className="rounded border-gray-300 text-blue-600 focus:ring-blue-500"
                   />
-                  <span className="text-sm text-gray-700">{role}</span>
+                  <span className="text-sm text-gray-700">{displayRole}</span>
                 </label>
               ))}
             </div>
 
-            {formState.roles.length > 0 && (
+            {formState.displayRoles.length > 0 && (
               <div className="mt-2">
                 <p className="mb-1 text-sm text-gray-600">Selected roles:</p>
                 <div className="flex flex-wrap gap-1">
-                  {formState.roles.map((role) => (
+                  {formState.displayRoles.map((displayRole) => (
                     <span
-                      key={role}
+                      key={displayRole}
                       className="inline-flex items-center gap-1 rounded-full bg-blue-100 px-2 py-1 text-xs text-blue-800"
                     >
-                      {role}
+                      {displayRole}
                     </span>
                   ))}
                 </div>

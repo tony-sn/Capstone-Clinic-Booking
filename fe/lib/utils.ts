@@ -135,3 +135,6 @@ export const getRandomDoctorImage = (userId: string) => {
   const index = Math.abs(hash) % DoctorList.length;
   return DoctorList[index].image;
 };
+
+export const mappedRole = (role: string) =>
+  role === "User" ? "Patient" : role;
