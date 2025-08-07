@@ -39,7 +39,7 @@ export const patientColumns: ColumnDef<User>[] = [
     header: "Email",
     cell: ({ row }) => {
       const user = row.original;
-      return <p className="text-14-regular">{user.email}</p>;
+      return <p className="text-14-regular">{user.username}</p>;
     },
   },
   {

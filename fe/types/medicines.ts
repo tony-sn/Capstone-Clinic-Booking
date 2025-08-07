@@ -48,4 +48,9 @@ export interface MedicineInventoryEntry {
   prescriptionID: number | null;
 }
 
-export type MedicineInventoryEntryListResponse = ApiResponse<MedicineInventoryEntry[]>;
+export type MedicineInventoryEntryListResponse = ApiResponse<
+  MedicineInventoryEntry[]
+>;
+
+export type MedicineInventoryEntryResponse =
+  ApiResponse<MedicineInventoryEntry>;

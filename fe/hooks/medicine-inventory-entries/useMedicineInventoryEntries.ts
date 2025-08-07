@@ -1,6 +1,9 @@
 import { useInfiniteQuery, useQuery } from "@tanstack/react-query";
 
-import { getAllMedicineInventoryEntries } from "@/lib/api/medicine-inventory-entry.actions";
+import {
+  getAllMedicineInventoryEntries,
+  getMedicineInventoryEntryById,
+} from "@/lib/api/medicine-inventory-entry.actions";
 
 export const useMedicineInventoryEntries = ({
   pageSize = 100,
@@ -26,4 +29,11 @@ export const useInfiniteMedicineInventoryEntries = (pageSize = 5) =>
       return hasNextPage ? pagination.pageNumber + 1 : undefined;
     },
     initialPageParam: 1,
+  });
+
+export const useMedicineInventoryEntry = (id: number, enabled = true) =>
+  useQuery({
+    queryKey: ["medicineInventoryEntry", id],
+    queryFn: () => getMedicineInventoryEntryById(id),
+    enabled: enabled && id > 0,
   });

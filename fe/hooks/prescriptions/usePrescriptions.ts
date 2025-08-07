@@ -42,11 +42,14 @@ export const useGetPrescriptionDetail = () =>
 export const useGetPrescriptionDetailById = ({
   prescriptionId,
   medicineId,
+  enabled = true,
 }: {
   prescriptionId: number;
   medicineId: number;
+  enabled?: boolean;
 }) =>
   useQuery<PrescriptionDetailResponse>({
     queryKey: ["prescriptionDetail", prescriptionId, medicineId],
     queryFn: () => getPrescriptionDetailById(prescriptionId, medicineId),
+    enabled: enabled && prescriptionId > 0 && medicineId > 0,
   });
