@@ -164,20 +164,26 @@ export const navigationItems = [
     parent: "Users",
     children: [
       {
+        label: "Admin",
+        href: "/admin",
+        desc: "Admin dashboard",
+      },
+      {
         label: "Appointments",
         href: "/appointments",
         desc: "List of appointments",
-      },
-      {
-        label: "Patients",
-        href: "/patients",
-        desc: "List of patients",
       },
       {
         label: "Doctors",
         href: "/doctors",
         desc: "List of doctors",
       },
+      {
+        label: "Patients",
+        href: "/patients",
+        desc: "List of patients",
+      },
+      ,
     ],
   },
 ];

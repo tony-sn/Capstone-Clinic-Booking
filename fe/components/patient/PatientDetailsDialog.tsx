@@ -88,7 +88,7 @@ export default function PatientDetailsDialog({
             </div>
             <div>
               <p className="text-sm font-medium text-muted-foreground">Email</p>
-              <p className="text-base">{patient.email}</p>
+              <p className="text-base">{patient.username}</p>
             </div>
             <div>
               <p className="text-sm font-medium text-muted-foreground">

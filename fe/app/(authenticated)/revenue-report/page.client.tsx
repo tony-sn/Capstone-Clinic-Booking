@@ -77,7 +77,7 @@ function RevenueReportContent() {
         <select
           value={selectedType}
           onChange={(e) => setSelectedType(e.target.value as RevenueType)}
-          className="rounded-lg border px-4 py-2"
+          className="ml-4 rounded-lg border px-4 py-2"
         >
           {revenueTypes.map((type) => (
             <option key={type} value={type}>

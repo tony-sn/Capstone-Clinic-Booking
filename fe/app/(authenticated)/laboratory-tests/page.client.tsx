@@ -7,7 +7,6 @@ import {
   CheckCircle,
   AlertCircle,
   Loader2,
-  DollarSign,
   Plus,
   Edit,
   Trash2,
@@ -18,17 +17,9 @@ import InfiniteScroll from "@/components/InfiniteScroll";
 import LaboratoryTestDeleteModal from "@/components/new/forms/laboratory-tests/laboratoryTestDetailDelete";
 import LaboratoryTestModal from "@/components/new/forms/laboratory-tests/laboratoryTestDetailForm";
 import LaboratoryTestEditModal from "@/components/new/forms/laboratory-tests/laboratoryTestEditForm";
-// import { useEditLaboratoryTest } from "@/hooks/laboratory-tests/useEditLaboratoryTests";
 import { useInfiniteLaboratoryTests } from "@/hooks/laboratory-tests/useLaboratoryTests";
+import { formatCurrency } from "@/lib/utils";
 import { LaboratoryTestReport } from "@/types/laboratoryTest";
-
-// Format currency helper
-const formatCurrency = (amount: number) => {
-  return new Intl.NumberFormat("vi-VN", {
-    style: "currency",
-    currency: "VND",
-  }).format(amount);
-};
 
 function LaboratoryTestPageContent() {
   const [selectedTestId, setSelectedTestId] = useState<number | null>(null);
@@ -280,7 +271,6 @@ function LaboratoryTestPageContent() {
                     {/* Price and Book Button */}
                     <div className="flex items-center justify-between border-t border-gray-100 pt-4">
                       <div className="flex items-center gap-2">
-                        <DollarSign className="size-4 text-green-600" />
                         <span className="text-lg font-bold text-green-600">
                           {formatCurrency(test.price)}
                         </span>

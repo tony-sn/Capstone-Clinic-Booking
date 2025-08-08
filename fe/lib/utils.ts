@@ -135,3 +135,11 @@ export const getRandomDoctorImage = (userId: string) => {
   const index = Math.abs(hash) % DoctorList.length;
   return DoctorList[index].image;
 };
+
+export const mappedRole = (role: string) =>
+  role === "User" ? "Patient" : role;
+
+export const formatCurrency = (amount: number) =>
+  new Intl.NumberFormat("en-US", { style: "currency", currency: "USD" }).format(
+    amount
+  );
