@@ -1,8 +1,6 @@
-export const {
-  NEXT_PUBLIC_ENDPOINT: ENDPOINT,
-  NEXT_PUBLIC_BUCKET_ID: BUCKET_ID,
-  NEXT_PUBLIC_UNSPLASH_ACCESS_KEY: UNSPLASH_ACCESS_KEY,
-} = process.env;
+export const ENDPOINT = process.env.NEXT_PUBLIC_ENDPOINT;
+export const BUCKET_ID = process.env.NEXT_PUBLIC_BUCKET_ID;
+export const UNSPLASH_ACCESS_KEY = process.env.NEXT_PUBLIC_UNSPLASH_ACCESS_KEY;
 
 export const Endpoints = {
   APPOINTMENT: `${ENDPOINT}/api/Appointment`,
