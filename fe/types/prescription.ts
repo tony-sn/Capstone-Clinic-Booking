@@ -1,6 +1,6 @@
 export interface Prescription {
-  prescriptionId: number;
-  medicalHistoryId: number;
+  prescriptionID: number;
+  medicalHistoryID: number;
   totalAmount: number;
 }
 
