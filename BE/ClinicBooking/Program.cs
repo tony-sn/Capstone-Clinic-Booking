@@ -133,13 +133,18 @@ builder.Services.AddSwaggerGen(c =>
     c.EnableAnnotations();
 });
 
-// CORS
+// CORS Configuration
+// First try environment variable, then fall back to configuration
+var allowedOrigins = Environment.GetEnvironmentVariable("CORS_ALLOWED_ORIGINS")?.Split(',') 
+    ?? builder.Configuration.GetSection("CorsSettings:AllowedOrigins").Get<string[]>() 
+    ?? new[] { "http://localhost:3000" };
+
 builder.Services.AddCors(options =>
 {
     options.AddDefaultPolicy(corsPolicyBuilder =>
     {
         corsPolicyBuilder
-            .WithOrigins("http://152:42:255.58:8082", "http://localhost:3000")
+            .WithOrigins(allowedOrigins)
             .AllowCredentials()
             .AllowAnyMethod()
             .AllowAnyHeader();
