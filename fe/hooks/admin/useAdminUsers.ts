@@ -1,7 +1,6 @@
 import { useMutation, useQueryClient } from "@tanstack/react-query";
-
-import { createUser, editUserRoles } from "@/lib/api/admin.actions";
-import { CreateUserRequest } from "@/types/admin";
+import { createUser, editUserRoles, updateUser } from "@/lib/api/admin.actions";
+import { CreateUserRequest, EditUserRequest } from "@/types/admin";
 
 export const useAdminActions = () => {
   const queryClient = useQueryClient();
@@ -21,8 +20,16 @@ export const useAdminActions = () => {
     },
   });
 
+  const updateUserMutation = useMutation({
+    mutationFn: (userData: EditUserRequest) => updateUser(userData),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["users"] });
+    },
+  });
+
   return {
     createUser: createUserMutation,
     editRoles: editRolesMutation,
+    updateUser: updateUserMutation,
   };
 };

@@ -2,7 +2,11 @@
 
 import { revalidatePath } from "next/cache";
 
-import { CreateUserRequest, EditRolesRequest } from "@/types/admin";
+import {
+  CreateUserRequest,
+  EditRolesRequest,
+  EditUserRequest,
+} from "@/types/admin";
 
 const ADMIN_ENDPOINT = `${process.env.NEXT_PUBLIC_ENDPOINT}/api/Admin`;
 
@@ -71,6 +75,36 @@ export const editUserRoles = async (
     return res.json();
   } catch (error) {
     console.error("An error occurred while editing user roles:", error);
+    throw error;
+  }
+};
+
+export const updateUser = async (userData: EditUserRequest) => {
+  try {
+    const res = await fetch(`${ADMIN_ENDPOINT}/update-user/${userData.id}`, {
+      method: "PUT",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        id: userData.id,
+        username: userData.username,
+        firstName: userData.firstName,
+        lastName: userData.lastName,
+        roles: userData.roles,
+      }),
+    });
+
+    if (!res.ok) {
+      const errorData = await res.text();
+      throw new Error(`Failed to update user: ${errorData}`);
+    }
+
+    revalidatePath("/admin");
+    revalidatePath("/patients");
+    return res.json();
+  } catch (error) {
+    console.error("An error occurred while updating user:", error);
     throw error;
   }
 };

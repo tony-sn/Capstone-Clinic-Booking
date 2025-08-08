@@ -1,6 +1,6 @@
 "use client";
 
-import { LogOut, Calendar, FileText, CreditCard } from "lucide-react";
+import { LogOut, Calendar, CreditCard } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
@@ -51,12 +51,12 @@ const PatientLayout = ({
       icon: Calendar,
       desc: "View and manage your appointments",
     },
-    {
-      label: "Medical History",
-      href: `/patients/${userInfo.id}/medical-history`,
-      icon: FileText,
-      desc: "View your medical records",
-    },
+    // {
+    //   label: "Medical History",
+    //   href: `/patients/${userInfo.id}/medical-history`,
+    //   icon: FileText,
+    //   desc: "View your medical records",
+    // },
     {
       label: "Transactions",
       href: `/patients/${userInfo.id}/transactions`,

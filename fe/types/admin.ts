@@ -24,3 +24,11 @@ export interface EditRolesRequest {
   username: string;
   roles: string[];
 }
+
+export interface EditUserRequest {
+  id: number;
+  username: string;
+  firstName: string;
+  lastName: string;
+  roles: string[];
+}

@@ -61,14 +61,15 @@ export default function CreateAppointmentModal({
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
 
+    // Create FormData with PascalCase field names as expected by the API
     const formData = new FormData();
-    formData.append("doctorId", formState.doctorId);
-    formData.append("bookByUserId", formState.bookByUserId);
-    formData.append("startTime", formState.startTime);
-    formData.append("endTime", formState.endTime);
-    formData.append("price", formState.price);
-    formData.append("appointmentStatus", formState.appointmentStatus);
-    formData.append("active", "true");
+    formData.append("DoctorId", formState.doctorId);
+    formData.append("BookByUserId", formState.bookByUserId);
+    formData.append("StartTime", formState.startTime);
+    formData.append("EndTime", formState.endTime);
+    formData.append("Price", formState.price);
+    formData.append("AppointmentStatus", formState.appointmentStatus);
+    formData.append("MedicalHistoryId", "0");
 
     createMutation.mutate(formData);
   };
