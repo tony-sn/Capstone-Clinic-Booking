@@ -6,6 +6,7 @@ import {
   Clock,
   Edit,
   Eye,
+  MoreVertical,
   Plus,
   RotateCcw,
   Search,
@@ -19,6 +20,13 @@ import CreateAppointmentModal from "@/components/new/forms/appointments/CreateAp
 import DeleteAppointmentModal from "@/components/new/forms/appointments/DeleteAppointmentModal";
 import EditAppointmentModal from "@/components/new/forms/appointments/EditAppointmentModal";
 import ViewAppointmentModal from "@/components/new/forms/appointments/ViewAppointmentModal";
+import { Button } from "@/components/ui/button";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
 import { useAppointments } from "@/hooks/appointments/useAppointments";
 import { useDoctors } from "@/hooks/doctors/useDoctors";
 import { useUsers } from "@/hooks/users/useUsers";
@@ -350,31 +358,43 @@ function AppointmentPageContent() {
                         ${appointment.price.toFixed(2)}
                       </td>
                       <td className="whitespace-nowrap px-6 py-4 text-right text-sm font-medium">
-                        <div className="flex items-center justify-end gap-2">
-                          <button
-                            onClick={() => handleViewAppointment(appointment)}
-                            className="inline-flex items-center gap-1 rounded-md bg-gray-600 px-3 py-1 text-xs text-white hover:bg-gray-700"
-                            title="View Details"
-                          >
-                            <Eye className="size-3" />
-                            View
-                          </button>
-                          <button
-                            onClick={() => handleEditAppointment(appointment)}
-                            className="inline-flex items-center gap-1 rounded-md bg-blue-600 px-3 py-1 text-xs text-white hover:bg-blue-700"
-                            title="Edit Appointment"
-                          >
-                            <Edit className="size-3" />
-                            Edit
-                          </button>
-                          <button
-                            onClick={() => handleDeleteAppointment(appointment)}
-                            className="inline-flex items-center gap-1 rounded-md bg-red-600 px-3 py-1 text-xs text-white hover:bg-red-700"
-                            title="Delete Appointment"
-                          >
-                            <Trash2 className="size-3" />
-                            Delete
-                          </button>
+                        <div className="flex items-center justify-end">
+                          <DropdownMenu>
+                            <DropdownMenuTrigger asChild>
+                              <Button
+                                className="inline-flex items-center justify-center rounded-md p-1 hover:bg-gray-100"
+                                title="Actions"
+                              >
+                                <MoreVertical className="size-4" />
+                              </Button>
+                            </DropdownMenuTrigger>
+                            <DropdownMenuContent align="end" className="w-40">
+                              <DropdownMenuItem
+                                onClick={() =>
+                                  handleViewAppointment(appointment)
+                                }
+                              >
+                                <Eye className="mr-2 size-4" />
+                                View
+                              </DropdownMenuItem>
+                              <DropdownMenuItem
+                                onClick={() =>
+                                  handleEditAppointment(appointment)
+                                }
+                              >
+                                <Edit className="mr-2 size-4" />
+                                Edit
+                              </DropdownMenuItem>
+                              <DropdownMenuItem
+                                onClick={() =>
+                                  handleDeleteAppointment(appointment)
+                                }
+                              >
+                                <Trash2 className="mr-2 size-4" />
+                                Delete
+                              </DropdownMenuItem>
+                            </DropdownMenuContent>
+                          </DropdownMenu>
                         </div>
                       </td>
                     </tr>
