@@ -129,14 +129,19 @@ export const navigationItems = [
         desc: "Show all laboratory test reports",
       },
       {
+        label: "Medical History",
+        href: "/medical-histories",
+        desc: "View medical histories",
+      },
+      {
         label: "Revenue",
         href: "/revenue-report",
         desc: "View clinic revenue",
       },
       {
-        label: "Medical History",
-        href: "/medical-histories",
-        desc: "View medical histories",
+        label: "Transactions",
+        href: "/transactions",
+        desc: "View transactions",
       },
     ],
   },
