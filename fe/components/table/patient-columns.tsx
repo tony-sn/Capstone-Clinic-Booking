@@ -2,9 +2,10 @@
 
 import { ColumnDef } from "@tanstack/react-table";
 
+import EditUserButton from "@/components/patient/EditUserButton";
 import PatientDetailsDialog from "@/components/patient/PatientDetailsDialog";
 import { Badge } from "@/components/ui/badge";
-import { Button } from "@/components/ui/button";
+import { mappedRole } from "@/lib/utils";
 import type { User } from "@/types/user";
 
 export const patientColumns: ColumnDef<User>[] = [
@@ -66,7 +67,7 @@ export const patientColumns: ColumnDef<User>[] = [
           {user.roles && user.roles.length > 0 ? (
             user.roles.map((role, index) => (
               <Badge key={index} variant="outline" className="text-xs">
-                {role}
+                {mappedRole(role)}
               </Badge>
             ))
           ) : (
@@ -88,9 +89,7 @@ export const patientColumns: ColumnDef<User>[] = [
       return (
         <div className="flex gap-2">
           {isPatient && <PatientDetailsDialog patient={user} />}
-          <Button variant="secondary" size="sm">
-            Edit
-          </Button>
+          <EditUserButton user={user} />
         </div>
       );
     },

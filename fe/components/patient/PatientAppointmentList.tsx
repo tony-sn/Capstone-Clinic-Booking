@@ -57,7 +57,6 @@ export default function PatientAppointmentList({
   });
   const { data: users = [] } = useUsers();
 
-  const appointments = appointmentsResponse?.data || [];
   const doctors = doctorsResponse?.data || [];
 
   // Create lookup maps for performance
@@ -83,6 +82,7 @@ export default function PatientAppointmentList({
 
   // Filter appointments based on search query
   const filteredAppointments = useMemo(() => {
+    const appointments = appointmentsResponse?.data || [];
     if (!searchQuery.trim()) return appointments;
 
     const query = searchQuery.toLowerCase().trim();
@@ -100,7 +100,7 @@ export default function PatientAppointmentList({
           .includes(query)
       );
     });
-  }, [appointments, searchQuery, doctorMap]);
+  }, [appointmentsResponse?.data, searchQuery, doctorMap]);
 
   const handleSearchChange = useCallback((value: string) => {
     setSearchQuery(value);
@@ -190,8 +190,8 @@ export default function PatientAppointmentList({
         <div>
           <h3 className="text-xl font-semibold">My Appointments</h3>
           <p className="text-sm text-muted-foreground">
-            {appointments.length} appointment
-            {appointments.length !== 1 ? "s" : ""} found
+            {filteredAppointments.length} appointment
+            {filteredAppointments.length !== 1 ? "s" : ""} found
           </p>
         </div>
         <Button

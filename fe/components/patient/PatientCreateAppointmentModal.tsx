@@ -22,6 +22,7 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { useDoctors } from "@/hooks/doctors/useDoctors";
+import { usePatientMedicalHistories } from "@/hooks/medicalhistories/useMedicalhistories";
 import { createAppointment } from "@/lib/api/appointment.actions";
 
 interface PatientCreateAppointmentModalProps {
@@ -41,7 +42,8 @@ export default function PatientCreateAppointmentModal({
     doctorId: "",
     startTime: "",
     endTime: "",
-    price: "",
+    // Hidden fields with defaults
+    price: "0", // Default to 0, will be set by staff later
     appointmentStatus: "0", // Default to "Booked"
   });
 
@@ -49,9 +51,20 @@ export default function PatientCreateAppointmentModal({
     pageSize: 100,
     pageNumber: 1,
   });
+
+  // Fetch patient's medical histories to get the medicalHistoryId
+  const { data: medicalHistoriesResponse } = usePatientMedicalHistories({
+    patientId,
+    pageSize: 1, // We just need the most recent one
+    pageNumber: 1,
+  });
+
   const queryClient = useQueryClient();
 
   const doctors = doctorsResponse?.data || [];
+  const medicalHistories = medicalHistoriesResponse?.data || [];
+  const mostRecentMedicalHistoryId =
+    medicalHistories.length > 0 ? medicalHistories[0].medicalHistoryId : null;
 
   const createMutation = useMutation({
     mutationFn: (formData: FormData) => createAppointment(formData),
@@ -77,9 +90,18 @@ export default function PatientCreateAppointmentModal({
 
     // Auto-set end time to 1 hour after start time
     if (name === "startTime" && value) {
+      // Parse the datetime-local string directly and add 1 hour
       const startDate = new Date(value);
       const endDate = new Date(startDate.getTime() + 60 * 60 * 1000); // Add 1 hour
-      const endTimeString = endDate.toISOString().slice(0, 16);
+
+      // Format back to datetime-local format (YYYY-MM-DDTHH:MM)
+      const year = endDate.getFullYear();
+      const month = String(endDate.getMonth() + 1).padStart(2, "0");
+      const day = String(endDate.getDate()).padStart(2, "0");
+      const hours = String(endDate.getHours()).padStart(2, "0");
+      const minutes = String(endDate.getMinutes()).padStart(2, "0");
+      const endTimeString = `${year}-${month}-${day}T${hours}:${minutes}`;
+
       setFormState((prev) => ({
         ...prev,
         endTime: endTimeString,
@@ -90,23 +112,39 @@ export default function PatientCreateAppointmentModal({
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
 
+    // Check if patient has a medical history
+    if (mostRecentMedicalHistoryId === null) {
+      alert(
+        "This patient doesn't have a medical history record yet. A medical history must be created before booking an appointment. Please contact staff for assistance."
+      );
+      return;
+    }
+
+    // Create FormData with PascalCase field names as expected by the API
     const formData = new FormData();
-    formData.append("doctorId", formState.doctorId);
-    formData.append("bookByUserId", patientId.toString());
-    formData.append("startTime", formState.startTime);
-    formData.append("endTime", formState.endTime);
-    formData.append("price", formState.price);
-    formData.append("appointmentStatus", formState.appointmentStatus);
-    formData.append("active", "true");
+    formData.append("DoctorId", formState.doctorId);
+    formData.append("BookByUserId", patientId.toString());
+    formData.append("StartTime", formState.startTime);
+    formData.append("EndTime", formState.endTime);
+    formData.append("Price", formState.price); // Default to 0
+    formData.append("AppointmentStatus", formState.appointmentStatus); // Default to 0 (Booked)
+    formData.append("MedicalHistoryId", mostRecentMedicalHistoryId.toString());
+
+    console.log("Submitting appointment with data:", {
+      DoctorId: formState.doctorId,
+      BookByUserId: patientId.toString(),
+      StartTime: formState.startTime,
+      EndTime: formState.endTime,
+      Price: formState.price,
+      AppointmentStatus: formState.appointmentStatus,
+      MedicalHistoryId: mostRecentMedicalHistoryId.toString(),
+    });
 
     createMutation.mutate(formData);
   };
 
   const isFormValid =
-    formState.doctorId &&
-    formState.startTime &&
-    formState.endTime &&
-    formState.price;
+    formState.doctorId && formState.startTime && formState.endTime;
 
   // Get minimum date/time (current time)
   const now = new Date();
@@ -188,42 +226,29 @@ export default function PatientCreateAppointmentModal({
             </p>
           </div>
 
-          <div className="space-y-2">
-            <Label htmlFor="price">Consultation Fee *</Label>
-            <div className="relative">
-              <span className="absolute left-3 top-1/2 -translate-y-1/2 text-muted-foreground">
-                $
-              </span>
-              <Input
-                id="price"
-                type="number"
-                step="0.01"
-                min="0"
-                value={formState.price}
-                onChange={(e) => handleChange("price", e.target.value)}
-                className="pl-8"
-                placeholder="0.00"
-                required
-              />
+          {/* Medical History Status */}
+          {mostRecentMedicalHistoryId ? (
+            <div className="rounded-lg bg-green-50 p-3">
+              <p className="text-sm text-green-800">
+                <strong>✓ Medical History:</strong> Found (ID:{" "}
+                {mostRecentMedicalHistoryId})
+              </p>
             </div>
-          </div>
+          ) : (
+            <div className="rounded-lg bg-red-50 p-3">
+              <p className="text-sm text-red-800">
+                <strong>⚠ Medical History Required:</strong> No medical history
+                found. Please contact staff to create one before booking.
+              </p>
+            </div>
+          )}
 
-          <div className="space-y-2">
-            <Label htmlFor="status">Status</Label>
-            <Select
-              value={formState.appointmentStatus}
-              onValueChange={(value) =>
-                handleChange("appointmentStatus", value)
-              }
-            >
-              <SelectTrigger>
-                <SelectValue />
-              </SelectTrigger>
-              <SelectContent>
-                <SelectItem value="0">Booked</SelectItem>
-                <SelectItem value="1">Pending</SelectItem>
-              </SelectContent>
-            </Select>
+          {/* Note about consultation fee */}
+          <div className="rounded-lg bg-blue-50 p-3">
+            <p className="text-sm text-blue-800">
+              <strong>Note:</strong> The consultation fee will be determined and
+              set by medical staff after your examination.
+            </p>
           </div>
 
           <div className="flex justify-end gap-3 pt-4">
