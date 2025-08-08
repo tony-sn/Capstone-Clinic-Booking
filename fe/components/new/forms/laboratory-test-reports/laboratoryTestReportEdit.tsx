@@ -1,28 +1,24 @@
 "use client";
 
 import {
-  TestTubes,
-  Clock,
-  CheckCircle,
   AlertCircle,
-  Plus,
   Edit,
-  Activity,
-  XCircle,
-  Trash2,
-  Loader2,
-  AlertTriangle,
   FilePlus,
   FileText,
+  Loader2,
+  Plus,
+  TestTubes,
+  Trash2,
   User,
+  XCircle,
 } from "lucide-react";
-import { useState, useEffect } from "react";
+import { useEffect, useState } from "react";
 
 import {
+  useCreateLaboratoryTestReport,
+  useDeleteLaboratoryTestReport,
   useMedicalHistoryReport,
   useUpdateLaboratoryTestReport,
-  useDeleteLaboratoryTestReport,
-  useCreateLaboratoryTestReport,
 } from "@/hooks/laboratory-test-report/useEditLaboratoryTestReport";
 import { useLaboratoryTests } from "@/hooks/laboratory-tests/useLaboratoryTests";
 import { useDoctors } from "@/hooks/users/useUsers";
@@ -105,13 +101,7 @@ export default function LaboratoryTestReportEdit({
         active: true,
       });
     }
-  }, [
-    existingReport,
-    isEditMode,
-    medicalHistoryId,
-    laboratoryTestId,
-    doctors,
-  ]);
+  }, [existingReport, isEditMode, medicalHistoryId, laboratoryTestId, doctors]);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -184,7 +174,7 @@ export default function LaboratoryTestReportEdit({
       <div className="fixed inset-0 z-50 overflow-y-auto">
         <div className="flex min-h-screen items-center justify-center p-4 text-center sm:block">
           <div className="fixed inset-0 bg-gray-500/75 transition-opacity" />
-          <div className="my-8 inline-block w-full max-w-md transform overflow-hidden rounded-2xl bg-white p-8 text-left align-middle shadow-xl transition-all">
+          <div className="my-8 inline-block w-full max-w-md overflow-hidden rounded-2xl bg-white p-8 text-left align-middle shadow-xl transition-all">
             <div className="flex min-h-[200px] items-center justify-center">
               <div className="text-center">
                 <Loader2 className="mx-auto mb-4 size-12 animate-spin text-blue-600" />
@@ -223,7 +213,7 @@ export default function LaboratoryTestReportEdit({
         />
 
         {/* Modal Content */}
-        <div className="my-8 inline-block w-full max-w-2xl transform overflow-hidden rounded-2xl bg-white text-left align-middle shadow-xl transition-all">
+        <div className="my-8 inline-block w-full max-w-2xl overflow-hidden rounded-2xl bg-white text-left align-middle shadow-xl transition-all">
           {/* Header */}
           <div className="flex items-center justify-between border-b border-gray-100 bg-gray-50 p-6">
             <div className="flex items-center gap-4">
@@ -462,7 +452,7 @@ export default function LaboratoryTestReportEdit({
               className="fixed inset-0 bg-gray-500/75 transition-opacity"
               onClick={() => setShowDeleteConfirm(false)}
             />
-            <div className="my-8 inline-block w-full max-w-md transform overflow-hidden rounded-2xl bg-white p-6 text-left align-middle shadow-xl transition-all">
+            <div className="my-8 inline-block w-full max-w-md overflow-hidden rounded-2xl bg-white p-6 text-left align-middle shadow-xl transition-all">
               <div className="flex items-center gap-4">
                 <div className="rounded-xl bg-red-100 p-3">
                   <Trash2 className="size-6 text-red-600" />

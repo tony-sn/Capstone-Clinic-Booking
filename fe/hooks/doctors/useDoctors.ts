@@ -1,10 +1,6 @@
 import { useInfiniteQuery, useQuery } from "@tanstack/react-query";
-import {
-  getAllDoctors,
-  getDoctorById,
-} from "@/lib/api/doctor.actions";
-import type { DoctorsResponse } from "@/types/doctor";
 
+import { getAllDoctors, getDoctorById } from "@/lib/api/doctor.actions";
 
 export const useDoctors = ({
   pageSize = 5,
