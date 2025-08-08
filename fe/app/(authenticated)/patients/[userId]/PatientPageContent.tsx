@@ -1,6 +1,10 @@
 "use client";
 import MedicalHistoryList from "@/components/patient/MedicalHistoryList";
+import PatientAppointmentList from "@/components/patient/PatientAppointmentList";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { usePatientAppointments } from "@/hooks/appointments/useAppointments";
 import { usePatientMedicalHistories } from "@/hooks/medicalhistories/useMedicalhistories";
+import { useUsers } from "@/hooks/users/useUsers";
 
 interface PatientPageContentProps {
   userId: string;
@@ -55,27 +59,41 @@ export default function PatientPageContent({
   userId,
 }: PatientPageContentProps) {
   const patientId = parseInt(userId);
+
+  // Fetch user data to get patient name
+  const { data: users = [] } = useUsers();
+  const patient = users.find((user) => user.id === patientId);
+  const patientName = patient
+    ? `${patient.firstName} ${patient.lastName}`
+    : "Patient";
+
   const {
     data: medicalHistoryData,
-    isLoading,
-    error,
+    isLoading: medicalLoading,
+    error: medicalError,
   } = usePatientMedicalHistories({
     patientId,
     pageSize: 0,
     pageNumber: 1,
   });
 
-  // Determine what content to render
-  const renderContent = () => {
-    if (isLoading) {
+  const { data: appointmentsData } = usePatientAppointments({
+    patientId,
+    pageSize: 0,
+    pageNumber: 1,
+  });
+
+  // Render medical history content
+  const renderMedicalHistoryContent = () => {
+    if (medicalLoading) {
       return <LoadingState />;
     }
 
-    if (error) {
+    if (medicalError) {
       return <ErrorState />;
     }
 
-    if (!medicalHistoryData) {
+    if (!medicalHistoryData || medicalHistoryData.data.length === 0) {
       return <EmptyState />;
     }
 
@@ -87,13 +105,47 @@ export default function PatientPageContent({
     );
   };
 
-  const content = renderContent();
-
   return (
     <div className="mx-auto w-full max-w-7xl">
       <div className="space-y-6">
         <PageHeader />
-        <div className="space-y-6">{content}</div>
+
+        {/* Stats Cards */}
+        <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
+          <div className="rounded-lg border border-green-200 bg-green-50 p-4">
+            <h3 className="font-medium text-green-900">My Appointments</h3>
+            <p className="text-2xl font-bold text-green-700">
+              {appointmentsData?.data?.length || 0}
+            </p>
+            <p className="text-sm text-green-600">Total appointments</p>
+          </div>
+          <div className="rounded-lg border border-blue-200 bg-blue-50 p-4">
+            <h3 className="font-medium text-blue-900">Medical Records</h3>
+            <p className="text-2xl font-bold text-blue-700">
+              {medicalHistoryData?.data?.length || 0}
+            </p>
+            <p className="text-sm text-blue-600">Total records</p>
+          </div>
+        </div>
+
+        {/* Tabs for different sections */}
+        <Tabs defaultValue="appointments" className="space-y-6">
+          <TabsList className="grid w-full grid-cols-2">
+            <TabsTrigger value="appointments">My Appointments</TabsTrigger>
+            <TabsTrigger value="medical-history">Medical History</TabsTrigger>
+          </TabsList>
+
+          <TabsContent value="appointments" className="space-y-6">
+            <PatientAppointmentList
+              patientId={patientId}
+              patientName={patientName}
+            />
+          </TabsContent>
+
+          <TabsContent value="medical-history" className="space-y-6">
+            {renderMedicalHistoryContent()}
+          </TabsContent>
+        </Tabs>
       </div>
     </div>
   );
