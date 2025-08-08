@@ -25,6 +25,7 @@ export default function EditAppointmentModal({
     endTime: formatDateTimeForInput(appointment.endTime),
     price: appointment.price.toString(),
     appointmentStatus: appointment.appointmentStatus.toString(),
+    medicalHistoryId: appointment.medicalHistoryId?.toString() || "",
     active: appointment.active.toString(),
   });
 
@@ -83,6 +84,9 @@ export default function EditAppointmentModal({
     formData.append("endTime", formState.endTime);
     formData.append("price", formState.price);
     formData.append("appointmentStatus", formState.appointmentStatus);
+    if (formState.medicalHistoryId) {
+      formData.append("medicalHistoryId", formState.medicalHistoryId);
+    }
     formData.append("active", formState.active);
 
     updateMutation.mutate(formData);

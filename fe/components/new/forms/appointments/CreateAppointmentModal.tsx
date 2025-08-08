@@ -69,7 +69,6 @@ export default function CreateAppointmentModal({
     formData.append("EndTime", formState.endTime);
     formData.append("Price", formState.price);
     formData.append("AppointmentStatus", formState.appointmentStatus);
-    formData.append("MedicalHistoryId", "0");
 
     createMutation.mutate(formData);
   };
