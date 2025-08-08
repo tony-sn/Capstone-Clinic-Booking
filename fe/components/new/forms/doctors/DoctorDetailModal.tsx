@@ -1,6 +1,7 @@
 "use client";
 
 import { X } from "lucide-react";
+
 import { DoctorDTO } from "@/types/doctor";
 
 export default function DoctorDetailModal({
@@ -12,15 +13,17 @@ export default function DoctorDetailModal({
 }) {
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 px-4">
-      <div className="w-full max-w-xl rounded-xl bg-white p-6 shadow-lg relative">
+      <div className="relative w-full max-w-xl rounded-xl bg-white p-6 shadow-lg">
         <button
-          className="absolute top-4 right-4 text-gray-500 hover:text-gray-700"
+          className="absolute right-4 top-4 text-gray-500 hover:text-gray-700"
           onClick={onClose}
         >
           <X className="size-5" />
         </button>
 
-        <h2 className="text-2xl font-semibold text-gray-800 mb-4">Doctor Detail</h2>
+        <h2 className="mb-4 text-2xl font-semibold text-gray-800">
+          Doctor Detail
+        </h2>
 
         <div className="space-y-4 text-gray-700">
           <div>
@@ -42,9 +45,9 @@ export default function DoctorDetailModal({
           <div>
             <span className="font-medium">Status: </span>
             {doctor.active ? (
-              <span className="text-green-600 font-medium">Active</span>
+              <span className="font-medium text-green-600">Active</span>
             ) : (
-              <span className="text-red-500 font-medium">Inactive</span>
+              <span className="font-medium text-red-500">Inactive</span>
             )}
           </div>
         </div>

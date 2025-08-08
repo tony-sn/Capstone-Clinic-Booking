@@ -1,10 +1,10 @@
 "use client";
 
-import { useEffect, useState } from "react";
 import { X, Loader2 } from "lucide-react";
+import { useEffect, useState } from "react";
 
-import { DoctorDTO } from "@/types/doctor";
 import { useEditDoctor } from "@/hooks/doctors/useEditDoctors";
+import { DoctorDTO } from "@/types/doctor";
 
 export default function DoctorEditModal({
   doctor,
@@ -37,12 +37,14 @@ export default function DoctorEditModal({
     }
   }, [doctor]);
 
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
+  const handleChange = (
+    e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>
+  ) => {
     const target = e.target as HTMLInputElement; // 👈 ép kiểu rõ ràng
     const { name, value, type, checked } = target;
-  
+
     const val = type === "checkbox" ? checked : value;
-  
+
     setFormState((prev) => ({
       ...prev,
       [name]: val,
@@ -72,11 +74,11 @@ export default function DoctorEditModal({
     <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 px-4">
       <form
         onSubmit={handleSubmit}
-        className="w-full max-w-xl rounded-xl bg-white p-6 shadow-lg relative space-y-4"
+        className="relative w-full max-w-xl space-y-4 rounded-xl bg-white p-6 shadow-lg"
       >
         <button
           type="button"
-          className="absolute top-4 right-4 text-gray-500 hover:text-gray-700"
+          className="absolute right-4 top-4 text-gray-500 hover:text-gray-700"
           onClick={onClose}
         >
           <X className="size-5" />
@@ -86,7 +88,9 @@ export default function DoctorEditModal({
 
         <div className="grid grid-cols-2 gap-4">
           <div>
-            <label className="block text-sm font-medium mb-1 text-gray-700">First Name</label>
+            <label className="mb-1 block text-sm font-medium text-gray-700">
+              First Name
+            </label>
             <input
               name="firstName"
               value={formState.firstName}
@@ -97,7 +101,9 @@ export default function DoctorEditModal({
           </div>
 
           <div>
-            <label className="block text-sm font-medium mb-1 text-gray-700">Last Name</label>
+            <label className="mb-1 block text-sm font-medium text-gray-700">
+              Last Name
+            </label>
             <input
               name="lastName"
               value={formState.lastName}
@@ -108,7 +114,9 @@ export default function DoctorEditModal({
           </div>
 
           <div className="col-span-2">
-            <label className="block text-sm font-medium mb-1 text-gray-700">Certificate</label>
+            <label className="mb-1 block text-sm font-medium text-gray-700">
+              Certificate
+            </label>
             <input
               name="certificate"
               value={formState.certificate}
@@ -118,7 +126,9 @@ export default function DoctorEditModal({
           </div>
 
           <div className="col-span-2">
-            <label className="block text-sm font-medium mb-1 text-gray-700">Department ID</label>
+            <label className="mb-1 block text-sm font-medium text-gray-700">
+              Department ID
+            </label>
             <input
               name="departmentID"
               type="number"
@@ -137,7 +147,7 @@ export default function DoctorEditModal({
               onChange={handleChange}
               className="rounded border-gray-300"
             />
-            <label className="text-gray-700 text-sm">Active</label>
+            <label className="text-sm text-gray-700">Active</label>
           </div>
         </div>
 
@@ -147,7 +157,7 @@ export default function DoctorEditModal({
             disabled={isPending}
             className="inline-flex items-center gap-2 rounded-lg bg-blue-600 px-4 py-2 text-white hover:bg-blue-700 disabled:opacity-50"
           >
-            {isPending && <Loader2 className="animate-spin size-4" />}
+            {isPending && <Loader2 className="size-4 animate-spin" />}
             Save Changes
           </button>
         </div>
