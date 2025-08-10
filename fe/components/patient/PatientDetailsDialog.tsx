@@ -22,13 +22,21 @@ import MedicalHistoryList from "./MedicalHistoryList";
 interface PatientDetailsDialogProps {
   patient: UserType;
   trigger?: React.ReactNode;
+  open?: boolean;
+  onOpenChange?: (open: boolean) => void;
 }
 
 export default function PatientDetailsDialog({
   patient,
   trigger,
+  open: externalOpen,
+  onOpenChange: externalOnOpenChange,
 }: PatientDetailsDialogProps) {
-  const [open, setOpen] = useState(false);
+  const [internalOpen, setInternalOpen] = useState(false);
+
+  // Use external control if provided, otherwise use internal state
+  const open = externalOpen !== undefined ? externalOpen : internalOpen;
+  const setOpen = externalOnOpenChange || setInternalOpen;
 
   const {
     data: medicalHistoryData,
@@ -65,7 +73,10 @@ export default function PatientDetailsDialog({
 
   return (
     <Dialog open={open} onOpenChange={setOpen}>
-      <DialogTrigger asChild>{trigger || defaultTrigger}</DialogTrigger>
+      {/* Only render trigger if one is provided or if not using external control */}
+      {(trigger || externalOpen === undefined) && (
+        <DialogTrigger asChild>{trigger || defaultTrigger}</DialogTrigger>
+      )}
       <DialogContent className="max-h-[80vh] max-w-4xl overflow-y-auto">
         <DialogHeader>
           <DialogTitle className="flex items-center gap-2">

@@ -207,8 +207,8 @@ function AppointmentPageContent() {
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-blue-50 to-white p-6">
-      <div className="mx-auto max-w-7xl">
+    <>
+      <div className="w-full">
         <div className="mb-6">
           <div className="mb-4 flex items-center justify-between">
             <div className="flex items-center gap-4">
@@ -445,7 +445,7 @@ function AppointmentPageContent() {
           onSuccess={handleSuccess}
         />
       )}
-    </div>
+    </>
   );
 }
 
