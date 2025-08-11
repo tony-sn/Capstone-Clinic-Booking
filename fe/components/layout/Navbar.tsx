@@ -71,9 +71,9 @@ const Navbar = ({
     return (
       <header
         className={cn(
-          "fixed top-0 w-full z-50 transition-all duration-300",
+          "fixed top-0 z-50 w-full transition-all duration-300",
           isScrolled
-            ? "bg-white/90 backdrop-blur-md shadow-sm py-3"
+            ? "bg-white/90 py-3 shadow-sm backdrop-blur-md"
             : "bg-transparent py-5",
           "admin-header"
         )}
@@ -96,7 +96,7 @@ const Navbar = ({
                   <NavigationMenuTrigger
                     className={cn(
                       "text-sm font-medium transition-colors hover:text-theme-600",
-                      isScrolled ? "text-gray-700" : "text-white/90"
+                      isScrolled ? "text-gray-400/90" : "text-white/90"
                     )}
                   >
                     {item.parent}
@@ -132,7 +132,7 @@ const Navbar = ({
               href={adminPath}
               className={cn(
                 "text-16-semibold truncate font-medium transition-colors hover:text-theme-600",
-                isScrolled ? "text-gray-700" : "text-white/90"
+                isScrolled ? "text-gray-400/90" : "text-white/90"
               )}
             >
               {isUser ? userEmail : fullname}
@@ -160,9 +160,9 @@ const Navbar = ({
   return (
     <header
       className={cn(
-        "fixed top-0 w-full z-50 transition-all duration-300",
+        "fixed top-0 z-50 w-full transition-all duration-300",
         isScrolled
-          ? "bg-white/90 backdrop-blur-md shadow-sm py-3"
+          ? "bg-white/90 py-3 shadow-sm backdrop-blur-md"
           : "bg-transparent py-5"
       )}
     >
