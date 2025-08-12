@@ -6,7 +6,9 @@ namespace ClinicBooking.Models.DTOs
     {
         public int Id { get; set; }
         public int DoctorId { get; set; }
+        public string? DoctorName { get; set; }
         public int BookByUserId { get; set; }
+        public string? PatientName { get; set; }
         public DateTime StartTime { get; set; }
         public DateTime EndTime { get; set; }
         public decimal? Price { get; set; }
@@ -20,7 +22,9 @@ namespace ClinicBooking.Models.DTOs
             {
                 Id = appointment.AppointmentID,
                 DoctorId = appointment.DoctorId,
+                DoctorName = appointment.Doctor != null ? $"{appointment.Doctor.FirstName} {appointment.Doctor.LastName}".Trim() : null,
                 BookByUserId = appointment.BookByUserID,
+                PatientName = appointment.BookByUser != null ? $"{appointment.BookByUser.FirstName} {appointment.BookByUser.LastName}".Trim() : null,
                 StartTime = appointment.StartTime,
                 EndTime = appointment.EndTime,
                 Price = appointment.Price,
