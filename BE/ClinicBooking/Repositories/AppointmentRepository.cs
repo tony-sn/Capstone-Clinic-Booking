@@ -18,14 +18,63 @@ public class AppointmentRepository : IAppointmentRepository
     {
         return await _context.Appointments
             .Include(a => a.Doctor)
+            .ThenInclude(d => d.User)
+            .Include(a => a.Doctor)
+            .ThenInclude(d => d.Department)
             .Include(a => a.BookByUser)
             .ToListAsync();
+    }
+
+    public async Task<IEnumerable<Appointment>> GetAllAsync(AppointmentStatus? status = null, DateTime? startDate = null, DateTime? endDate = null, int? doctorId = null, int? departmentId = null, int? patientId = null)
+    {
+        var query = _context.Appointments
+            .Include(a => a.Doctor)
+                .ThenInclude(d => d.User)
+            .Include(a => a.Doctor)
+                .ThenInclude(d => d.Department)
+            .Include(a => a.BookByUser)
+            .AsQueryable();
+
+        if (status.HasValue)
+        {
+            query = query.Where(a => a.AppointmentStatus == status.Value);
+        }
+
+        if (startDate.HasValue)
+        {
+            query = query.Where(a => a.StartTime >= startDate.Value);
+        }
+
+        if (endDate.HasValue)
+        {
+            query = query.Where(a => a.StartTime <= endDate.Value);
+        }
+
+        if (doctorId.HasValue)
+        {
+            query = query.Where(a => a.DoctorId == doctorId.Value);
+        }
+
+        if (departmentId.HasValue)
+        {
+            query = query.Where(a => a.Doctor.DepartmentID == departmentId.Value);
+        }
+
+        if (patientId.HasValue)
+        {
+            query = query.Where(a => a.BookByUserID == patientId.Value);
+        }
+
+        return await query.OrderBy(a => a.StartTime).ToListAsync();
     }
 
     public async Task<Appointment?> GetById(int id)
     {
         return await _context.Appointments
             .Include(a => a.Doctor)
+            .ThenInclude(d => d.User)
+            .Include(a => a.Doctor)
+            .ThenInclude(d => d.Department)
             .Include(a => a.BookByUser)
             .FirstOrDefaultAsync(a => a.AppointmentID == id);
     }
@@ -38,6 +87,9 @@ public class AppointmentRepository : IAppointmentRepository
         // Reload the appointment with related entities
         var createdAppointment = await _context.Appointments
             .Include(a => a.Doctor)
+            .ThenInclude(d => d.User)
+            .Include(a => a.Doctor)
+            .ThenInclude(d => d.Department)
             .Include(a => a.BookByUser)
             .FirstOrDefaultAsync(a => a.AppointmentID == appointment.AppointmentID);
             
@@ -56,6 +108,9 @@ public class AppointmentRepository : IAppointmentRepository
             // Reload the appointment with related entities
             var updatedAppointment = await _context.Appointments
                 .Include(a => a.Doctor)
+                .ThenInclude(d => d.User)
+                .Include(a => a.Doctor)
+                .ThenInclude(d => d.Department)
                 .Include(a => a.BookByUser)
                 .FirstOrDefaultAsync(a => a.AppointmentID == id);
                 
@@ -72,6 +127,9 @@ public class AppointmentRepository : IAppointmentRepository
     {
         var item = await _context.Appointments
             .Include(a => a.Doctor)
+            .ThenInclude(d => d.User)
+            .Include(a => a.Doctor)
+            .ThenInclude(d => d.Department)
             .Include(a => a.BookByUser)
             .FirstOrDefaultAsync(a => a.AppointmentID == id);
         if (item == null) throw new ArgumentException($"invalid id: {id}");

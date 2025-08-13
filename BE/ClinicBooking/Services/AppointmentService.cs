@@ -34,6 +34,25 @@ namespace ClinicBooking.Services
             };
         }
 
+        public async Task<PageResultUlt<IEnumerable<AppointmentDTO>>> GetAll(int pageSize = 0, int pageNumber = 1, AppointmentStatus? status = null, DateTime? startDate = null, DateTime? endDate = null, int? doctorId = null, int? departmentId = null, int? patientId = null)
+        {
+            if (pageSize < 0) throw new ArgumentException($"invalid page size: {pageSize}");
+            if (pageNumber <= 0) throw new ArgumentException($"inlvalid page number:{pageNumber}");
+            var list = await _repository.GetAllAsync(status, startDate, endDate, doctorId, departmentId, patientId);
+            if (list == null) return null;
+            var totalItems = list.Count();
+            if (pageSize > 0)
+            {
+                list = list.Skip((pageNumber - 1) * pageSize).Take(pageSize).ToList();
+            }
+
+            return new PageResultUlt<IEnumerable<AppointmentDTO>>
+            {
+                Items = list.Select(x => AppointmentDTO.ConvertToDTO(x)),
+                TotalItems = totalItems
+            };
+        }
+
         public async Task<AppointmentDTO> GetById(int id)
         {
             var item = await _repository.GetById(id);
