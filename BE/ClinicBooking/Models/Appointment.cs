@@ -8,9 +8,9 @@ namespace ClinicBooking.Models
         [Key]
         public int AppointmentID { get; set; }
         [Required]
-        [ForeignKey("User")]
+        [ForeignKey("Doctor")]
         public int DoctorId { get; set; }
-        public User Doctor { get; set; }
+        public Doctor Doctor { get; set; }
         [Required]
         [ForeignKey("BookByUser")]
         public int BookByUserID { get; set; }
