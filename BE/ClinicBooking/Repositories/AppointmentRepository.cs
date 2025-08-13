@@ -18,9 +18,9 @@ public class AppointmentRepository : IAppointmentRepository
     {
         return await _context.Appointments
             .Include(a => a.Doctor)
-                .ThenInclude(d => d.User)
+            .ThenInclude(d => d.User)
             .Include(a => a.Doctor)
-                .ThenInclude(d => d.Department)
+            .ThenInclude(d => d.Department)
             .Include(a => a.BookByUser)
             .ToListAsync();
     }
@@ -72,9 +72,9 @@ public class AppointmentRepository : IAppointmentRepository
     {
         return await _context.Appointments
             .Include(a => a.Doctor)
-                .ThenInclude(d => d.User)
+            .ThenInclude(d => d.User)
             .Include(a => a.Doctor)
-                .ThenInclude(d => d.Department)
+            .ThenInclude(d => d.Department)
             .Include(a => a.BookByUser)
             .FirstOrDefaultAsync(a => a.AppointmentID == id);
     }
@@ -87,9 +87,9 @@ public class AppointmentRepository : IAppointmentRepository
         // Reload the appointment with related entities
         var createdAppointment = await _context.Appointments
             .Include(a => a.Doctor)
-                .ThenInclude(d => d.User)
+            .ThenInclude(d => d.User)
             .Include(a => a.Doctor)
-                .ThenInclude(d => d.Department)
+            .ThenInclude(d => d.Department)
             .Include(a => a.BookByUser)
             .FirstOrDefaultAsync(a => a.AppointmentID == appointment.AppointmentID);
             
@@ -108,9 +108,9 @@ public class AppointmentRepository : IAppointmentRepository
             // Reload the appointment with related entities
             var updatedAppointment = await _context.Appointments
                 .Include(a => a.Doctor)
-                    .ThenInclude(d => d.User)
+                .ThenInclude(d => d.User)
                 .Include(a => a.Doctor)
-                    .ThenInclude(d => d.Department)
+                .ThenInclude(d => d.Department)
                 .Include(a => a.BookByUser)
                 .FirstOrDefaultAsync(a => a.AppointmentID == id);
                 
@@ -127,9 +127,9 @@ public class AppointmentRepository : IAppointmentRepository
     {
         var item = await _context.Appointments
             .Include(a => a.Doctor)
-                .ThenInclude(d => d.User)
+            .ThenInclude(d => d.User)
             .Include(a => a.Doctor)
-                .ThenInclude(d => d.Department)
+            .ThenInclude(d => d.Department)
             .Include(a => a.BookByUser)
             .FirstOrDefaultAsync(a => a.AppointmentID == id);
         if (item == null) throw new ArgumentException($"invalid id: {id}");
