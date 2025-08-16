@@ -73,7 +73,9 @@ function RevenueReportContent() {
   return (
     <div className="mx-auto max-w-screen-xl p-8">
       <div className="mb-6 flex items-center justify-between">
-        <h1 className="text-2xl font-bold">Revenue Report</h1>
+        <h1 className="text-2xl font-bold text-gray-800 dark:text-black">
+          Revenue Report
+        </h1>
         <select
           value={selectedType}
           onChange={(e) => setSelectedType(e.target.value as RevenueType)}
@@ -95,7 +97,7 @@ function RevenueReportContent() {
         <div className="text-red-500">Error loading report.</div>
       ) : (
         <>
-          <div className="mb-6 text-lg font-semibold">
+          <div className="mb-6 text-lg font-semibold dark:text-black">
             Total Revenue:{" "}
             {totalRevenue.toLocaleString("en-US", {
               style: "currency",
