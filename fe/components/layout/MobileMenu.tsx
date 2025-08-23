@@ -100,7 +100,10 @@ const MobileMenu = ({
                           key={`${item.parent}-${index}`}
                           className="w-full"
                         >
-                          <NavigationMenuTrigger className="w-full justify-between bg-transparent px-0 py-3 text-left text-base font-medium hover:bg-gray-100 data-[state=open]:bg-gray-100">
+                          <NavigationMenuTrigger
+                            // className="w-full justify-between bg-transparent px-0 py-3 text-left text-base font-medium hover:bg-gray-100 data-[state=open]:bg-gray-100"
+                            className="w-full border-theme-500 font-medium text-theme-600 hover:bg-theme-600 hover:text-white data-[state=open]:bg-gray-100"
+                          >
                             {item.parent}
                           </NavigationMenuTrigger>
                           <NavigationMenuContent className="w-full">
