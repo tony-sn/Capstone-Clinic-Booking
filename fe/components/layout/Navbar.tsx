@@ -95,7 +95,8 @@ const Navbar = ({
                 <NavigationMenuItem key={`${item.parent}-${index}`}>
                   <NavigationMenuTrigger
                     className={cn(
-                      "text-sm font-medium transition-colors hover:text-theme-600",
+                      // "text-sm font-medium transition-colors hover:text-theme-600",
+                      "font-medium text-theme-600 transition-colors hover:bg-theme-600 hover:text-white data-[state=open]:bg-gray-100",
                       isScrolled ? "text-gray-400/90" : "text-white/90"
                     )}
                   >
